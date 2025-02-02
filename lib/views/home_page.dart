@@ -1,85 +1,84 @@
 import 'package:exam_app/config/colors.dart';
-import 'package:exam_app/config/icons.dart';
-import 'package:exam_app/controllers/home_controller.dart';
+import 'package:exam_app/config/images.dart';
 import 'package:exam_app/utils/extension.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:get/get.dart';
-import 'package:simple_gradient_text/simple_gradient_text.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final controller = HomeController.instance;
-
-    return Obx(() {
-      return Scaffold(
-        bottomNavigationBar: BottomAppBar(
-          height: 77.h,
-          color: greyColor,
-          child:
-              Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
-            _navItem(0, selectedHomeIcon, unSelectedHomeIcon, 'Home', () {
-              controller.homeIndex = 0;
-              controller.pageController.jumpToPage(0);
-            }),
-            _navItem(1, selectedPracIcon, unSelectedPracIcon, 'Practice', () {
-              controller.homeIndex = 1;
-              controller.pageController.jumpToPage(1);
-            }),
-            _navItem(2, selectedFavIcon, unSelectedFavIcon, 'Favourite', () {
-              controller.homeIndex = 2;
-              controller.pageController.jumpToPage(2);
-            }),
-            _navItem(
-                3, selectedSettingsIcon, unSelectedSettingsIcon, 'Settings',
-                () {
-              controller.homeIndex = 3;
-              controller.pageController.jumpToPage(3);
-            }),
-          ]),
-        ),
-      );
-    });
-  }
-
-  Widget _navItem(
-    int index,
-    String seletedIcon,
-    String unseletedIcon,
-    String title,
-    Function callBack,
-  ) {
-    return InkWell(
-      onTap: () {
-        callBack();
-      },
-      child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-        SvgPicture.asset(
-          HomeController.instance.homeIndex == index
-              ? seletedIcon
-              : unseletedIcon,
-        ),
-        SizedBox(height: 6.h),
-        HomeController.instance.homeIndex == index
-            ? GradientText(
-                title,
-                style: const TextStyle(
-                  fontWeight: FontWeight.w500,
-                  fontSize: 12,
+    return Scaffold(
+      body: Container(
+        width: MediaQuery.of(context).size.width,
+        height: MediaQuery.of(context).size.height,
+        decoration: BoxDecoration(gradient: containerGradient),
+        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          Padding(
+            padding: EdgeInsets.fromLTRB(
+              25.w,
+              MediaQuery.of(context).padding.top + 20.h,
+              0,
+              20.h,
+            ),
+            child: const Text(
+              'Welcome to PDD',
+              style: TextStyle(
+                fontWeight: FontWeight.w700,
+                fontSize: 20,
+                color: whiteColor,
+              ),
+            ),
+          ),
+          Expanded(
+            child: Container(
+              decoration: const BoxDecoration(
+                color: whiteColor,
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(25),
+                  topRight: Radius.circular(25),
                 ),
-                colors: const [primaryColor, primaryColor, secondaryColor],
-              )
-            : Text(
-                title,
-                style: const TextStyle(
-                  fontWeight: FontWeight.w500,
-                  fontSize: 12,
-                ),
-              )
-      ]),
+              ),
+              padding: EdgeInsets.symmetric(horizontal: 25.w, vertical: 25.h),
+              child: Wrap(
+                spacing: 10.w,
+                runSpacing: 10.h,
+                children: List.generate(4, (index) {
+                  return Container(
+                    width: 157.w,
+                    height: 170.h,
+                    decoration: BoxDecoration(
+                      color: greyColor,
+                      borderRadius: BorderRadius.circular(25),
+                    ),
+                    child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Image.asset(
+                            [homeOne, homeTwo, homeThree, homeFour][index],
+                            width: 80.w,
+                          ),
+                          SizedBox(height: 20.h),
+                          Text(
+                            [
+                              'Таңдаулылар',
+                              'КР ЖКЕ',
+                              'АвтоДром\nсабақтары',
+                              'Emtihan\nTapsyru'
+                            ][index],
+                            style: const TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w700,
+                            ),
+                          )
+                        ]),
+                  );
+                }),
+              ),
+            ),
+          )
+        ]),
+      ),
     );
   }
 }

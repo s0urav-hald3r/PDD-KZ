@@ -1,13 +1,13 @@
 import 'package:exam_app/config/colors.dart';
 import 'package:exam_app/controllers/home_controller.dart';
 import 'package:exam_app/services/navigator_key.dart';
-import 'package:exam_app/views/home_page.dart';
+import 'package:exam_app/views/navbar_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
 void main() async {
-  WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+  WidgetsFlutterBinding.ensureInitialized();
 
   // Dependency injection
   Get.lazyPut(() => HomeController());
@@ -28,6 +28,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       theme: ThemeData(
         useMaterial3: true,
+        fontFamily: 'Nunito Sans',
         scaffoldBackgroundColor: whiteColor,
         splashFactory: NoSplash.splashFactory,
         splashColor: Colors.transparent,
@@ -35,7 +36,7 @@ class MyApp extends StatelessWidget {
         highlightColor: Colors.transparent,
       ),
       navigatorKey: NavigatorKey.navigatorKey,
-      home: const HomePage(),
+      home: const NavBarPage(),
     );
   }
 }

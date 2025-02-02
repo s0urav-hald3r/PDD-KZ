@@ -9,5 +9,7 @@ const Color textColor = Color(0xFF282828);
 const Color greyColor = Color(0xFFF5F7FA);
 
 // Gradient
-Gradient containerGradient =
-    const LinearGradient(colors: [primaryColor, secondaryColor]);
+Gradient containerGradient = LinearGradient(colors: [
+  primaryColor,
+  secondaryColor.withOpacity(.75),
+]);
