@@ -1,0 +1,11 @@
+const String backArrowIcon = 'assets/icons/back_arrow.svg';
+const String lockTutorialsIcon = 'assets/icons/lock_tutorials.svg';
+const String selectedFavIcon = 'assets/icons/selected_fav.svg';
+const String selectedHomeIcon = 'assets/icons/selected_home.svg';
+const String selectedPracIcon = 'assets/icons/selected_prac.svg';
+const String selectedSettingsIcon = 'assets/icons/selected_settings.svg';
+const String unSelectedFavIcon = 'assets/icons/unselected_fav.svg';
+const String unSelectedHomeIcon = 'assets/icons/unselected_home.svg';
+const String unSelectedPracIcon = 'assets/icons/unselected_prac.svg';
+const String unSelectedSettingsIcon = 'assets/icons/unselected_settings.svg';
+const String timerIcon = 'assets/icons/timer.svg';

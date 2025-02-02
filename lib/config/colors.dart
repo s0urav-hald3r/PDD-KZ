@@ -9,9 +9,5 @@ const Color textColor = Color(0xFF282828);
 const Color greyColor = Color(0xFFF5F7FA);
 
 // Gradient
-Shader textShader = const LinearGradient(
-  colors: [primaryColor, secondaryColor],
-).createShader(const Rect.fromLTWH(0.0, 0.0, 200.0, 70.0));
-
 Gradient containerGradient =
     const LinearGradient(colors: [primaryColor, secondaryColor]);
