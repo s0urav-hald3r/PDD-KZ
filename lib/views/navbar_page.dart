@@ -3,6 +3,7 @@ import 'package:exam_app/config/icons.dart';
 import 'package:exam_app/controllers/home_controller.dart';
 import 'package:exam_app/utils/extension.dart';
 import 'package:exam_app/views/home_page.dart';
+import 'package:exam_app/views/practice_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
@@ -22,7 +23,7 @@ class NavBarPage extends StatelessWidget {
           physics: const NeverScrollableScrollPhysics(),
           children: [
             const HomePage(),
-            Container(),
+            const PracticePage(),
             Container(),
             Container(),
           ],
