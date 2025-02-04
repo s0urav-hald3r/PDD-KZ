@@ -2,6 +2,7 @@ import 'package:exam_app/config/colors.dart';
 import 'package:exam_app/config/icons.dart';
 import 'package:exam_app/controllers/home_controller.dart';
 import 'package:exam_app/utils/extension.dart';
+import 'package:exam_app/views/favourite_page.dart';
 import 'package:exam_app/views/home_page.dart';
 import 'package:exam_app/views/practice_page.dart';
 import 'package:exam_app/views/settings_page.dart';
@@ -22,11 +23,11 @@ class NavBarPage extends StatelessWidget {
         body: PageView(
           controller: controller.pageController,
           physics: const NeverScrollableScrollPhysics(),
-          children: [
-            const HomePage(),
-            const PracticePage(),
-            Container(),
-            const SettingsPage()
+          children: const [
+            HomePage(),
+            PracticePage(),
+            FavouritePage(),
+            SettingsPage()
           ],
         ),
         bottomNavigationBar: BottomAppBar(
