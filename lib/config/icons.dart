@@ -10,3 +10,4 @@ const String unSelectedPracIcon = 'assets/icons/unselected_prac.svg';
 const String unSelectedSettingsIcon = 'assets/icons/unselected_settings.svg';
 const String timerIcon = 'assets/icons/timer.svg';
 const String gradientRightArrow = 'assets/icons/gradientRightArrow.svg';
+const String gradientLeftArrow = 'assets/icons/gradientLeftArrow.svg';
