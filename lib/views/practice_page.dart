@@ -44,7 +44,7 @@ class PracticePage extends StatelessWidget {
                   itemCount: 10,
                   padding: EdgeInsets.zero,
                   itemBuilder: (context, index) {
-                    return const PracticeCard();
+                    return PracticeCard(index: index);
                   }),
             ),
           )
