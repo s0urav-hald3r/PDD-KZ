@@ -4,6 +4,7 @@ import 'package:exam_app/controllers/home_controller.dart';
 import 'package:exam_app/services/navigator_key.dart';
 import 'package:exam_app/utils/extension.dart';
 import 'package:exam_app/views/premium_page.dart';
+import 'package:exam_app/views/q_a_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
@@ -19,6 +20,8 @@ class PracticeCard extends StatelessWidget {
       onTap: () {
         if (index != 0 && !HomeController.instance.isProUser) {
           NavigatorKey.push(const PremiumPage());
+        } else {
+          NavigatorKey.push(const QAPage());
         }
       },
       child: Container(

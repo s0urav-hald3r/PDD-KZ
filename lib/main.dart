@@ -1,5 +1,6 @@
 import 'package:exam_app/config/colors.dart';
 import 'package:exam_app/controllers/home_controller.dart';
+import 'package:exam_app/controllers/timer_controller.dart';
 import 'package:exam_app/services/navigator_key.dart';
 import 'package:exam_app/views/navbar_page.dart';
 import 'package:flutter/material.dart';
@@ -11,6 +12,7 @@ void main() async {
 
   // Dependency injection
   Get.lazyPut(() => HomeController());
+  Get.lazyPut(() => TimerController());
 
   await SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
