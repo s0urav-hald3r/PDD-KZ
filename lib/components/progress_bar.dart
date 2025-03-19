@@ -18,7 +18,7 @@ class _ProgressBarState extends State<ProgressBar>
   @override
   void initState() {
     super.initState();
-    controller.initializeController(controller.practiceSetLen, this);
+    controller.initializeController(this);
   }
 
   @override
@@ -41,7 +41,7 @@ class _ProgressBarState extends State<ProgressBar>
               child: Container(
                 width: 32.w,
                 height: 32.w,
-                decoration: tab.no == (controller.currentIndex)
+                decoration: tab.no == (controller.currentIndex + 1)
                     ? BoxDecoration(
                         shape: BoxShape.circle,
                         gradient: containerGradient,

@@ -68,7 +68,7 @@ class _PracticeCardState extends State<PracticeCard> {
               return RichText(
                 text: TextSpan(children: [
                   const TextSpan(
-                    text: '32',
+                    text: '0',
                     style: TextStyle(
                       fontWeight: FontWeight.w400,
                       color: blackColor,

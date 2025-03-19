@@ -102,17 +102,41 @@ class QAPage extends StatelessWidget {
                                     ),
                                   ),
                                   SizedBox(width: 10.w),
-                                  Text(
-                                    controller
-                                        .praciceSets[controller.currentIndex]
-                                        .options[index]
-                                        .qus,
-                                    style: const TextStyle(
-                                      fontWeight: FontWeight.w400,
-                                      fontSize: 14,
-                                      color: Color(0xFF333333),
-                                    ),
-                                  ),
+                                  controller
+                                                  .praciceSets[
+                                                      controller.currentIndex]
+                                                  .submit !=
+                                              null &&
+                                          controller.submitAnswerIndex(index) ==
+                                              index
+                                      ? GradientText(
+                                          controller
+                                              .praciceSets[
+                                                  controller.currentIndex]
+                                              .options[index]
+                                              .qus,
+                                          style: const TextStyle(
+                                            fontWeight: FontWeight.w400,
+                                            fontSize: 14,
+                                          ),
+                                          colors: const [
+                                            primaryColor,
+                                            primaryColor,
+                                            secondaryColor
+                                          ],
+                                        )
+                                      : Text(
+                                          controller
+                                              .praciceSets[
+                                                  controller.currentIndex]
+                                              .options[index]
+                                              .qus,
+                                          style: const TextStyle(
+                                            fontWeight: FontWeight.w400,
+                                            fontSize: 14,
+                                            color: Color(0xFF333333),
+                                          ),
+                                        ),
                                 ]),
                               );
                             },

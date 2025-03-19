@@ -8,8 +8,8 @@ class PracticeController extends GetxController {
 
   late TabController tabController;
 
-  void initializeController(int length, TickerProvider vsync) {
-    tabController = TabController(length: length, vsync: vsync);
+  void initializeController(TickerProvider vsync) {
+    tabController = TabController(length: practiceSetLen, vsync: vsync);
   }
 
   getPracticeSetJson(int index) {
@@ -29,7 +29,7 @@ class PracticeController extends GetxController {
     praciceSets = temp;
   }
 
-  final RxInt _currentIndex = 1.obs;
+  final RxInt _currentIndex = 0.obs;
   final RxList<PracticeSetModel> _praciceSets = <PracticeSetModel>[].obs;
 
   int get currentIndex => _currentIndex.value;
@@ -50,15 +50,17 @@ class PracticeController extends GetxController {
   }
 
   void nextQuestion() {
-    if (currentIndex == praciceSets.length - 1) return;
-
-    currentIndex = currentIndex + 1;
-    tabController.index = tabController.index + 1;
+    if (currentIndex < praciceSets.length) {
+      currentIndex = currentIndex + 1;
+      tabController.index = tabController.index + 1;
+    }
   }
 
   void doAnswer(int index) {
-    praciceSets[currentIndex] = praciceSets[currentIndex]
-        .copyWith(submit: praciceSets[currentIndex].options[index]);
+    praciceSets[currentIndex] = praciceSets[currentIndex].copyWith(
+      submit: praciceSets[currentIndex].options[index],
+      isSubmit: true,
+    );
   }
 
   int submitAnswerIndex(int index) {
