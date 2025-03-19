@@ -7,6 +7,7 @@ import 'package:exam_app/controllers/practice_controller.dart';
 import 'package:exam_app/utils/extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
 import 'package:simple_gradient_text/simple_gradient_text.dart';
 
 class QAPage extends StatelessWidget {
@@ -36,47 +37,54 @@ class QAPage extends StatelessWidget {
                 SizedBox(height: 25.h),
                 const ProgressBar(),
                 const Question(),
-                Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                  InkWell(
-                    onTap: controller.nextQuestion,
-                    child: Container(
-                      width: 140.w,
-                      height: 45.h,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(5),
-                        color: whiteColor,
-                        border: Border.all(color: primaryColor),
-                      ),
-                      child: Center(
-                        child: GradientText('Continue',
-                            style: const TextStyle(
-                              fontWeight: FontWeight.w700,
-                              fontSize: 16,
+                Obx(() {
+                  return Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        InkWell(
+                          onTap: controller.submitQuestion,
+                          child: Container(
+                            width: 140.w,
+                            height: 45.h,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(5),
+                              color: whiteColor,
+                              border: Border.all(color: primaryColor),
                             ),
-                            colors: const [
-                              primaryColor,
-                              primaryColor,
-                              secondaryColor
-                            ]),
-                      ),
-                    ),
-                  ),
-                  SizedBox(width: 10.w),
-                  Container(
-                    width: 45.w,
-                    height: 45.w,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(5),
-                      gradient: containerGradient,
-                    ),
-                    child: Center(
-                      child: SvgPicture.asset(
-                        unSelectedFavIcon,
-                        color: whiteColor,
-                      ),
-                    ),
-                  ),
-                ])
+                            child: Center(
+                              child: GradientText(
+                                  controller.isLastQuestion
+                                      ? 'Submit'
+                                      : 'Continue',
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.w700,
+                                    fontSize: 16,
+                                  ),
+                                  colors: const [
+                                    primaryColor,
+                                    primaryColor,
+                                    secondaryColor
+                                  ]),
+                            ),
+                          ),
+                        ),
+                        SizedBox(width: 10.w),
+                        Container(
+                          width: 45.w,
+                          height: 45.w,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(5),
+                            gradient: containerGradient,
+                          ),
+                          child: Center(
+                            child: SvgPicture.asset(
+                              unSelectedFavIcon,
+                              color: whiteColor,
+                            ),
+                          ),
+                        ),
+                      ]);
+                })
               ]),
             ),
           )

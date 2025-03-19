@@ -1,5 +1,6 @@
 import 'package:exam_app/models/practice_set_model.dart';
 import 'package:exam_app/practice_set.dart';
+import 'package:exam_app/services/navigator_key.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -36,7 +37,9 @@ class PracticeController extends GetxController {
 
   int get currentIndex => _currentIndex.value;
   List<PracticeSetModel> get praciceSets => _praciceSets;
+
   int get practiceSetLen => _praciceSets.length;
+  bool get isLastQuestion => currentIndex == practiceSetLen - 1;
 
   set currentIndex(value) => _currentIndex.value = value;
   set praciceSets(value) => _praciceSets.value = value;
@@ -51,10 +54,12 @@ class PracticeController extends GetxController {
     tabController.index = tabController.previousIndex;
   }
 
-  void nextQuestion() {
-    if (currentIndex < praciceSets.length) {
+  void submitQuestion() {
+    if (!isLastQuestion) {
       currentIndex = currentIndex + 1;
       tabController.index = tabController.index + 1;
+    } else {
+      NavigatorKey.pop();
     }
   }
 
