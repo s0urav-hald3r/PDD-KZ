@@ -1,5 +1,6 @@
 import 'package:exam_app/config/colors.dart';
 import 'package:exam_app/controllers/practice_controller.dart';
+import 'package:exam_app/models/practice_set_model.dart';
 import 'package:exam_app/utils/extension.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -21,10 +22,44 @@ class _ProgressBarState extends State<ProgressBar>
     controller.initializeController(this);
   }
 
+  BoxDecoration getTabDecoration(PracticeSetModel tab) {
+    // Case 1: Current tab (active tab)
+    if (tab.no == (controller.currentIndex + 1)) {
+      return BoxDecoration(
+        shape: BoxShape.circle,
+        gradient: containerGradient,
+      );
+    }
+    // Case 2: Submitted tab
+    else if (tab.isSubmitted) {
+      // Correct answer
+      if (tab.submit == tab.options.firstWhere((e) => e.answer)) {
+        return const BoxDecoration(
+          shape: BoxShape.circle,
+          color: Colors.green,
+        );
+      }
+      // Wrong answer
+      else {
+        return const BoxDecoration(
+          shape: BoxShape.circle,
+          color: Colors.red,
+        );
+      }
+    }
+    // Case 3: Default/unselected tab
+    else {
+      return const BoxDecoration(
+        shape: BoxShape.circle,
+        color: Color(0xFFD4D4D4),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 25.w, vertical: 25.h),
+      padding: EdgeInsets.symmetric(horizontal: 25.w),
       child: Obx(() {
         return TabBar(
           controller: controller.tabController,
@@ -41,26 +76,8 @@ class _ProgressBarState extends State<ProgressBar>
               child: Container(
                 width: 32.w,
                 height: 32.w,
-                decoration: tab.no == (controller.currentIndex + 1)
-                    ? BoxDecoration(
-                        shape: BoxShape.circle,
-                        gradient: containerGradient,
-                      )
-                    : tab.isSubmit
-                        ? tab.submit ==
-                                tab.options.firstWhere((e) => e.ans == true)
-                            ? const BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: Colors.green,
-                              )
-                            : const BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: Colors.red,
-                              )
-                        : const BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: Color(0xFFD4D4D4),
-                          ),
+                // Usage example:
+                decoration: getTabDecoration(tab),
                 child: Center(
                   child: Text(
                     '${tab.no}',

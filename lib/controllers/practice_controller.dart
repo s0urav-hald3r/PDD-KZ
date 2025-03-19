@@ -33,8 +33,8 @@ class PracticeController extends GetxController {
   final RxList<PracticeSetModel> _praciceSets = <PracticeSetModel>[].obs;
 
   int get currentIndex => _currentIndex.value;
-  int get practiceSetLen => _praciceSets.length;
   List<PracticeSetModel> get praciceSets => _praciceSets;
+  int get practiceSetLen => _praciceSets.length;
 
   set currentIndex(value) => _currentIndex.value = value;
   set praciceSets(value) => _praciceSets.value = value;
@@ -59,13 +59,13 @@ class PracticeController extends GetxController {
   void doAnswer(int index) {
     praciceSets[currentIndex] = praciceSets[currentIndex].copyWith(
       submit: praciceSets[currentIndex].options[index],
-      isSubmit: true,
+      isSubmitted: true,
     );
   }
 
-  int submitAnswerIndex(int index) {
+  int submitAnswerIndex() {
     if (praciceSets[currentIndex].submit == null) {
-      return 0;
+      return -1;
     }
 
     return praciceSets[currentIndex]
