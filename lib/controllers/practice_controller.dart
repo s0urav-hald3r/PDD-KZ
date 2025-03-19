@@ -16,6 +16,8 @@ class PracticeController extends GetxController {
     switch (index) {
       case 0:
         return practiceSetOne;
+      case 1:
+        return practiceSetTwo;
     }
   }
 

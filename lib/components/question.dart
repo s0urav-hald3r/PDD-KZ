@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:exam_app/config/colors.dart';
 import 'package:exam_app/controllers/practice_controller.dart';
 import 'package:exam_app/utils/extension.dart';
@@ -20,8 +21,9 @@ class Question extends StatelessWidget {
           SizedBox(
             height: 180.h,
             width: MediaQuery.of(context).size.width,
-            child: Image.network(
-                controller.praciceSets[controller.currentIndex].mediaFile,
+            child: CachedNetworkImage(
+                imageUrl:
+                    controller.praciceSets[controller.currentIndex].mediaFile,
                 fit: BoxFit.cover),
           ),
           SizedBox(height: 25.h),
