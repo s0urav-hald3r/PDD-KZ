@@ -99,17 +99,20 @@ class _PracticeCardState extends State<PracticeCard> {
           Row(
             children: [
               const SizedBox(width: 15),
-              LinearPercentIndicator(
-                width: 295.w,
-                lineHeight: 5.h,
-                percent: .67,
-                padding: EdgeInsets.zero,
-                barRadius: const Radius.circular(10),
-                backgroundColor: whiteColor,
-                linearGradient: const LinearGradient(
-                  colors: [primaryColor, secondaryColor],
-                ),
-              ),
+              Obx(() {
+                return LinearPercentIndicator(
+                  width: 295.w,
+                  lineHeight: 5.h,
+                  percent:
+                      (controller.currentIndex / controller.practiceSetLen),
+                  padding: EdgeInsets.zero,
+                  barRadius: const Radius.circular(10),
+                  backgroundColor: whiteColor,
+                  linearGradient: const LinearGradient(
+                    colors: [primaryColor, secondaryColor],
+                  ),
+                );
+              }),
               const SizedBox(width: 15),
             ],
           ),
