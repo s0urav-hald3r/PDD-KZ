@@ -1,5 +1,6 @@
 import 'package:exam_app/config/colors.dart';
 import 'package:exam_app/config/icons.dart';
+import 'package:exam_app/controllers/practice_controller.dart';
 import 'package:exam_app/controllers/timer_controller.dart';
 import 'package:exam_app/services/navigator_key.dart';
 import 'package:exam_app/utils/extension.dart';
@@ -9,25 +10,31 @@ import 'package:get/get.dart';
 import 'package:simple_gradient_text/simple_gradient_text.dart';
 
 class QuizAppbar extends StatefulWidget {
-  const QuizAppbar({super.key});
+  final PracticeController practiceController;
+  final TimerController timerController;
+  const QuizAppbar({
+    super.key,
+    required this.practiceController,
+    required this.timerController,
+  });
 
   @override
   State<QuizAppbar> createState() => _QuizAppbarState();
 }
 
 class _QuizAppbarState extends State<QuizAppbar> {
-  final controller = TimerController.instance;
-
   @override
   void initState() {
     super.initState();
-    controller.startTimer();
+    widget.timerController
+        .startTimer(setIndex: widget.practiceController.currentSetIndex);
   }
 
   @override
   void dispose() {
     super.dispose();
-    controller.stopTimer();
+    widget.timerController
+        .stopTimer(setIndex: widget.practiceController.currentSetIndex);
   }
 
   @override
@@ -63,7 +70,7 @@ class _QuizAppbarState extends State<QuizAppbar> {
             SizedBox(width: 5.w),
             Obx(() {
               return GradientText(
-                controller.formattedTime,
+                widget.timerController.formattedTime,
                 style: const TextStyle(
                   fontWeight: FontWeight.w500,
                   fontSize: 12,

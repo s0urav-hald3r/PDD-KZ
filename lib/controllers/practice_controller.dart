@@ -1,16 +1,36 @@
+import 'dart:convert';
+
 import 'package:exam_app/models/practice_set_model.dart';
 import 'package:exam_app/practice_set.dart';
 import 'package:exam_app/services/navigator_key.dart';
+import 'package:exam_app/services/local_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class PracticeController extends GetxController {
-  static PracticeController get instance => Get.find();
-
   late TabController tabController;
 
+  final RxInt _currentSetIndex = 0.obs;
+  final RxInt _currentIndex = 0.obs;
+  final RxList<PracticeSetModel> _praciceSets = <PracticeSetModel>[].obs;
+
+  int get currentSetIndex => _currentSetIndex.value;
+  int get currentIndex => _currentIndex.value;
+  List<PracticeSetModel> get praciceSets => _praciceSets;
+
+  int get practiceSetLen => _praciceSets.length;
+  bool get isLastQuestion => currentIndex == practiceSetLen - 1;
+
+  set currentSetIndex(int value) => _currentSetIndex.value = value;
+  set currentIndex(int value) => _currentIndex.value = value;
+  set praciceSets(List<PracticeSetModel> value) => _praciceSets.value = value;
+
   void initializeController(TickerProvider vsync) {
-    tabController = TabController(length: practiceSetLen, vsync: vsync);
+    tabController = TabController(
+        initialIndex:
+            LocalStorage.getData('current_question_$currentSetIndex') ?? 0,
+        length: practiceSetLen,
+        vsync: vsync);
   }
 
   getPracticeSetJson(int index) {
@@ -19,30 +39,44 @@ class PracticeController extends GetxController {
         return practiceSetOne;
       case 1:
         return practiceSetTwo;
+      case 2:
+        return practiceSetThree;
+      case 3:
+        return practiceSetFour;
+      default:
+        return practiceSetOne;
     }
   }
 
   void initializePracticeSet(int index) {
+    currentSetIndex = index;
     var temp = <PracticeSetModel>[];
 
-    for (var element in getPracticeSetJson(index)) {
-      temp.add(PracticeSetModel.fromJson(element));
+    // Load saved state if exists and within timeout
+    String? savedPracticeSet =
+        LocalStorage.getData('practice_set_$currentSetIndex');
+    debugPrint('savedPracticeSet: $savedPracticeSet');
+
+    if (savedPracticeSet != null) {
+      // Load saved practice state
+      temp = (jsonDecode(savedPracticeSet) as List)
+          .map((e) => PracticeSetModel.fromJson(e as Map<String, dynamic>))
+          .toList();
+
+      currentIndex = LocalStorage.getData('current_question_$currentSetIndex');
+    } else {
+      // Initialize new practice set
+      final josonBody = getPracticeSetJson(index);
+      for (var element in josonBody) {
+        temp.add(PracticeSetModel.fromJson(element));
+      }
+
+      currentIndex =
+          LocalStorage.getData('current_question_$currentSetIndex') ?? 0;
     }
 
     praciceSets = temp;
   }
-
-  final RxInt _currentIndex = 0.obs;
-  final RxList<PracticeSetModel> _praciceSets = <PracticeSetModel>[].obs;
-
-  int get currentIndex => _currentIndex.value;
-  List<PracticeSetModel> get praciceSets => _praciceSets;
-
-  int get practiceSetLen => _praciceSets.length;
-  bool get isLastQuestion => currentIndex == practiceSetLen - 1;
-
-  set currentIndex(value) => _currentIndex.value = value;
-  set praciceSets(value) => _praciceSets.value = value;
 
   @override
   void onClose() {
@@ -58,7 +92,9 @@ class PracticeController extends GetxController {
     if (!isLastQuestion) {
       currentIndex = currentIndex + 1;
       tabController.index = tabController.index + 1;
+      _savePracticeState();
     } else {
+      _savePracticeState();
       NavigatorKey.pop();
     }
   }
@@ -78,5 +114,13 @@ class PracticeController extends GetxController {
     return praciceSets[currentIndex]
         .options
         .indexOf(praciceSets[currentIndex].submit!);
+  }
+
+  void _savePracticeState() async {
+    final practiceSetData = praciceSets.map((e) => e.toJson()).toList();
+    await LocalStorage.setData(
+        'practice_set_$currentSetIndex', jsonEncode(practiceSetData));
+    await LocalStorage.setData(
+        'current_question_$currentSetIndex', currentIndex);
   }
 }

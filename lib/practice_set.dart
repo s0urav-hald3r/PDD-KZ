@@ -1045,3 +1045,35 @@ const practiceSetTwo = [
     "submit": null
   }
 ];
+
+const practiceSetThree = [
+  {
+    "no": 1,
+    "question": "What is the capital of Germany?",
+    "mediaFile": "https://media.giphy.com/media/xT5LMDzN1jKqGVZpLq/giphy.gif",
+    "options": [
+      {"slNo": "A", "value": "Berlin", "answer": true},
+      {"slNo": "B", "value": "Madrid", "answer": false},
+      {"slNo": "C", "value": "Rome", "answer": false},
+      {"slNo": "D", "value": "Paris", "answer": false}
+    ],
+    "isSubmitted": false,
+    "submit": null
+  }
+];
+
+const practiceSetFour = [
+  {
+    "no": 1,
+    "question": "What is the capital of Germany?",
+    "mediaFile": "https://media.giphy.com/media/xT5LMDzN1jKqGVZpLq/giphy.gif",
+    "options": [
+      {"slNo": "A", "value": "Berlin", "answer": true},
+      {"slNo": "B", "value": "Madrid", "answer": false},
+      {"slNo": "C", "value": "Rome", "answer": false},
+      {"slNo": "D", "value": "Paris", "answer": false}
+    ],
+    "isSubmitted": false,
+    "submit": null
+  }
+];

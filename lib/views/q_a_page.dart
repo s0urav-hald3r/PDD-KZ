@@ -4,6 +4,7 @@ import 'package:exam_app/components/quiz_appbar.dart';
 import 'package:exam_app/config/colors.dart';
 import 'package:exam_app/config/icons.dart';
 import 'package:exam_app/controllers/practice_controller.dart';
+import 'package:exam_app/controllers/timer_controller.dart';
 import 'package:exam_app/utils/extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -11,19 +12,26 @@ import 'package:get/get.dart';
 import 'package:simple_gradient_text/simple_gradient_text.dart';
 
 class QAPage extends StatelessWidget {
-  const QAPage({super.key});
+  final PracticeController controller;
+  final TimerController timerController;
+  const QAPage({
+    super.key,
+    required this.controller,
+    required this.timerController,
+  });
 
   @override
   Widget build(BuildContext context) {
-    final controller = PracticeController.instance;
-
     return Scaffold(
       body: Container(
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height,
         decoration: BoxDecoration(gradient: containerGradient),
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          const QuizAppbar(),
+          QuizAppbar(
+            practiceController: controller,
+            timerController: timerController,
+          ),
           Expanded(
             child: Container(
               decoration: const BoxDecoration(
@@ -35,8 +43,8 @@ class QAPage extends StatelessWidget {
               ),
               child: Column(children: [
                 SizedBox(height: 25.h),
-                const ProgressBar(),
-                const Question(),
+                ProgressBar(controller: controller),
+                Question(controller: controller),
                 Obx(() {
                   return Row(
                       mainAxisAlignment: MainAxisAlignment.center,

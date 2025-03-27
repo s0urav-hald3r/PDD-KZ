@@ -2,6 +2,7 @@ import 'package:exam_app/config/colors.dart';
 import 'package:exam_app/config/icons.dart';
 import 'package:exam_app/controllers/home_controller.dart';
 import 'package:exam_app/controllers/practice_controller.dart';
+import 'package:exam_app/controllers/timer_controller.dart';
 import 'package:exam_app/services/navigator_key.dart';
 import 'package:exam_app/utils/extension.dart';
 import 'package:exam_app/views/premium_page.dart';
@@ -21,11 +22,15 @@ class PracticeCard extends StatefulWidget {
 }
 
 class _PracticeCardState extends State<PracticeCard> {
-  final controller = PracticeController.instance;
+  late PracticeController controller;
+  late TimerController timerController;
 
   @override
   void initState() {
     super.initState();
+    controller = Get.find<PracticeController>(tag: 'cardIndex_${widget.index}');
+    timerController =
+        Get.find<TimerController>(tag: 'cardIndex_${widget.index}');
     controller.initializePracticeSet(widget.index);
   }
 
@@ -36,7 +41,9 @@ class _PracticeCardState extends State<PracticeCard> {
         if (widget.index != 0 && !HomeController.instance.isProUser) {
           NavigatorKey.push(const PremiumPage());
         } else {
-          NavigatorKey.push(const QAPage());
+          NavigatorKey.push(
+            QAPage(controller: controller, timerController: timerController),
+          );
         }
       },
       child: Container(
@@ -64,12 +71,12 @@ class _PracticeCardState extends State<PracticeCard> {
               colors: const [primaryColor, primaryColor, secondaryColor],
             ),
             const Spacer(),
-            GetBuilder<PracticeController>(builder: (controller) {
+            Obx(() {
               return RichText(
                 text: TextSpan(children: [
-                  const TextSpan(
-                    text: '0',
-                    style: TextStyle(
+                  TextSpan(
+                    text: '${controller.currentIndex}',
+                    style: const TextStyle(
                       fontWeight: FontWeight.w400,
                       color: blackColor,
                       fontSize: 16,

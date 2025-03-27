@@ -9,10 +9,21 @@ class NavigatorKey {
 
   static String? previousRoute;
   static String? currentRoute;
+  static bool _isNavigating = false;
+
+  static bool _canNavigate() {
+    if (_isNavigating) return false;
+    _isNavigating = true;
+    Future.delayed(
+        const Duration(milliseconds: 500), () => _isNavigating = false);
+    return true;
+  }
 
   static Future<dynamic>? push(dynamic route, {String? routeName}) {
-    previousRoute = Get.currentRoute; // Update GetX's previousRoute
-    currentRoute = routeName; // Update GetX's currentRoute
+    if (!_canNavigate()) return null;
+
+    previousRoute = Get.currentRoute;
+    currentRoute = routeName;
 
     return navigatorKey.currentState?.push(PageTransition(
       child: route,
@@ -22,8 +33,10 @@ class NavigatorKey {
   }
 
   static Future<dynamic>? pushReplacement(dynamic route, {String? routeName}) {
-    previousRoute = Get.currentRoute; // Update GetX's previousRoute
-    currentRoute = routeName; // Update GetX's currentRoute
+    if (!_canNavigate()) return null;
+
+    previousRoute = Get.currentRoute;
+    currentRoute = routeName;
 
     return navigatorKey.currentState?.pushReplacement(PageTransition(
       child: route,
@@ -34,8 +47,10 @@ class NavigatorKey {
 
   static Future<dynamic>? pushAndRemoveUntil(dynamic route,
       {String? routeName}) {
-    previousRoute = Get.currentRoute; // Update GetX's previousRoute
-    currentRoute = routeName; // Update GetX's currentRoute
+    if (!_canNavigate()) return null;
+
+    previousRoute = Get.currentRoute;
+    currentRoute = routeName;
 
     return navigatorKey.currentState?.pushAndRemoveUntil(
         PageTransition(
@@ -51,9 +66,10 @@ class NavigatorKey {
   }
 
   static void pop([dynamic arguments]) {
-    currentRoute = previousRoute;
+    if (!_canNavigate()) return;
+
     if (canPop()) {
-      return navigatorKey.currentState?.pop(arguments);
+      navigatorKey.currentState?.pop(arguments);
     }
   }
 }

@@ -1,7 +1,10 @@
 import 'package:exam_app/components/practice_card.dart';
 import 'package:exam_app/config/colors.dart';
+import 'package:exam_app/controllers/practice_controller.dart';
+import 'package:exam_app/controllers/timer_controller.dart';
 import 'package:exam_app/utils/extension.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class PracticePage extends StatelessWidget {
   const PracticePage({super.key});
@@ -41,9 +44,12 @@ class PracticePage extends StatelessWidget {
               ),
               padding: EdgeInsets.fromLTRB(25.w, 15.h, 25.w, 0),
               child: ListView.builder(
-                  itemCount: 2,
+                  itemCount: 4,
                   padding: EdgeInsets.zero,
                   itemBuilder: (context, index) {
+                    Get.put(PracticeController(), tag: 'cardIndex_$index');
+                    Get.put(TimerController(), tag: 'cardIndex_$index');
+
                     return PracticeCard(index: index);
                   }),
             ),

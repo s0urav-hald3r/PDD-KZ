@@ -1,20 +1,19 @@
 import 'package:exam_app/config/colors.dart';
 import 'package:exam_app/controllers/home_controller.dart';
-import 'package:exam_app/controllers/practice_controller.dart';
-import 'package:exam_app/controllers/timer_controller.dart';
 import 'package:exam_app/services/navigator_key.dart';
 import 'package:exam_app/views/navbar_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
+  await GetStorage.init();
+
   // Dependency injection
   Get.lazyPut(() => HomeController());
-  Get.lazyPut(() => PracticeController());
-  Get.lazyPut(() => TimerController());
 
   await SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,

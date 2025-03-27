@@ -1,11 +1,10 @@
 import 'dart:async';
 import 'package:get/get.dart';
+import 'package:exam_app/services/local_storage.dart';
 
 class TimerController extends GetxController {
-  static TimerController get instance => Get.find();
-
-  RxInt min = 19.obs;
-  RxInt sec = 59.obs;
+  RxInt min = 20.obs;
+  RxInt sec = 0.obs;
 
   Timer? _timer;
 
@@ -15,9 +14,23 @@ class TimerController extends GetxController {
   String get formattedTime =>
       '${minute.toString().padLeft(2, '0')}:${second.toString().padLeft(2, '0')}';
 
-  void startTimer() {
-    min.value = 19;
-    sec.value = 59;
+  void startTimer({int? setIndex}) {
+    if (setIndex != null) {
+      // Try to restore saved timer state
+      final savedMin = LocalStorage.getData('timer_min_$setIndex');
+      final savedSec = LocalStorage.getData('timer_sec_$setIndex');
+
+      if (savedMin != null && savedSec != null) {
+        min.value = savedMin;
+        sec.value = savedSec;
+      } else {
+        min.value = 19;
+        sec.value = 59;
+      }
+    } else {
+      min.value = 19;
+      sec.value = 59;
+    }
 
     _timer?.cancel(); // Cancel any existing timer before starting a new one
 
@@ -33,10 +46,22 @@ class TimerController extends GetxController {
     });
   }
 
-  void stopTimer() {
+  void stopTimer({int? setIndex}) {
     _timer?.cancel(); // Cancel the timer when stopping
+
+    if (setIndex != null) {
+      // Save current timer state
+      LocalStorage.setData('timer_min_$setIndex', min.value);
+      LocalStorage.setData('timer_sec_$setIndex', sec.value);
+    }
+
     min.value = 0;
     sec.value = 0;
+  }
+
+  void clearSavedTimer(int setIndex) {
+    LocalStorage.removeData('timer_min_$setIndex');
+    LocalStorage.removeData('timer_sec_$setIndex');
   }
 
   bool get isTimerStop => min.value == 0 && sec.value == 0;

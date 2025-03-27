@@ -6,7 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class ProgressBar extends StatefulWidget {
-  const ProgressBar({super.key});
+  final PracticeController controller;
+  const ProgressBar({super.key, required this.controller});
 
   @override
   State<ProgressBar> createState() => _ProgressBarState();
@@ -14,17 +15,15 @@ class ProgressBar extends StatefulWidget {
 
 class _ProgressBarState extends State<ProgressBar>
     with SingleTickerProviderStateMixin {
-  final controller = PracticeController.instance;
-
   @override
   void initState() {
     super.initState();
-    controller.initializeController(this);
+    widget.controller.initializeController(this);
   }
 
   BoxDecoration getTabDecoration(PracticeSetModel tab) {
     // Case 1: Current tab (active tab)
-    if (tab.no == (controller.currentIndex + 1)) {
+    if (tab.no == (widget.controller.currentIndex + 1)) {
       return BoxDecoration(
         shape: BoxShape.circle,
         gradient: containerGradient,
@@ -62,7 +61,7 @@ class _ProgressBarState extends State<ProgressBar>
       padding: EdgeInsets.symmetric(horizontal: 25.w),
       child: Obx(() {
         return TabBar(
-          controller: controller.tabController,
+          controller: widget.controller.tabController,
           isScrollable: true,
           tabAlignment: TabAlignment.start,
           padding: EdgeInsets.zero,
@@ -70,8 +69,8 @@ class _ProgressBarState extends State<ProgressBar>
           indicatorWeight: 2,
           labelPadding: EdgeInsets.symmetric(horizontal: 7.w),
           indicatorColor: primaryColor,
-          onTap: controller.changeTab,
-          tabs: controller.praciceSets.map((tab) {
+          onTap: widget.controller.changeTab,
+          tabs: widget.controller.praciceSets.map((tab) {
             return Tab(
               child: Container(
                 width: 32.w,

@@ -7,12 +7,11 @@ import 'package:get/get.dart';
 import 'package:simple_gradient_text/simple_gradient_text.dart';
 
 class Question extends StatelessWidget {
-  const Question({super.key});
+  final PracticeController controller;
+  const Question({super.key, required this.controller});
 
   @override
   Widget build(BuildContext context) {
-    final controller = PracticeController.instance;
-
     return Obx(() {
       return Container(
         width: MediaQuery.of(context).size.width,
