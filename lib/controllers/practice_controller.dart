@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:exam_app/components/quiz_completion_dialog.dart';
+import 'package:exam_app/controllers/timer_controller.dart';
 import 'package:exam_app/models/practice_set_model.dart';
 import 'package:exam_app/practice_set.dart';
 import 'package:exam_app/services/navigator_key.dart';
@@ -20,6 +22,15 @@ class PracticeController extends GetxController {
 
   int get practiceSetLen => _praciceSets.length;
   bool get isLastQuestion => currentIndex == practiceSetLen - 1;
+
+  bool get isPracticeSetComplete {
+    final controller =
+        Get.find<TimerController>(tag: 'cardIndex_$currentSetIndex');
+    if (controller.isTimerStop) return true;
+
+    return LocalStorage.getData('complete_practice_set_$currentSetIndex') ??
+        false;
+  }
 
   set currentSetIndex(int value) => _currentSetIndex.value = value;
   set currentIndex(int value) => _currentIndex.value = value;
@@ -85,21 +96,39 @@ class PracticeController extends GetxController {
   }
 
   void changeTab(int index) {
+    if (isPracticeSetComplete) {
+      tabController.index = index;
+      return;
+    }
+
     tabController.index = tabController.previousIndex;
   }
 
   void submitQuestion() {
+    if (isPracticeSetComplete) return;
+
     if (!isLastQuestion) {
       currentIndex = currentIndex + 1;
       tabController.index = tabController.index + 1;
       _savePracticeState();
     } else {
       _savePracticeState();
-      NavigatorKey.pop();
+      final controller =
+          Get.find<TimerController>(tag: 'cardIndex_$currentSetIndex');
+      controller.stopTimer();
+
+      showDialog(
+        context: NavigatorKey.context,
+        barrierDismissible: false,
+        builder: (context) => const QuizCompletionDialog(isTimeUp: false),
+      );
+      LocalStorage.setData('complete_practice_set_$currentSetIndex', true);
     }
   }
 
   void doAnswer(int index) {
+    if (isPracticeSetComplete) return;
+
     praciceSets[currentIndex] = praciceSets[currentIndex].copyWith(
       submit: praciceSets[currentIndex].options[index],
       isSubmitted: true,

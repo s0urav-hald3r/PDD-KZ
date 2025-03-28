@@ -6,6 +6,7 @@ class NavigatorKey {
   NavigatorKey._();
 
   static GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+  static BuildContext context = navigatorKey.currentContext!;
 
   static String? previousRoute;
   static String? currentRoute;

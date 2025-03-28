@@ -1,10 +1,13 @@
 import 'dart:async';
+import 'package:exam_app/services/navigator_key.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:exam_app/services/local_storage.dart';
+import 'package:exam_app/components/quiz_completion_dialog.dart';
 
 class TimerController extends GetxController {
-  RxInt min = 20.obs;
-  RxInt sec = 0.obs;
+  RxInt min = 01.obs;
+  RxInt sec = 59.obs;
 
   Timer? _timer;
 
@@ -24,11 +27,11 @@ class TimerController extends GetxController {
         min.value = savedMin;
         sec.value = savedSec;
       } else {
-        min.value = 19;
+        min.value = 01;
         sec.value = 59;
       }
     } else {
-      min.value = 19;
+      min.value = 01;
       sec.value = 59;
     }
 
@@ -41,7 +44,15 @@ class TimerController extends GetxController {
         min.value = min.value - 1;
         sec.value = 59;
       } else {
+        // Use Get.find to get the current context and show dialog
+        showDialog(
+          context: NavigatorKey.context,
+          barrierDismissible: false,
+          builder: (context) => const QuizCompletionDialog(),
+        );
+
         stopTimer();
+        LocalStorage.setData('complete_practice_set_$setIndex', true);
       }
     });
   }

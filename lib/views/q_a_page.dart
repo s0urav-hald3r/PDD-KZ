@@ -46,6 +46,10 @@ class QAPage extends StatelessWidget {
                 ProgressBar(controller: controller),
                 Question(controller: controller),
                 Obx(() {
+                  if (controller.isPracticeSetComplete) {
+                    return const SizedBox.shrink();
+                  }
+
                   return Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
