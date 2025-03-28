@@ -40,25 +40,29 @@ class QuizCompletionDialog extends StatelessWidget {
           ),
           SizedBox(height: 20.h),
           Row(mainAxisAlignment: MainAxisAlignment.end, children: [
-            ElevatedButton(
-              onPressed: () {
+            InkWell(
+              onTap: () {
                 NavigatorKey.pop();
               },
-              style: ElevatedButton.styleFrom(
-                minimumSize: Size(120.w, 45.h),
-                backgroundColor: primaryColor,
-                shape: RoundedRectangleBorder(
+              child: Container(
+                width: 140.w,
+                height: 45.h,
+                decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(5),
+                  gradient: containerGradient,
+                ),
+                child: const Center(
+                  child: Text(
+                    'Review answers',
+                    style: TextStyle(
+                      fontWeight: FontWeight.w700,
+                      fontSize: 16,
+                      color: whiteColor,
+                    ),
+                  ),
                 ),
               ),
-              child: const Text(
-                'Review Answers',
-                style: TextStyle(
-                  color: whiteColor,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
+            )
           ]),
         ]),
       ),
