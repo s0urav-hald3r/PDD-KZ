@@ -98,10 +98,10 @@ class PracticeController extends GetxController {
   void changeTab(int index) {
     if (isPracticeSetComplete) {
       tabController.index = index;
-      return;
+      currentIndex = index;
+    } else {
+      tabController.index = tabController.previousIndex;
     }
-
-    tabController.index = tabController.previousIndex;
   }
 
   void submitQuestion() {
