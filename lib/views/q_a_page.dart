@@ -5,6 +5,7 @@ import 'package:exam_app/config/colors.dart';
 import 'package:exam_app/config/icons.dart';
 import 'package:exam_app/controllers/practice_controller.dart';
 import 'package:exam_app/controllers/timer_controller.dart';
+import 'package:exam_app/services/navigator_key.dart';
 import 'package:exam_app/utils/extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -47,7 +48,29 @@ class QAPage extends StatelessWidget {
                 Question(controller: controller),
                 Obx(() {
                   if (controller.isPracticeSetComplete) {
-                    return const SizedBox.shrink();
+                    return InkWell(
+                      onTap: () {
+                        NavigatorKey.pop();
+                      },
+                      child: Container(
+                        width: 140.w,
+                        height: 45.h,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(5),
+                          gradient: containerGradient,
+                        ),
+                        child: const Center(
+                          child: Text(
+                            'Back to practice',
+                            style: TextStyle(
+                              fontWeight: FontWeight.w700,
+                              fontSize: 16,
+                              color: whiteColor,
+                            ),
+                          ),
+                        ),
+                      ),
+                    );
                   }
 
                   return Row(
