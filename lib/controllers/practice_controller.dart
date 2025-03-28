@@ -129,6 +129,8 @@ class PracticeController extends GetxController {
   void doAnswer(int index) {
     if (isPracticeSetComplete) return;
 
+    if (praciceSets[currentIndex].isSubmitted) return;
+
     praciceSets[currentIndex] = praciceSets[currentIndex].copyWith(
       submit: praciceSets[currentIndex].options[index],
       isSubmitted: true,
