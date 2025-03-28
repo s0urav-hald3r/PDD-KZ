@@ -13,7 +13,7 @@ class Question extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Obx(() {
-      int index = controller.isPracticeSetComplete
+      int currentIndex = controller.isPracticeSetComplete
           ? controller.tabController.index
           : controller.currentIndex;
 
@@ -25,12 +25,12 @@ class Question extends StatelessWidget {
             height: 180.h,
             width: MediaQuery.of(context).size.width,
             child: CachedNetworkImage(
-                imageUrl: controller.praciceSets[index].mediaFile,
+                imageUrl: controller.praciceSets[currentIndex].mediaFile,
                 fit: BoxFit.cover),
           ),
           SizedBox(height: 25.h),
           Text(
-            controller.praciceSets[index].question,
+            controller.praciceSets[currentIndex].question,
             style: const TextStyle(
               fontWeight: FontWeight.w600,
               fontSize: 16,
@@ -42,7 +42,7 @@ class Question extends StatelessWidget {
             shrinkWrap: true,
             padding: EdgeInsets.zero,
             itemBuilder: (context, index) {
-              final currentQuestion = controller.praciceSets[index];
+              final currentQuestion = controller.praciceSets[currentIndex];
               final option = currentQuestion.options[index];
               final isSubmitted = currentQuestion.submit != null;
               final isSelected = controller.submitAnswerIndex() == index;
