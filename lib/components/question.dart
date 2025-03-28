@@ -42,65 +42,72 @@ class Question extends StatelessWidget {
               final currentQuestion =
                   controller.praciceSets[controller.currentIndex];
               final option = currentQuestion.options[index];
-              final isSubmitted = currentQuestion.submit != null;
               final isSelected = controller.submitAnswerIndex() == index;
-              final isSelectedAfterSubmit = isSubmitted && isSelected;
+              final isCorrect = controller.correctAnswerIndex() == index;
 
-              return InkWell(
-                onTap: () => controller.doAnswer(index),
-                child: Row(
-                  children: [
-                    // Option indicator circle
-                    Container(
-                      width: 40.w,
-                      height: 40.w,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: isSelectedAfterSubmit
-                            ? null
-                            : const Color(0xFFD4D4D4),
-                        gradient:
-                            isSelectedAfterSubmit ? containerGradient : null,
-                      ),
-                      child: Center(
-                        child: Text(
-                          option.slNo,
-                          style: const TextStyle(
-                            color: whiteColor,
-                            fontWeight: FontWeight.w500,
-                            fontSize: 16,
+              return Container(
+                padding: EdgeInsets.symmetric(horizontal: 5.w, vertical: 5.h),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(5),
+                  color: isSelected || isCorrect
+                      ? option.answer
+                          ? Colors.green.shade200
+                          : Colors.red.shade200
+                      : null,
+                ),
+                child: InkWell(
+                  onTap: () => controller.doAnswer(index),
+                  child: Row(
+                    children: [
+                      // Option indicator circle
+                      Container(
+                        width: 40.w,
+                        height: 40.w,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: isSelected ? null : const Color(0xFFD4D4D4),
+                          gradient: isSelected ? containerGradient : null,
+                        ),
+                        child: Center(
+                          child: Text(
+                            option.slNo,
+                            style: const TextStyle(
+                              color: whiteColor,
+                              fontWeight: FontWeight.w500,
+                              fontSize: 16,
+                            ),
                           ),
                         ),
                       ),
-                    ),
 
-                    SizedBox(width: 10.w),
+                      SizedBox(width: 10.w),
 
-                    // Option text content
-                    Expanded(
-                      child: isSelectedAfterSubmit
-                          ? GradientText(
-                              option.value,
-                              style: const TextStyle(
-                                fontWeight: FontWeight.w400,
-                                fontSize: 14,
+                      // Option text content
+                      Expanded(
+                        child: isSelected
+                            ? GradientText(
+                                option.value,
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.w400,
+                                  fontSize: 14,
+                                ),
+                                colors: const [
+                                  primaryColor,
+                                  primaryColor,
+                                  secondaryColor
+                                ],
+                              )
+                            : Text(
+                                option.value,
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.w400,
+                                  fontSize: 14,
+                                  color: Color(0xFF333333),
+                                ),
                               ),
-                              colors: const [
-                                primaryColor,
-                                primaryColor,
-                                secondaryColor
-                              ],
-                            )
-                          : Text(
-                              option.value,
-                              style: const TextStyle(
-                                fontWeight: FontWeight.w400,
-                                fontSize: 14,
-                                color: Color(0xFF333333),
-                              ),
-                            ),
-                    ),
-                  ],
+                      ),
+                    ],
+                  ),
                 ),
               );
             },

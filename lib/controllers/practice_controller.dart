@@ -9,20 +9,34 @@ import 'package:exam_app/services/local_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+/// A controller class that manages practice sets and their states in the exam app.
+/// Handles practice set initialization, navigation, answer submission, and state persistence.
 class PracticeController extends GetxController {
+  /// Tab controller for managing question navigation
   late TabController tabController;
 
+  /// Current practice set index (0-3) representing which set is active
   final RxInt _currentSetIndex = 0.obs;
+
+  /// Current question index within the active practice set
   final RxInt _currentIndex = 0.obs;
+
+  /// List of practice set models containing questions and their states
   final RxList<PracticeSetModel> _praciceSets = <PracticeSetModel>[].obs;
 
+  /// Getters and setters for reactive state management
   int get currentSetIndex => _currentSetIndex.value;
   int get currentIndex => _currentIndex.value;
   List<PracticeSetModel> get praciceSets => _praciceSets;
 
+  /// Total number of questions in the current practice set
   int get practiceSetLen => _praciceSets.length;
+
+  /// Indicates if user is on the last question
   bool get isLastQuestion => currentIndex == practiceSetLen - 1;
 
+  /// Checks if the current practice set is completed
+  /// Returns true if either the timer has stopped or the set is marked as complete
   bool get isPracticeSetComplete {
     final controller =
         Get.find<TimerController>(tag: 'cardIndex_$currentSetIndex');
@@ -36,6 +50,8 @@ class PracticeController extends GetxController {
   set currentIndex(int value) => _currentIndex.value = value;
   set praciceSets(List<PracticeSetModel> value) => _praciceSets.value = value;
 
+  /// Initializes the tab controller with saved question index
+  /// @param vsync - Ticker provider for animation
   void initializeController(TickerProvider vsync) {
     tabController = TabController(
         initialIndex:
@@ -44,6 +60,9 @@ class PracticeController extends GetxController {
         vsync: vsync);
   }
 
+  /// Returns the practice set data based on the index
+  /// @param index - Index of the practice set (0-3)
+  /// @returns JSON data for the selected practice set
   getPracticeSetJson(int index) {
     switch (index) {
       case 0:
@@ -59,11 +78,12 @@ class PracticeController extends GetxController {
     }
   }
 
+  /// Initializes or restores a practice set from local storage
+  /// @param index - Index of the practice set to initialize
   void initializePracticeSet(int index) {
     currentSetIndex = index;
     var temp = <PracticeSetModel>[];
 
-    // Load saved state if exists and within timeout
     String? savedPracticeSet =
         LocalStorage.getData('practice_set_$currentSetIndex');
     debugPrint('savedPracticeSet: $savedPracticeSet');
@@ -95,6 +115,8 @@ class PracticeController extends GetxController {
     super.onClose();
   }
 
+  /// Changes the current tab if the practice set is complete
+  /// @param index - Target tab index
   void changeTab(int index) {
     if (isPracticeSetComplete) {
       tabController.index = index;
@@ -104,6 +126,8 @@ class PracticeController extends GetxController {
     }
   }
 
+  /// Handles question submission and practice set completion
+  /// Saves state and shows completion dialog when all questions are answered
   void submitQuestion() {
     if (isPracticeSetComplete) return;
 
@@ -126,9 +150,10 @@ class PracticeController extends GetxController {
     }
   }
 
+  /// Records user's answer for the current question
+  /// @param index - Selected option index
   void doAnswer(int index) {
     if (isPracticeSetComplete) return;
-
     if (praciceSets[currentIndex].isSubmitted) return;
 
     praciceSets[currentIndex] = praciceSets[currentIndex].copyWith(
@@ -137,6 +162,8 @@ class PracticeController extends GetxController {
     );
   }
 
+  /// Returns the index of the submitted answer
+  /// @returns -1 if no answer submitted, otherwise returns the answer index
   int submitAnswerIndex() {
     if (praciceSets[currentIndex].submit == null) {
       return -1;
@@ -147,6 +174,18 @@ class PracticeController extends GetxController {
         .indexOf(praciceSets[currentIndex].submit!);
   }
 
+  /// Returns the index of the correct answer
+  /// @returns -1 if no answer submitted, otherwise returns the correct answer index
+  int correctAnswerIndex() {
+    if (praciceSets[currentIndex].submit == null) {
+      return -1;
+    }
+
+    return praciceSets[currentIndex].options.indexWhere((opt) => opt.answer);
+  }
+
+  /// Saves the current practice state to local storage
+  /// Persists both the practice set data and current question index
   void _savePracticeState() async {
     final practiceSetData = praciceSets.map((e) => e.toJson()).toList();
     await LocalStorage.setData(

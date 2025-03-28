@@ -6,7 +6,7 @@ import 'package:exam_app/services/local_storage.dart';
 import 'package:exam_app/components/quiz_completion_dialog.dart';
 
 class TimerController extends GetxController {
-  RxInt min = 04.obs;
+  RxInt min = 29.obs;
   RxInt sec = 59.obs;
 
   Timer? _timer;
@@ -27,11 +27,11 @@ class TimerController extends GetxController {
         min.value = savedMin;
         sec.value = savedSec;
       } else {
-        min.value = 04;
+        min.value = 29;
         sec.value = 59;
       }
     } else {
-      min.value = 04;
+      min.value = 29;
       sec.value = 59;
     }
 
