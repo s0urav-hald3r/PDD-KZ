@@ -20,9 +20,9 @@ class PracticePage extends StatelessWidget {
           Padding(
             padding: EdgeInsets.fromLTRB(
               25.w,
-              MediaQuery.of(context).padding.top + 20.h,
+              MediaQuery.of(context).padding.top + 15.h,
               0,
-              20.h,
+              15.h,
             ),
             child: const Text(
               'Practice',

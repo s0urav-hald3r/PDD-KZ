@@ -43,7 +43,7 @@ class QAPage extends StatelessWidget {
                 ),
               ),
               child: Column(children: [
-                SizedBox(height: 25.h),
+                SizedBox(height: 15.h),
                 ProgressBar(controller: controller),
                 Question(controller: controller),
                 Obx(() {
@@ -119,7 +119,8 @@ class QAPage extends StatelessWidget {
                           ),
                         ),
                       ]);
-                })
+                }),
+                SizedBox(height: MediaQuery.of(context).padding.bottom)
               ]),
             ),
           )

@@ -41,7 +41,7 @@ class _QuizAppbarState extends State<QuizAppbar> {
   Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsets.fromLTRB(
-          25.w, MediaQuery.of(context).padding.top + 20.h, 25.w, 20.h),
+          25.w, MediaQuery.of(context).padding.top + 15.h, 25.w, 15.h),
       child: Row(children: [
         InkWell(
             onTap: () {

@@ -15,17 +15,18 @@ class Question extends StatelessWidget {
     return Obx(() {
       return Container(
         width: MediaQuery.of(context).size.width,
-        padding: EdgeInsets.symmetric(vertical: 25.h, horizontal: 25.w),
+        padding: EdgeInsets.symmetric(horizontal: 25.w),
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          SizedBox(height: 15.h),
           SizedBox(
-            height: 180.h,
+            height: 160.h,
             width: MediaQuery.of(context).size.width,
             child: CachedNetworkImage(
                 imageUrl:
                     controller.praciceSets[controller.currentIndex].mediaFile,
                 fit: BoxFit.cover),
           ),
-          SizedBox(height: 25.h),
+          SizedBox(height: 15.h),
           Text(
             controller.praciceSets[controller.currentIndex].question,
             style: const TextStyle(
@@ -38,6 +39,7 @@ class Question extends StatelessWidget {
           ListView.separated(
             shrinkWrap: true,
             padding: EdgeInsets.zero,
+            physics: const NeverScrollableScrollPhysics(),
             itemBuilder: (context, index) {
               final currentQuestion =
                   controller.praciceSets[controller.currentIndex];
@@ -46,7 +48,8 @@ class Question extends StatelessWidget {
               final isCorrect = controller.correctAnswerIndex() == index;
 
               return Container(
-                padding: EdgeInsets.symmetric(horizontal: 5.w, vertical: 5.h),
+                padding:
+                    EdgeInsets.symmetric(horizontal: 10.w, vertical: 7.5.h),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(5),
                   color: isSelected || isCorrect
@@ -61,8 +64,8 @@ class Question extends StatelessWidget {
                     children: [
                       // Option indicator circle
                       Container(
-                        width: 40.w,
-                        height: 40.w,
+                        width: 30.w,
+                        height: 30.w,
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
                           color: isSelected ? null : const Color(0xFFD4D4D4),
@@ -114,6 +117,89 @@ class Question extends StatelessWidget {
             separatorBuilder: (context, index) => SizedBox(height: 15.h),
             itemCount: 4,
           ),
+          Visibility.maintain(
+            visible:
+                controller.praciceSets[controller.currentIndex].isSubmitted,
+            child: InkWell(
+              onTap: () {
+                showModalBottomSheet(
+                    context: context,
+                    builder: (_) {
+                      return Container(
+                        decoration: const BoxDecoration(
+                          color: whiteColor,
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(25),
+                            topRight: Radius.circular(25),
+                          ),
+                        ),
+                        padding: EdgeInsets.fromLTRB(
+                          25.w,
+                          25.h,
+                          25.w,
+                          25.h + MediaQuery.of(context).padding.bottom,
+                        ),
+                        child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              const Text(
+                                'Explanation! 🔭',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 18,
+                                  color: Color(0xFF333333),
+                                ),
+                              ),
+                              SizedBox(height: 10.h),
+                              const Text(
+                                'Symbols in text, especially in informal settings like texting and social media, are often used to express emotions, indicate tone, or add a visual element to a message. They range from simple emoticons to more complex symbols, and their meanings can vary depending on the context.',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w400,
+                                  fontSize: 13,
+                                  color: Color(0xFF333333),
+                                ),
+                              ),
+                            ]),
+                      );
+                    });
+              },
+              child: Container(
+                height: 74.h,
+                width: MediaQuery.of(context).size.width,
+                margin: EdgeInsets.symmetric(vertical: 15.h),
+                padding:
+                    EdgeInsets.symmetric(horizontal: 10.w, vertical: 7.5.h),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(5),
+                  color: Colors.green.shade200,
+                ),
+                child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        'Explanation! 🔭',
+                        style: TextStyle(
+                          fontWeight: FontWeight.w600,
+                          fontSize: 16,
+                          color: Color(0xFF333333),
+                        ),
+                      ),
+                      SizedBox(height: 5.h),
+                      const Text(
+                        'Symbols in text, especially in informal settings like texting and social media, are often used to express emotions, indicate tone, or add a visual element to a message. They range from simple emoticons to more complex symbols, and their meanings can vary depending on the context.',
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          fontWeight: FontWeight.w400,
+                          fontSize: 10,
+                          color: Color(0xFF333333),
+                        ),
+                      ),
+                    ]),
+              ),
+            ),
+          )
         ]),
       );
     });

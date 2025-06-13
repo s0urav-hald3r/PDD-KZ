@@ -17,9 +17,9 @@ class FavouritePage extends StatelessWidget {
           Padding(
             padding: EdgeInsets.fromLTRB(
               25.w,
-              MediaQuery.of(context).padding.top + 20.h,
+              MediaQuery.of(context).padding.top + 15.h,
               0,
-              20.h,
+              15.h,
             ),
             child: const Text(
               'Favourite',
@@ -48,7 +48,6 @@ class FavouritePage extends StatelessWidget {
                     children: List.generate(7, (index) {
                       return Container(
                         width: 157.w,
-                        height: 170.h,
                         decoration: BoxDecoration(
                           color: const Color(0xFFF5F7FA),
                           borderRadius: BorderRadius.circular(25),
