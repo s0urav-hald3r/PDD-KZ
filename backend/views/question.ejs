@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PDD KZ</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="min-h-screen bg-[#0d1117] text-[#c9d1d9]">
+    <div class="container mx-auto px-4 py-8">
+        <div
+            class="max-w-4xl mx-auto bg-[#161b22] rounded-2xl shadow-2xl p-8 transform hover:scale-[1.01] transition-transform duration-300">
+            <h2 class="text-3xl mb-8 text-[#c9d1d9]">Add New Question</h2>
+            <form action="/method/question" method="POST" class="space-y-6">
+                <!-- Question Set Selection -->
+                <div class="space-y-2">
+                    <label class="block text-lg text-[#c9d1d9]">Select Question Set:</label>
+                    <div class="grid grid-cols-5 gap-4">
+                        <% for(let i=1; i <=12; i++) { %>
+                            <div class="flex items-center space-x-2">
+                                <input type="radio" name="questionSet" value="<%= i %>" required
+                                    class="w-4 h-4 text-[#238636] border-[#30363d] focus:ring-[#238636]">
+                                <label class="text-sm text-[#c9d1d9]">Set <%= i %></label>
+                            </div>
+                            <% } %>
+                    </div>
+                </div>
+
+                <!-- Question Details -->
+                <div class="space-y-2">
+                    <label class="block text-lg text-[#c9d1d9]">Question:</label>
+                    <input name="question" placeholder="Enter question" rows="3" required
+                        class="w-full px-3 py-2 bg-[#0d1117] border border-[#30363d] rounded-xl focus:outline-none focus:border-[#238636] text-[#c9d1d9] placeholder-[#8b949e]">
+                </div>
+
+                <div class="space-y-2">
+                    <label class="block text-lg text-[#c9d1d9]">Image URL:</label>
+                    <input type="url" name="imageUrl" placeholder="https://example.com/image.jpg"
+                        class="w-full px-3 py-2 bg-[#0d1117] border border-[#30363d] rounded-xl focus:outline-none focus:border-[#238636] text-[#c9d1d9] placeholder-[#8b949e]">
+                </div>
+
+                <!-- Options -->
+                <div class="space-y-4">
+                    <label class="block text-lg text-[#c9d1d9]">Options:</label>
+                    <% ['A', 'B' , 'C' , 'D' ].forEach(option=> { %>
+                        <div
+                            class="bg-[#1f2937] rounded-xl p-4 border border-[#30363d] transform hover:scale-[1.01] transition-all duration-300">
+                            <div class="flex items-center space-x-4">
+                                <div class="w-24">
+                                    <strong class="text-[#c9d1d9]">Option <%= option %>:</strong>
+                                </div>
+                                <div class="flex-grow">
+                                    <input type="text" name="option<%= option %>Value" required
+                                        placeholder="Enter option <%= option %>"
+                                        class="w-full px-3 py-2 bg-[#0d1117] border border-[#30363d] rounded-xl focus:outline-none focus:border-[#238636] text-[#c9d1d9] placeholder-[#8b949e]">
+                                </div>
+                                <div class="flex items-center space-x-2">
+                                    <input type="radio" name="correctAnswer" value="<%= option %>" required
+                                        class="w-4 h-4 text-[#238636] border-[#30363d] focus:ring-[#238636]">
+                                    <label class="text-sm text-[#c9d1d9]">Correct Answer</label>
+                                </div>
+                            </div>
+                        </div>
+                        <% }) %>
+                </div>
+
+                <div class="space-y-2">
+                    <label class="block text-lg text-[#c9d1d9]">Explanation:</label>
+                    <input type="text" name="explanation" placeholder="Enter explanation"
+                        class="w-full px-3 py-2 bg-[#0d1117] border border-[#30363d] rounded-xl focus:outline-none focus:border-[#238636] text-[#c9d1d9] placeholder-[#8b949e]">
+                </div>
+
+                <button type="submit"
+                    class="px-6 py-3 bg-[#238636] text-[#c9d1d9] rounded-xl hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300 hover:bg-[#2ea043] focus:outline-none focus:ring-2 focus:ring-[#238636] focus:ring-offset-2">
+                    Add Question
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Form validation
+        document.querySelector('form').addEventListener('submit', function (event) {
+            if (!this.checkValidity()) {
+                event.preventDefault()
+                event.stopPropagation()
+            }
+        })
+    </script>
+</body>
+
+</html>
