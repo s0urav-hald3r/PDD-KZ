@@ -6,12 +6,9 @@ const PORT = process.env.PORT || 3000;
 
 //Connect to DB
 const admin = require('firebase-admin');
-// Import FieldPath if not already imported
-const { FieldPath } = require('firebase-admin/firestore');
 
 // Initialize Firebase Admin SDK
 try {
-
     // Parse the JSON string from the environment variable
     const serviceAccount = process.env.NODE_ENV === 'production' ? JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT) : require('./serviceAccountKey.json');
 
