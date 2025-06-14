@@ -57,7 +57,7 @@ dev_dependencies:
   build_runner: ^2.4.13
   freezed: ^2.5.7
   json_serializable: ^6.9.0
-  # dart run change_app_package_name:main co.drivingexamapp.ios --ios
+  # dart run change_app_package_name:main com.pddresmikzzzapp.ios --ios
   change_app_package_name: ^1.4.0
 
 # For information on the generic Dart part of this file, see the
