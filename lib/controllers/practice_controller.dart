@@ -14,29 +14,30 @@ class PracticeController extends GetxController {
 
   final RxInt _currentSetIndex = 0.obs;
   final RxInt _currentIndex = 0.obs;
+  final RxInt _questionAttempted = 0.obs;
   final RxList<PracticeSetModel> _praciceSets = <PracticeSetModel>[].obs;
 
   int get currentSetIndex => _currentSetIndex.value;
   int get currentIndex => _currentIndex.value;
+  int get questionAttempted => _questionAttempted.value;
   List<PracticeSetModel> get praciceSets => _praciceSets;
 
   int get practiceSetLen => _praciceSets.length;
   bool get isLastQuestion => currentIndex == practiceSetLen - 1;
 
   bool get isPracticeSetComplete {
-    final controller =
-        Get.find<TimerController>(tag: 'cardIndex_$currentSetIndex');
-    if (controller.isTimerStop) return true;
-
     return LocalStorage.getData('complete_practice_set_$currentSetIndex') ??
         false;
   }
 
   set currentSetIndex(int value) => _currentSetIndex.value = value;
   set currentIndex(int value) => _currentIndex.value = value;
+  set questionAttempted(int value) => _questionAttempted.value = value;
   set praciceSets(List<PracticeSetModel> value) => _praciceSets.value = value;
 
   void initializeController(TickerProvider vsync) {
+    currentIndex =
+        LocalStorage.getData('current_question_$currentSetIndex') ?? 0;
     tabController = TabController(
         initialIndex:
             LocalStorage.getData('current_question_$currentSetIndex') ?? 0,
@@ -61,13 +62,17 @@ class PracticeController extends GetxController {
           .map((e) => PracticeSetModel.fromJson(e as Map<String, dynamic>))
           .toList();
 
-      currentIndex = LocalStorage.getData('current_question_$currentSetIndex');
+      currentIndex =
+          LocalStorage.getData('current_question_$currentSetIndex') ?? 0;
+
+      questionAttempted =
+          LocalStorage.getData('question_attempted_$currentSetIndex') ?? 0;
     } else {
       // Initialize new practice set
       temp = getPracticeSetJson(index);
 
-      currentIndex =
-          LocalStorage.getData('current_question_$currentSetIndex') ?? 0;
+      currentIndex = 0;
+      questionAttempted = 0;
     }
 
     praciceSets = temp;
@@ -82,12 +87,14 @@ class PracticeController extends GetxController {
     }
   }
 
-  void submitQuestion() {
+  void submitQuestion() async {
     if (isPracticeSetComplete) return;
 
     if (!isLastQuestion) {
       currentIndex = currentIndex + 1;
       tabController.index = tabController.index + 1;
+      await LocalStorage.setData(
+          'current_question_$currentSetIndex', currentIndex);
     } else {
       final controller =
           Get.find<TimerController>(tag: 'cardIndex_$currentSetIndex');
@@ -97,8 +104,9 @@ class PracticeController extends GetxController {
         context: NavigatorKey.context,
         barrierDismissible: false,
         builder: (context) => const QuizCompletionDialog(isTimeUp: false),
-      );
-      LocalStorage.setData('complete_practice_set_$currentSetIndex', true);
+      ).then((_) {
+        LocalStorage.setData('complete_practice_set_$currentSetIndex', true);
+      });
     }
   }
 
@@ -106,6 +114,7 @@ class PracticeController extends GetxController {
     if (isPracticeSetComplete) return;
     if (praciceSets[currentIndex].isSubmitted) return;
 
+    questionAttempted = questionAttempted + 1;
     praciceSets[currentIndex] = praciceSets[currentIndex].copyWith(
       submit: praciceSets[currentIndex].options[index],
       isSubmitted: true,
@@ -137,6 +146,6 @@ class PracticeController extends GetxController {
     await LocalStorage.setData(
         'practice_set_$currentSetIndex', jsonEncode(practiceSetData));
     await LocalStorage.setData(
-        'current_question_$currentSetIndex', currentIndex);
+        'question_attempted_$currentSetIndex', questionAttempted);
   }
 }

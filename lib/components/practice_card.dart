@@ -77,7 +77,7 @@ class _PracticeCardState extends State<PracticeCard> {
               return RichText(
                 text: TextSpan(children: [
                   TextSpan(
-                    text: '${controller.currentIndex}',
+                    text: '${controller.questionAttempted}',
                     style: const TextStyle(
                       fontWeight: FontWeight.w400,
                       color: blackColor,
@@ -106,7 +106,8 @@ class _PracticeCardState extends State<PracticeCard> {
                   width: 295.w,
                   lineHeight: 5.h,
                   percent: controller.practiceSetLen > 0
-                      ? (controller.currentIndex / controller.practiceSetLen)
+                      ? (controller.questionAttempted /
+                          controller.practiceSetLen)
                       : 0.0,
                   padding: EdgeInsets.zero,
                   barRadius: const Radius.circular(10),
