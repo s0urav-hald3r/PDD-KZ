@@ -22,7 +22,7 @@ class TimerController extends GetxController {
   void startTimer({int? setIndex}) {
     if (setIndex != null) {
       // Try to restore saved timer state
-      final savedSec = LocalStorage.getData('timer_sec_$setIndex');
+      final savedSec = LocalStorage.getData('timer_$setIndex');
 
       if (savedSec != null) {
         sec.value = savedSec;
@@ -39,7 +39,7 @@ class TimerController extends GetxController {
     _timer = Timer.periodic(const Duration(seconds: 1), (t) {
       if (sec.value > 0) {
         sec.value = sec.value - 1;
-        LocalStorage.setData('timer_sec_$setIndex', sec.value);
+        LocalStorage.setData('timer_$setIndex', sec.value);
       } else {
         // Use Get.find to get the current context and show dialog
         showDialog(
@@ -60,7 +60,7 @@ class TimerController extends GetxController {
   }
 
   void clearSavedTimer(int setIndex) {
-    LocalStorage.removeData('timer_sec_$setIndex');
+    LocalStorage.removeData('timer_$setIndex');
   }
 
   bool get isTimerStop => sec.value == 0;
