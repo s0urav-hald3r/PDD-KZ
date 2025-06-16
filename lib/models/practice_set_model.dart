@@ -12,6 +12,7 @@ class PracticeSetModel with _$PracticeSetModel {
         'https://thumb.ac-illust.com/b1/b170870007dfa419295d949814474ab2_t.jpeg')
     String mediaFile,
     @Default(<OptionModel>[]) final List<OptionModel> options,
+    @Default('') String explanation,
     @Default(false) bool isSubmitted,
     OptionModel? submit,
   }) = _PracticeSetModel;

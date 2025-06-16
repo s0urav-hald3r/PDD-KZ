@@ -6,43 +6,40 @@ import 'package:exam_app/services/local_storage.dart';
 import 'package:exam_app/components/quiz_completion_dialog.dart';
 
 class TimerController extends GetxController {
-  RxInt min = 29.obs;
-  RxInt sec = 59.obs;
+  RxInt sec = (30 * 60).obs;
 
   Timer? _timer;
 
-  int get minute => min.value;
   int get second => sec.value;
 
-  String get formattedTime =>
-      '${minute.toString().padLeft(2, '0')}:${second.toString().padLeft(2, '0')}';
+  // Getter to format time as MM:SS
+  String get formattedTime {
+    final minutes = (sec.value ~/ 60).toString().padLeft(2, '0');
+    final seconds = (sec.value % 60).toString().padLeft(2, '0');
+    return '$minutes:$seconds';
+  }
 
   void startTimer({int? setIndex}) {
     if (setIndex != null) {
       // Try to restore saved timer state
-      final savedMin = LocalStorage.getData('timer_min_$setIndex');
       final savedSec = LocalStorage.getData('timer_sec_$setIndex');
 
-      if (savedMin != null && savedSec != null) {
-        min.value = savedMin;
+      if (savedSec != null) {
         sec.value = savedSec;
       } else {
-        min.value = 29;
-        sec.value = 59;
+        sec.value = 30 * 60;
       }
     } else {
-      min.value = 29;
-      sec.value = 59;
+      sec.value = 30 * 60;
     }
 
     _timer?.cancel(); // Cancel any existing timer before starting a new one
 
+    sec.value = sec.value - 1;
     _timer = Timer.periodic(const Duration(seconds: 1), (t) {
       if (sec.value > 0) {
         sec.value = sec.value - 1;
-      } else if (min.value > 0) {
-        min.value = min.value - 1;
-        sec.value = 59;
+        LocalStorage.setData('timer_sec_$setIndex', sec.value);
       } else {
         // Use Get.find to get the current context and show dialog
         showDialog(
@@ -57,23 +54,20 @@ class TimerController extends GetxController {
     });
   }
 
-  void stopTimer({int? setIndex}) {
+  void stopTimer() {
     _timer?.cancel(); // Cancel the timer when stopping
-
-    if (setIndex != null) {
-      // Save current timer state
-      LocalStorage.setData('timer_min_$setIndex', min.value);
-      LocalStorage.setData('timer_sec_$setIndex', sec.value);
-    }
-
-    min.value = 0;
     sec.value = 0;
   }
 
   void clearSavedTimer(int setIndex) {
-    LocalStorage.removeData('timer_min_$setIndex');
     LocalStorage.removeData('timer_sec_$setIndex');
   }
 
-  bool get isTimerStop => min.value == 0 && sec.value == 0;
+  bool get isTimerStop => sec.value == 0;
+
+  @override
+  void onClose() {
+    _timer?.cancel();
+    super.onClose();
+  }
 }

@@ -44,7 +44,7 @@ class PracticePage extends StatelessWidget {
               ),
               padding: EdgeInsets.fromLTRB(25.w, 15.h, 25.w, 0),
               child: ListView.builder(
-                  itemCount: 4,
+                  itemCount: 12,
                   padding: EdgeInsets.zero,
                   itemBuilder: (context, index) {
                     Get.put(PracticeController(), tag: 'cardIndex_$index');

@@ -38,6 +38,8 @@ class _PracticeCardState extends State<PracticeCard> {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
+        if (controller.practiceSetLen == 0) return;
+
         if (widget.index != 0 && !HomeController.instance.isProUser) {
           NavigatorKey.push(const PremiumPage());
         } else {
@@ -103,8 +105,9 @@ class _PracticeCardState extends State<PracticeCard> {
                 return LinearPercentIndicator(
                   width: 295.w,
                   lineHeight: 5.h,
-                  percent:
-                      (controller.currentIndex / controller.practiceSetLen),
+                  percent: controller.practiceSetLen > 0
+                      ? (controller.currentIndex / controller.practiceSetLen)
+                      : 0.0,
                   padding: EdgeInsets.zero,
                   barRadius: const Radius.circular(10),
                   backgroundColor: whiteColor,

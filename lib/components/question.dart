@@ -21,10 +21,18 @@ class Question extends StatelessWidget {
           SizedBox(
             height: 160.h,
             width: MediaQuery.of(context).size.width,
-            child: CachedNetworkImage(
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(10),
+              child: CachedNetworkImage(
                 imageUrl:
                     controller.praciceSets[controller.currentIndex].mediaFile,
-                fit: BoxFit.cover),
+                fit: BoxFit.cover,
+                errorWidget: (context, url, error) => Image.network(
+                  'https://thumb.ac-illust.com/b1/b170870007dfa419295d949814474ab2_t.jpeg',
+                  fit: BoxFit.cover,
+                ),
+              ),
+            ),
           ),
           SizedBox(height: 15.h),
           Text(
@@ -152,9 +160,10 @@ class Question extends StatelessWidget {
                                 ),
                               ),
                               SizedBox(height: 10.h),
-                              const Text(
-                                'Symbols in text, especially in informal settings like texting and social media, are often used to express emotions, indicate tone, or add a visual element to a message. They range from simple emoticons to more complex symbols, and their meanings can vary depending on the context.',
-                                style: TextStyle(
+                              Text(
+                                controller.praciceSets[controller.currentIndex]
+                                    .explanation,
+                                style: const TextStyle(
                                   fontWeight: FontWeight.w400,
                                   fontSize: 13,
                                   color: Color(0xFF333333),
@@ -186,11 +195,12 @@ class Question extends StatelessWidget {
                         ),
                       ),
                       SizedBox(height: 5.h),
-                      const Text(
-                        'Symbols in text, especially in informal settings like texting and social media, are often used to express emotions, indicate tone, or add a visual element to a message. They range from simple emoticons to more complex symbols, and their meanings can vary depending on the context.',
+                      Text(
+                        controller
+                            .praciceSets[controller.currentIndex].explanation,
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontWeight: FontWeight.w400,
                           fontSize: 10,
                           color: Color(0xFF333333),

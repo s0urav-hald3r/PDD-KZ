@@ -59,16 +59,22 @@ class HomePage extends StatelessWidget {
                             width: 80.w,
                           ),
                           SizedBox(height: 20.h),
-                          Text(
-                            [
-                              'Таңдаулылар',
-                              'КР ЖКЕ',
-                              'АвтоДром\nсабақтары',
-                              'Emtihan\nTapsyru'
-                            ][index],
-                            style: const TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w700,
+                          Container(
+                            color: Colors.transparent,
+                            padding: EdgeInsets.symmetric(horizontal: 10.w),
+                            width: 150.w,
+                            child: Text(
+                              [
+                                'Таңдаулылар',
+                                'КР ЖКЕ',
+                                'АвтоДром\nсабақтары',
+                                'Emtihan\nTapsyru'
+                              ][index],
+                              textAlign: TextAlign.center,
+                              style: const TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w700,
+                              ),
                             ),
                           )
                         ]),

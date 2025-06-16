@@ -26,15 +26,16 @@ class _QuizAppbarState extends State<QuizAppbar> {
   @override
   void initState() {
     super.initState();
-    widget.timerController
-        .startTimer(setIndex: widget.practiceController.currentSetIndex);
+    if (!widget.practiceController.isPracticeSetComplete) {
+      widget.timerController
+          .startTimer(setIndex: widget.practiceController.currentSetIndex);
+    }
   }
 
   @override
   void dispose() {
     super.dispose();
-    widget.timerController
-        .stopTimer(setIndex: widget.practiceController.currentSetIndex);
+    widget.timerController.stopTimer();
   }
 
   @override
@@ -58,27 +59,30 @@ class _QuizAppbarState extends State<QuizAppbar> {
           ),
         ),
         const Spacer(flex: 3),
-        Container(
-          width: 72.w,
-          height: 24.h,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(16),
-            color: whiteColor,
+        Visibility.maintain(
+          visible: !widget.practiceController.isPracticeSetComplete,
+          child: Container(
+            width: 72.w,
+            height: 24.h,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(16),
+              color: whiteColor,
+            ),
+            child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+              SvgPicture.asset(timerIcon),
+              SizedBox(width: 5.w),
+              Obx(() {
+                return GradientText(
+                  widget.timerController.formattedTime,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.w500,
+                    fontSize: 12,
+                  ),
+                  colors: const [primaryColor, primaryColor, secondaryColor],
+                );
+              })
+            ]),
           ),
-          child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-            SvgPicture.asset(timerIcon),
-            SizedBox(width: 5.w),
-            Obx(() {
-              return GradientText(
-                widget.timerController.formattedTime,
-                style: const TextStyle(
-                  fontWeight: FontWeight.w500,
-                  fontSize: 12,
-                ),
-                colors: const [primaryColor, primaryColor, secondaryColor],
-              );
-            })
-          ]),
         )
       ]),
     );

@@ -10,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:simple_gradient_text/simple_gradient_text.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 class NavBarPage extends StatelessWidget {
   const NavBarPage({super.key});
@@ -23,11 +24,15 @@ class NavBarPage extends StatelessWidget {
         body: PageView(
           controller: controller.pageController,
           physics: const NeverScrollableScrollPhysics(),
-          children: const [
-            HomePage(),
-            PracticePage(),
-            FavouritePage(),
-            SettingsPage()
+          children: [
+            Skeletonizer(
+                enabled: controller.isLoading, child: const HomePage()),
+            Skeletonizer(
+                enabled: controller.isLoading, child: const PracticePage()),
+            Skeletonizer(
+                enabled: controller.isLoading, child: const FavouritePage()),
+            Skeletonizer(
+                enabled: controller.isLoading, child: const SettingsPage())
           ],
         ),
         bottomNavigationBar: BottomAppBar(
