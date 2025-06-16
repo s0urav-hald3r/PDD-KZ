@@ -71,7 +71,21 @@ app.get('/screen/dashboard', async (req, res) => {
     }
 })
 
-app.get('/screen/question', (req, res) => res.render('question'))
+app.get('/screen/question', async (req, res) => {
+    const questionId = req.query.id;
+    if (questionId) {
+        try {
+            const doc = await firestore.collection('questions').doc(questionId).get();
+            if (doc.exists) {
+                const question = { id: doc.id, ...doc.data() };
+                return res.render('question', { question });
+            }
+        } catch (error) {
+            console.error('Error fetching question:', error);
+        }
+    }
+    res.render('question', { question: null });
+})
 
 app.post('/method/question', async (req, res) => {
     try {
@@ -114,12 +128,63 @@ app.post('/method/question', async (req, res) => {
         const docRef = await firestore.collection('questions').add(questionData);
         console.log(`✅ Question added with ID: ${docRef.id}`);
 
-        return res.redirect('/');
+        return res.redirect('/screen/dashboard');
     } catch (error) {
         console.error("Error adding document: ", error);
         return res.status(400).json({ 'status': false, 'error': 'Question addition failed!' })
     }
 })
+
+app.post('/method/question/:id', async (req, res) => {
+    try {
+        const questionId = req.params.id;
+        const { questionSet, question, imageUrl, correctAnswer, explanation } = req.body;
+
+        // Validate required fields
+        if (!questionSet || !question || !correctAnswer || !explanation) {
+            return res.status(400).json({
+                status: false,
+                error: 'Required fields are missing!'
+            });
+        }
+
+        // Create options array
+        const options = ['A', 'B', 'C', 'D'].map(opt => ({
+            slNo: opt,
+            value: req.body[`option${opt}Value`],
+            answer: correctAnswer === opt
+        }));
+
+        // Update the question
+        await firestore.collection('questions').doc(questionId).update({
+            questionSet: parseInt(questionSet),
+            question,
+            mediaFile: imageUrl,
+            options,
+            explanation,
+            updatedAt: new Date().toISOString()
+        });
+
+        res.redirect('/screen/dashboard');
+    } catch (error) {
+        console.error('Error updating question:', error);
+        res.status(500).json({
+            status: false,
+            error: 'Failed to update question'
+        });
+    }
+});
+
+app.delete('/method/question/:id', async (req, res) => {
+    try {
+        const questionId = req.params.id;
+        await firestore.collection('questions').doc(questionId).delete();
+        res.json({ success: true, message: 'Question deleted successfully' });
+    } catch (error) {
+        console.error('Error deleting question:', error);
+        res.status(500).json({ success: false, error: 'Failed to delete question' });
+    }
+});
 
 app.get('/api/question', async (req, res) => {
     try {
@@ -184,17 +249,6 @@ app.get('/api/question', async (req, res) => {
             status: false,
             error: 'Failed to retrieve questions!'
         });
-    }
-});
-
-app.delete('/question/:id', async (req, res) => {
-    try {
-        const questionId = req.params.id;
-        await firestore.collection('questions').doc(questionId).delete();
-        res.json({ success: true, message: 'Question deleted successfully' });
-    } catch (error) {
-        console.error('Error deleting question:', error);
-        res.status(500).json({ success: false, error: 'Failed to delete question' });
     }
 });
 

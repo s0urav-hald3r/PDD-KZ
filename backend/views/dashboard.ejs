@@ -68,6 +68,10 @@
                                                 <span class="font-semibold text-[#c9d1d9]">Question <%= index + 1 %>
                                                 </span>
                                                 <div class="flex space-x-2">
+                                                    <a href="/screen/question?id=<%= question.id %>"
+                                                        class="text-[#58a6ff] hover:text-[#79b6ff] transition-colors mr-3">
+                                                        Edit
+                                                    </a>
                                                     <button onclick="deleteQuestion('<%= question.id %>')"
                                                         class="text-[#f85149] hover:text-[#ff6b64] transition-colors">
                                                         Delete
@@ -135,7 +139,7 @@
 
             function deleteQuestion(questionId) {
                 if (confirm('Are you sure you want to delete this question?')) {
-                    fetch(`/question/${questionId}`, {
+                    fetch(`/method/question/${questionId}`, {
                         method: 'DELETE',
                     })
                         .then(response => response.json())

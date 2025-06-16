@@ -12,8 +12,8 @@
     <div class="container mx-auto px-4 py-8">
         <div
             class="max-w-4xl mx-auto bg-[#161b22] rounded-2xl shadow-2xl p-8 transform hover:scale-[1.01] transition-transform duration-300">
-            <h2 class="text-3xl mb-8 text-[#c9d1d9]">Add New Question</h2>
-            <form action="/method/question" method="POST" class="space-y-6">
+            <h2 class="text-3xl mb-8 text-[#c9d1d9]"><%= question ? 'Edit Question' : 'Add New Question' %></h2>
+            <form action="/method/question<%= question ? '/' + question.id : '' %>" method="POST" class="space-y-6">
                 <!-- Question Set Selection -->
                 <div class="space-y-2">
                     <label class="block text-lg text-[#c9d1d9]">Select Question Set:</label>
@@ -21,6 +21,7 @@
                         <% for(let i=1; i <=12; i++) { %>
                             <div class="flex items-center space-x-2">
                                 <input type="radio" name="questionSet" value="<%= i %>" required
+                                    <%= question && question.questionSet == i ? 'checked' : '' %>
                                     class="w-4 h-4 text-[#238636] border-[#30363d] focus:ring-[#238636]">
                                 <label class="text-sm text-[#c9d1d9]">Set <%= i %></label>
                             </div>
@@ -32,12 +33,14 @@
                 <div class="space-y-2">
                     <label class="block text-lg text-[#c9d1d9]">Question:</label>
                     <input name="question" placeholder="Enter question" rows="3" required
+                        value="<%= question ? question.question : '' %>"
                         class="w-full px-3 py-2 bg-[#0d1117] border border-[#30363d] rounded-xl focus:outline-none focus:border-[#238636] text-[#c9d1d9] placeholder-[#8b949e]">
                 </div>
 
                 <div class="space-y-2">
                     <label class="block text-lg text-[#c9d1d9]">Image URL:</label>
-                    <input type="url" name="imageUrl" placeholder="https://example.com/image.jpg"
+                    <input type="url" name="imageUrl" placeholder="https://example.com/image.jpg" required
+                        value="<%= question ? question.mediaFile : '' %>"
                         class="w-full px-3 py-2 bg-[#0d1117] border border-[#30363d] rounded-xl focus:outline-none focus:border-[#238636] text-[#c9d1d9] placeholder-[#8b949e]">
                 </div>
 
@@ -53,11 +56,13 @@
                                 </div>
                                 <div class="flex-grow">
                                     <input type="text" name="option<%= option %>Value" required
+                                        value="<%= question ? question.options.find(opt => opt.slNo === option)?.value : '' %>"
                                         placeholder="Enter option <%= option %>"
                                         class="w-full px-3 py-2 bg-[#0d1117] border border-[#30363d] rounded-xl focus:outline-none focus:border-[#238636] text-[#c9d1d9] placeholder-[#8b949e]">
                                 </div>
                                 <div class="flex items-center space-x-2">
                                     <input type="radio" name="correctAnswer" value="<%= option %>" required
+                                        <%= question && question.options.find(opt => opt.slNo === option)?.answer ? 'checked' : '' %>
                                         class="w-4 h-4 text-[#238636] border-[#30363d] focus:ring-[#238636]">
                                     <label class="text-sm text-[#c9d1d9]">Correct Answer</label>
                                 </div>
@@ -68,13 +73,14 @@
 
                 <div class="space-y-2">
                     <label class="block text-lg text-[#c9d1d9]">Explanation:</label>
-                    <input type="text" name="explanation" placeholder="Enter explanation"
+                    <input type="text" name="explanation" placeholder="Enter explanation" required
+                        value="<%= question ? question.explanation : '' %>"
                         class="w-full px-3 py-2 bg-[#0d1117] border border-[#30363d] rounded-xl focus:outline-none focus:border-[#238636] text-[#c9d1d9] placeholder-[#8b949e]">
                 </div>
 
                 <button type="submit"
                     class="px-6 py-3 bg-[#238636] text-[#c9d1d9] rounded-xl hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300 hover:bg-[#2ea043] focus:outline-none focus:ring-2 focus:ring-[#238636] focus:ring-offset-2">
-                    Add Question
+                    <%= question ? 'Update Question' : 'Add Question' %>
                 </button>
             </form>
         </div>
