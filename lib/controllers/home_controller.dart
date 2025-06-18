@@ -36,8 +36,8 @@ class HomeController extends GetxController {
 
   // Methods
   Future<void> fetchQuestionSet() async {
+    isLoading = true;
     try {
-      isLoading = true;
       final response = await http.get(
         Uri.parse('https://pdd-kz-murex.vercel.app/api/question'),
       );

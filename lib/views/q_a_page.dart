@@ -30,8 +30,8 @@ class QAPage extends StatelessWidget {
         decoration: BoxDecoration(gradient: containerGradient),
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           QuizAppbar(
-            practiceController: controller,
-            timerController: timerController,
+            pController: controller,
+            tController: timerController,
           ),
           Expanded(
             child: Container(

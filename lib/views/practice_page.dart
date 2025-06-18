@@ -47,8 +47,8 @@ class PracticePage extends StatelessWidget {
                   itemCount: 12,
                   padding: EdgeInsets.zero,
                   itemBuilder: (context, index) {
-                    Get.put(PracticeController(), tag: 'cardIndex_$index');
-                    Get.put(TimerController(), tag: 'cardIndex_$index');
+                    Get.put(PracticeController(), tag: 'controller_$index');
+                    Get.put(TimerController(), tag: 'controller_$index');
 
                     return PracticeCard(index: index);
                   }),

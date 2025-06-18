@@ -24,9 +24,10 @@ class _PracticeCardState extends State<PracticeCard> {
   @override
   void initState() {
     super.initState();
-    controller = Get.find<PracticeController>(tag: 'cardIndex_${widget.index}');
+    controller =
+        Get.find<PracticeController>(tag: 'controller_${widget.index}');
     timerController =
-        Get.find<TimerController>(tag: 'cardIndex_${widget.index}');
+        Get.find<TimerController>(tag: 'controller_${widget.index}');
     controller.initializePracticeSet(widget.index);
   }
 
@@ -69,7 +70,7 @@ class _PracticeCardState extends State<PracticeCard> {
               return RichText(
                 text: TextSpan(children: [
                   TextSpan(
-                    text: '${controller.questionAttempted}',
+                    text: '${controller.questionAnswered}',
                     style: const TextStyle(
                       fontWeight: FontWeight.w400,
                       color: blackColor,
@@ -98,7 +99,7 @@ class _PracticeCardState extends State<PracticeCard> {
                   width: 295.w,
                   lineHeight: 5.h,
                   percent: controller.practiceSetLen > 0
-                      ? (controller.questionAttempted /
+                      ? (controller.questionAnswered /
                           controller.practiceSetLen)
                       : 0.0,
                   padding: EdgeInsets.zero,

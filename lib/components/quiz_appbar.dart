@@ -10,12 +10,12 @@ import 'package:get/get.dart';
 import 'package:simple_gradient_text/simple_gradient_text.dart';
 
 class QuizAppbar extends StatefulWidget {
-  final PracticeController practiceController;
-  final TimerController timerController;
+  final PracticeController pController;
+  final TimerController tController;
   const QuizAppbar({
     super.key,
-    required this.practiceController,
-    required this.timerController,
+    required this.pController,
+    required this.tController,
   });
 
   @override
@@ -26,29 +26,33 @@ class _QuizAppbarState extends State<QuizAppbar> {
   @override
   void initState() {
     super.initState();
-    if (!widget.practiceController.isPracticeSetComplete) {
-      widget.timerController
-          .startTimer(setIndex: widget.practiceController.currentSetIndex);
+    if (!widget.pController.isPracticeSetComplete) {
+      widget.tController
+          .startTimer(setIndex: widget.pController.currentSetIndex);
     }
   }
 
   @override
   void dispose() {
     super.dispose();
-    widget.timerController.stopTimer();
+    widget.tController.stopTimer();
   }
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsets.fromLTRB(
-          25.w, MediaQuery.of(context).padding.top + 15.h, 25.w, 15.h),
+          15.w, MediaQuery.of(context).padding.top + 15.h, 25.w, 15.h),
       child: Row(children: [
         InkWell(
-            onTap: () {
-              NavigatorKey.pop();
-            },
-            child: SvgPicture.asset(backArrowIcon)),
+          onTap: () {
+            NavigatorKey.pop();
+          },
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(10, 7.5, 0, 7.5),
+            child: SvgPicture.asset(backArrowIcon),
+          ),
+        ),
         const Spacer(flex: 5),
         const Text(
           'Quiz',
@@ -60,7 +64,7 @@ class _QuizAppbarState extends State<QuizAppbar> {
         ),
         const Spacer(flex: 3),
         Visibility.maintain(
-          visible: !widget.practiceController.isPracticeSetComplete,
+          visible: !widget.pController.isPracticeSetComplete,
           child: Container(
             width: 72.w,
             height: 24.h,
@@ -73,7 +77,7 @@ class _QuizAppbarState extends State<QuizAppbar> {
               SizedBox(width: 5.w),
               Obx(() {
                 return GradientText(
-                  widget.timerController.formattedTime,
+                  widget.tController.formattedTime,
                   style: const TextStyle(
                     fontWeight: FontWeight.w500,
                     fontSize: 12,
