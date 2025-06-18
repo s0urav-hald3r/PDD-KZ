@@ -79,12 +79,9 @@ class PracticeController extends GetxController {
   }
 
   void changeTab(int index) {
-    if (isPracticeSetComplete) {
-      tabController.index = index;
-      currentIndex = index;
-    } else {
-      tabController.index = tabController.previousIndex;
-    }
+    currentIndex = index;
+    tabController.index = index;
+    LocalStorage.setData('current_question_$currentSetIndex', currentIndex);
   }
 
   void submitQuestion() async {

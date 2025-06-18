@@ -14,20 +14,17 @@ class HomeController extends GetxController {
 
   // Private variables
   final RxInt _homeIndex = 0.obs;
-  final RxBool _isProUser = false.obs;
   final RxBool _isLoading = false.obs;
   final RxMap<int, List<PracticeSetModel>> _questionSets =
       <int, List<PracticeSetModel>>{}.obs;
 
   // Getters
   int get homeIndex => _homeIndex.value;
-  bool get isProUser => _isProUser.value;
   bool get isLoading => _isLoading.value;
   Map<int, List<PracticeSetModel>> get questionSets => _questionSets;
 
   // Setters
   set homeIndex(value) => _homeIndex.value = value;
-  set isProUser(value) => _isProUser.value = value;
   set isLoading(value) => _isLoading.value = value;
   set questionSets(value) => _questionSets.value = value;
 

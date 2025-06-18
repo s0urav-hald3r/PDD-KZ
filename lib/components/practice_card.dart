@@ -1,14 +1,10 @@
 import 'package:exam_app/config/colors.dart';
-import 'package:exam_app/config/icons.dart';
-import 'package:exam_app/controllers/home_controller.dart';
 import 'package:exam_app/controllers/practice_controller.dart';
 import 'package:exam_app/controllers/timer_controller.dart';
 import 'package:exam_app/services/navigator_key.dart';
 import 'package:exam_app/utils/extension.dart';
-import 'package:exam_app/views/premium_page.dart';
 import 'package:exam_app/views/q_a_page.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:simple_gradient_text/simple_gradient_text.dart';
@@ -40,13 +36,9 @@ class _PracticeCardState extends State<PracticeCard> {
       onTap: () {
         if (controller.practiceSetLen == 0) return;
 
-        if (widget.index != 0 && !HomeController.instance.isProUser) {
-          NavigatorKey.push(const PremiumPage());
-        } else {
-          NavigatorKey.push(
-            QAPage(controller: controller, timerController: timerController),
-          );
-        }
+        NavigatorKey.push(
+          QAPage(controller: controller, timerController: timerController),
+        );
       },
       child: Container(
         width: MediaQuery.of(context).size.width,
@@ -59,10 +51,10 @@ class _PracticeCardState extends State<PracticeCard> {
         child: Column(children: [
           const SizedBox(height: 13),
           Row(children: [
-            if (widget.index != 0 && !HomeController.instance.isProUser)
-              SvgPicture.asset(lockTutorialsIcon)
-            else
-              const SizedBox(width: 5),
+            // if (widget.index != 0 && !HomeController.instance.isProUser)
+            //   SvgPicture.asset(lockTutorialsIcon)
+            // else
+            //   const SizedBox(width: 5),
             const SizedBox(width: 10),
             GradientText(
               'Practice ${widget.index + 1}',

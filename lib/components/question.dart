@@ -20,19 +20,20 @@ class Question extends StatelessWidget {
           SizedBox(height: 15.h),
           SizedBox(
             height: 160.h,
-            width: MediaQuery.of(context).size.width,
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(10),
-              child: CachedNetworkImage(
-                imageUrl:
-                    controller.praciceSets[controller.currentIndex].mediaFile,
-                fit: BoxFit.cover,
-                errorWidget: (context, url, error) => Image.network(
-                  'https://thumb.ac-illust.com/b1/b170870007dfa419295d949814474ab2_t.jpeg',
-                  fit: BoxFit.cover,
+            child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+              ClipRRect(
+                borderRadius: BorderRadius.circular(10),
+                child: CachedNetworkImage(
+                  imageUrl:
+                      controller.praciceSets[controller.currentIndex].mediaFile,
+                  fit: BoxFit.contain,
+                  errorWidget: (context, url, error) => Image.network(
+                    'https://thumb.ac-illust.com/b1/b170870007dfa419295d949814474ab2_t.jpeg',
+                    fit: BoxFit.contain,
+                  ),
                 ),
               ),
-            ),
+            ]),
           ),
           SizedBox(height: 15.h),
           Text(
@@ -134,6 +135,7 @@ class Question extends StatelessWidget {
                     context: context,
                     builder: (_) {
                       return Container(
+                        width: MediaQuery.of(context).size.width,
                         decoration: const BoxDecoration(
                           color: whiteColor,
                           borderRadius: BorderRadius.only(
