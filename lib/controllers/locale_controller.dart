@@ -20,6 +20,9 @@ class LocaleController extends GetxController implements Translations {
           'Practice': 'Practice',
           'Favourite': 'Favourite',
           'Settings': 'Settings',
+          'In Progress': 'In Progress',
+          'Answered': 'Answered',
+          'Locked': 'Locked',
           'Version': 'Version',
           'Description': 'Description',
           'PDD KZ Description':
@@ -35,6 +38,9 @@ class LocaleController extends GetxController implements Translations {
           'Practice': 'Практика',
           'Favourite': 'Бекітілген',
           'Settings': 'Баптаулар',
+          'In Progress': 'Жүргізіліп жатыр',
+          'Answered': 'Жауап берілген',
+          'Locked': 'Блокировка',
           'Version': 'Нұсқасы',
           'Description': 'Сипаттама',
           'PDD KZ Description':

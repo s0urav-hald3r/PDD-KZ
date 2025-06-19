@@ -115,27 +115,32 @@ class _PracticeCardState extends State<PracticeCard> {
               ],
             ),
             const Spacer(),
-            const Row(children: [
-              SizedBox(width: 15),
-              Text(
-                'Bastalmady',
-                style: TextStyle(
-                  color: blackColor,
-                  fontWeight: FontWeight.w500,
-                  fontSize: 12,
-                ),
-              ),
-              Spacer(),
-              Text(
-                'Answered',
-                style: TextStyle(
-                  color: blackColor,
-                  fontWeight: FontWeight.w500,
-                  fontSize: 12,
-                ),
-              ),
-              SizedBox(width: 15),
-            ]),
+            Obx(() {
+              return Row(children: [
+                const SizedBox(width: 15),
+                if (controller.questionAnswered > 0 &&
+                    !controller.isPracticeSetComplete)
+                  Text(
+                    'In Progress'.tr,
+                    style: const TextStyle(
+                      color: blackColor,
+                      fontWeight: FontWeight.w500,
+                      fontSize: 12,
+                    ),
+                  ),
+                const Spacer(),
+                if (controller.isPracticeSetComplete)
+                  Text(
+                    'Answered'.tr,
+                    style: const TextStyle(
+                      color: blackColor,
+                      fontWeight: FontWeight.w500,
+                      fontSize: 12,
+                    ),
+                  ),
+                const SizedBox(width: 15),
+              ]);
+            }),
             const SizedBox(height: 15),
           ]),
           Obx(() {
