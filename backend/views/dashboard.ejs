@@ -33,26 +33,42 @@
                 <div
                     class="bg-[#161b22] rounded-2xl p-6 transform hover:scale-[1.02] transition-all duration-300 border border-[#30363d]">
                     <h3 class="text-lg font-semibold mb-2 text-[#c9d1d9]">Question Sets</h3>
-                    <p class="text-3xl font-bold text-[#c9d1d9]">10</p>
+                    <p class="text-3xl font-bold text-[#c9d1d9]">13</p>
                 </div>
                 <div
                     class="bg-[#161b22] rounded-2xl p-6 transform hover:scale-[1.02] transition-all duration-300 border border-[#30363d]">
                     <h3 class="text-lg font-semibold mb-2 text-[#c9d1d9]">Average Questions per Set</h3>
                     <p class="text-3xl font-bold text-[#c9d1d9]">
-                        <%= Math.round(totalQuestions / 10) %>
+                        <%= Math.round(totalQuestions / (Object.keys(questionsBySet).length || 1)) %>
                     </p>
                 </div>
             </div>
 
-            <!-- Question Sets -->
-            <div class="space-y-4">
+            <!-- Tabs for Practice and Exam Sets -->
+            <div class="mb-6">
+                <div class="inline-flex rounded-md border border-[#30363d] p-1 bg-[#0d1117] mb-4">
+                    <button type="button"
+                        class="inline-flex items-center px-5 py-2 rounded-md cursor-pointer mr-2 bg-[#238636] text-white"
+                        id="practice-tab-btn">
+                        <span class="text-sm font-medium">Practice Sets</span>
+                    </button>
+                    <button type="button" class="inline-flex items-center px-5 py-2 rounded-md cursor-pointer"
+                        id="exam-tab-btn">
+                        <span class="text-sm font-medium text-[#c9d1d9]">Exam Set</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Practice Question Sets (1-12) -->
+            <div id="practice-sets-container" class="space-y-4">
+                <h2 class="text-2xl font-bold mb-4 text-[#c9d1d9] border-b border-[#30363d] pb-2">Practice Sets</h2>
                 <% for(let i=1; i <=12; i++) { %>
                     <div
                         class="bg-[#161b22] rounded-2xl overflow-hidden border border-[#30363d] transform hover:scale-[1.01] transition-all duration-300">
                         <button onclick="toggleSet('<%- i %>')"
                             class="w-full px-6 py-4 flex justify-between items-center hover:bg-[#1f2937] transition-all duration-300"
                             aria-expanded="false" aria-controls="set<%- i %>">
-                            <h3 class="text-xl font-semibold text-[#c9d1d9]">Question Set <%= i %>
+                            <h3 class="text-xl font-semibold text-[#c9d1d9]">Practice Set <%= i %>
                             </h3>
                             <span class="text-sm bg-[#1f2937] px-3 py-1 rounded-full text-[#c9d1d9]">
                                 <%= questionsBySet[i] || 0 %> Questions
@@ -113,6 +129,75 @@
                     </div>
                     <% } %>
             </div>
+
+            <!-- Exam Question Set (13) -->
+            <div id="exam-set-container" class="space-y-4 hidden">
+                <h2 class="text-2xl font-bold mb-4 text-[#c9d1d9] border-b border-[#30363d] pb-2">Final Exam Set</h2>
+                <div
+                    class="bg-[#161b22] rounded-2xl overflow-hidden border border-[#30363d] transform hover:scale-[1.01] transition-all duration-300">
+                    <button onclick="toggleSet('13')"
+                        class="w-full px-6 py-4 flex justify-between items-center hover:bg-[#1f2937] transition-all duration-300"
+                        aria-expanded="false" aria-controls="set13">
+                        <h3 class="text-xl font-semibold text-[#c9d1d9]">Final Exam
+                        </h3>
+                        <span class="text-sm bg-[#1f2937] px-3 py-1 rounded-full text-[#c9d1d9]">
+                            <%= questionsBySet[13] || 0 %> Questions
+                        </span>
+                    </button>
+                    <div id="set13" class="hidden">
+                        <div class="px-6 py-4 space-y-4">
+                            <% if (questions[13] && questions[13].length> 0) { %>
+                                <% questions[13].forEach((question, index)=> { %>
+                                    <div
+                                        class="bg-[#1f2937] rounded-xl p-4 border border-[#30363d] transform hover:scale-[1.01] transition-all duration-300">
+                                        <div class="flex justify-between items-start mb-2">
+                                            <span class="font-semibold text-[#c9d1d9]">Question <%= index + 1 %>
+                                            </span>
+                                            <div class="flex space-x-2">
+                                                <a href="/screen/question?id=<%= question.id %>"
+                                                    class="text-[#58a6ff] hover:text-[#79b6ff] transition-colors mr-3">
+                                                    Edit
+                                                </a>
+                                                <button onclick="deleteQuestion('<%= question.id %>')"
+                                                    class="text-[#f85149] hover:text-[#ff6b64] transition-colors">
+                                                    Delete
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <p class="text-[#8b949e]">
+                                            <%= question.question %>
+                                        </p>
+                                        <% if (question.mediaFile && question.mediaFile !=='' ) { %>
+                                            <img src="<%= question.mediaFile %>" alt="Question Image"
+                                                class="mt-4 rounded-md max-h-40 object-cover">
+                                            <% } %>
+                                                <div class="mt-4 mb-4 grid grid-cols-2 gap-2">
+                                                    <% question.options.forEach(option=> { %>
+                                                        <div class="flex items-center space-x-2">
+                                                            <span
+                                                                class="<%= option.answer ? 'text-[#238636]' : 'text-[#8b949e]' %>">
+                                                                <%= option.slNo %>)
+                                                            </span>
+                                                            <span
+                                                                class="<%= option.answer ? 'text-[#238636]' : 'text-[#8b949e]' %>">
+                                                                <%= option.value %>
+                                                            </span>
+                                                        </div>
+                                                        <% }) %>
+                                                </div>
+                                                <span class="font-semibold mb-2 text-[#c9d1d9]">Explanation:</span>
+                                                <p class="text-[#8b949e]">
+                                                    <%= question.explanation || 'No explanation provided' %>
+                                                </p>
+                                    </div>
+                                    <% }) %>
+                                        <% } else { %>
+                                            <p class="text-[#8b949e] text-center py-4">No questions in this set</p>
+                                            <% } %>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <script>
@@ -156,6 +241,29 @@
                         });
                 }
             }
+
+            // Tab switching functionality
+            document.addEventListener('DOMContentLoaded', function () {
+                const practiceTabBtn = document.getElementById('practice-tab-btn');
+                const examTabBtn = document.getElementById('exam-tab-btn');
+                const practiceSetsContainer = document.getElementById('practice-sets-container');
+                const examSetContainer = document.getElementById('exam-set-container');
+
+                practiceTabBtn.addEventListener('click', function () {
+                    practiceSetsContainer.classList.remove('hidden');
+                    examSetContainer.classList.add('hidden');
+                    practiceTabBtn.classList.add('bg-[#238636]', 'text-white');
+                    examTabBtn.classList.remove('bg-[#238636]', 'text-white');
+                    examTabBtn.classList.add('text-[#c9d1d9]');
+                });
+
+                examTabBtn.addEventListener('click', function () {
+                    practiceSetsContainer.classList.add('hidden');
+                    examSetContainer.classList.remove('hidden');
+                    examTabBtn.classList.add('bg-[#238636]', 'text-white');
+                    practiceTabBtn.classList.remove('bg-[#238636]', 'text-white');
+                });
+            });
         </script>
 </body>
 

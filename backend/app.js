@@ -200,23 +200,32 @@ app.get('/api/question', async (req, res) => {
 
         // Group questions by questionSet
         const questionsBySet = {};
+        const examQuestions = [];
 
         questionsSnapshot.forEach(doc => {
             const questionData = doc.data();
             const questionSet = questionData.questionSet;
 
-            if (!questionsBySet[questionSet]) {
-                questionsBySet[questionSet] = [];
-            }
+            // Separate exam questions (set 13) from practice questions (sets 1-12)
+            if (questionSet === 13) {
+                examQuestions.push({
+                    id: doc.id,
+                    ...questionData
+                });
+            } else {
+                if (!questionsBySet[questionSet]) {
+                    questionsBySet[questionSet] = [];
+                }
 
-            questionsBySet[questionSet].push({
-                id: doc.id,
-                ...questionData
-            });
+                questionsBySet[questionSet].push({
+                    id: doc.id,
+                    ...questionData
+                });
+            }
         });
 
-        // Format the response and assign incremental 'no' for each set
-        const result = Object.keys(questionsBySet)
+        // Format the practice sets (1-12)
+        const practiceSets = Object.keys(questionsBySet)
             .sort((a, b) => parseInt(a) - parseInt(b)) // Sort question sets numerically
             .map(questionSet => {
                 // Sort questions within each set by createdAt and assign 'no'
@@ -237,9 +246,40 @@ app.get('/api/question', async (req, res) => {
 
                 return {
                     questionSet: parseInt(questionSet),
+                    type: 'practice',
                     data: sortedQuestions
                 };
             });
+
+        // Format the exam set (13) if it exists
+        let examSet = null;
+        if (examQuestions.length > 0) {
+            const sortedExamQuestions = examQuestions
+                .sort((a, b) => {
+                    const timeA = a.createdAt ? a.createdAt.toDate() : new Date(0);
+                    const timeB = b.createdAt ? b.createdAt.toDate() : new Date(0);
+                    return timeA - timeB;
+                })
+                .map((question, index) => ({
+                    no: index + 1,
+                    question: question.question,
+                    mediaFile: question.mediaFile,
+                    options: question.options || [],
+                    explanation: question.explanation,
+                }));
+
+            examSet = {
+                questionSet: 13,
+                type: 'exam',
+                data: sortedExamQuestions
+            };
+        }
+
+        // Combine both types of sets in the response
+        const result = [...practiceSets];
+        if (examSet) {
+            result.push(examSet);
+        }
 
         return res.json(result);
 

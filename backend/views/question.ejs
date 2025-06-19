@@ -12,20 +12,46 @@
     <div class="container mx-auto px-4 py-8">
         <div
             class="max-w-4xl mx-auto bg-[#161b22] rounded-2xl shadow-2xl p-8 transform hover:scale-[1.01] transition-transform duration-300">
-            <h2 class="text-3xl mb-8 text-[#c9d1d9]"><%= question ? 'Edit Question' : 'Add New Question' %></h2>
+            <h2 class="text-3xl mb-8 text-[#c9d1d9]">
+                <%= question ? 'Edit Question' : 'Add New Question' %>
+            </h2>
             <form action="/method/question<%= question ? '/' + question.id : '' %>" method="POST" class="space-y-6">
                 <!-- Question Set Selection -->
                 <div class="space-y-2">
                     <label class="block text-lg text-[#c9d1d9]">Select Question Set:</label>
-                    <div class="grid grid-cols-5 gap-4">
+                    <div class="mb-2">
+                        <div class="mb-2 inline-flex rounded-md border border-[#30363d] p-1 bg-[#0d1117]">
+                            <label class="inline-flex items-center px-3 py-2 rounded-md cursor-pointer mr-2"
+                                id="practice-tab">
+                                <input type="radio" name="setType" value="practice" class="hidden" checked>
+                                <span class="text-sm font-medium text-[#c9d1d9]">Practice</span>
+                            </label>
+                            <label class="inline-flex items-center px-3 py-2 rounded-md cursor-pointer" id="exam-tab">
+                                <input type="radio" name="setType" value="exam" class="hidden">
+                                <span class="text-sm font-medium text-[#c9d1d9]">Exam</span>
+                            </label>
+                        </div>
+                    </div>
+                    <!-- Practice Sets (1-12) -->
+                    <div id="practice-sets" class="grid grid-cols-4 sm:grid-cols-6 gap-4">
                         <% for(let i=1; i <=12; i++) { %>
                             <div class="flex items-center space-x-2">
-                                <input type="radio" name="questionSet" value="<%= i %>" required
-                                    <%= question && question.questionSet == i ? 'checked' : '' %>
-                                    class="w-4 h-4 text-[#238636] border-[#30363d] focus:ring-[#238636]">
-                                <label class="text-sm text-[#c9d1d9]">Set <%= i %></label>
+                                <input type="radio" name="questionSet" value="<%= i %>" required <%=question &&
+                                    question.questionSet==i ? 'checked' : '' %>
+                                class="w-4 h-4 text-[#238636] border-[#30363d] focus:ring-[#238636]">
+                                <label class="text-sm text-[#c9d1d9]">Practice <%= i %></label>
                             </div>
                             <% } %>
+                    </div>
+
+                    <!-- Exam Set (13) -->
+                    <div id="exam-set" class="grid grid-cols-1 gap-4 hidden">
+                        <div class="flex items-center space-x-2">
+                            <input type="radio" name="questionSet" value="13" required <%=question &&
+                                question.questionSet==13 ? 'checked' : '' %>
+                            class="w-4 h-4 text-[#238636] border-[#30363d] focus:ring-[#238636]">
+                            <label class="text-sm text-[#c9d1d9]">Final Exam</label>
+                        </div>
                     </div>
                 </div>
 
@@ -61,9 +87,9 @@
                                         class="w-full px-3 py-2 bg-[#0d1117] border border-[#30363d] rounded-xl focus:outline-none focus:border-[#238636] text-[#c9d1d9] placeholder-[#8b949e]">
                                 </div>
                                 <div class="flex items-center space-x-2">
-                                    <input type="radio" name="correctAnswer" value="<%= option %>" required
-                                        <%= question && question.options.find(opt => opt.slNo === option)?.answer ? 'checked' : '' %>
-                                        class="w-4 h-4 text-[#238636] border-[#30363d] focus:ring-[#238636]">
+                                    <input type="radio" name="correctAnswer" value="<%= option %>" required <%=question
+                                        && question.options.find(opt=> opt.slNo === option)?.answer ? 'checked' : '' %>
+                                    class="w-4 h-4 text-[#238636] border-[#30363d] focus:ring-[#238636]">
                                     <label class="text-sm text-[#c9d1d9]">Correct Answer</label>
                                 </div>
                             </div>
@@ -94,6 +120,42 @@
                 event.stopPropagation()
             }
         })
+
+        // Tab switching for practice vs exam sets
+        const practiceTab = document.getElementById('practice-tab');
+        const examTab = document.getElementById('exam-tab');
+        const practiceSets = document.getElementById('practice-sets');
+        const examSet = document.getElementById('exam-set');
+
+        practiceTab.addEventListener('click', function () {
+            practiceSets.classList.remove('hidden');
+            examSet.classList.add('hidden');
+            practiceTab.classList.add('bg-[#238636]', 'text-white');
+            examTab.classList.remove('bg-[#238636]', 'text-white');
+            // Select the first practice set by default
+            const firstPracticeSet = document.querySelector('#practice-sets input[type="radio"]');
+            if (firstPracticeSet) firstPracticeSet.checked = true;
+        });
+
+        examTab.addEventListener('click', function () {
+            practiceSets.classList.add('hidden');
+            examSet.classList.remove('hidden');
+            examTab.classList.add('bg-[#238636]', 'text-white');
+            practiceTab.classList.remove('bg-[#238636]', 'text-white');
+            // Select the exam set
+            const examSetRadio = document.querySelector('#exam-set input[type="radio"]');
+            if (examSetRadio) examSetRadio.checked = true;
+        });
+
+        // Initialize the correct tab based on existing selection
+        window.addEventListener('DOMContentLoaded', function () {
+            const selectedSet = document.querySelector('input[name="questionSet"]:checked');
+            if (selectedSet && selectedSet.value === '13') {
+                examTab.click();
+            } else {
+                practiceTab.click();
+            }
+        });
     </script>
 </body>
 
