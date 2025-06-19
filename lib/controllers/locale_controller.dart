@@ -1,9 +1,8 @@
+import 'package:exam_app/services/local_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get_storage/get_storage.dart';
 
 class LocaleController extends GetxController implements Translations {
-  final _storage = GetStorage();
   final String _localeKey = 'locale';
 
   Locale? get currentLocale => _getStoredLocale();
@@ -50,7 +49,7 @@ class LocaleController extends GetxController implements Translations {
 
   void changeLocale(String languageCode, String countryCode) {
     final locale = Locale(languageCode, countryCode);
-    _storage.write(_localeKey, {
+    LocalStorage.setData(_localeKey, {
       'languageCode': languageCode,
       'countryCode': countryCode,
     });
@@ -58,7 +57,7 @@ class LocaleController extends GetxController implements Translations {
   }
 
   Locale? _getStoredLocale() {
-    final localeData = _storage.read(_localeKey);
+    final localeData = LocalStorage.getData(_localeKey);
     if (localeData != null) {
       return Locale(
         localeData['languageCode'],

@@ -51,7 +51,7 @@ class PracticeController extends GetxController {
 
     String? savedPracticeSet = LocalStorage.getData('set_$currentSetIndex');
 
-    if (savedPracticeSet != null) {
+    if (savedPracticeSet != null && praciceSets.isNotEmpty) {
       // Load saved practice state
       temp = (jsonDecode(savedPracticeSet) as List)
           .map((e) => PracticeSetModel.fromJson(e as Map<String, dynamic>))
