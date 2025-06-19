@@ -1,9 +1,14 @@
 import 'package:exam_app/config/colors.dart';
 import 'package:exam_app/config/images.dart';
 import 'package:exam_app/controllers/home_controller.dart';
+import 'package:exam_app/controllers/practice_controller.dart';
+import 'package:exam_app/controllers/timer_controller.dart';
+import 'package:exam_app/services/navigator_key.dart';
 import 'package:exam_app/utils/extension.dart';
 import 'package:exam_app/views/pdf_viewer_page.dart';
+import 'package:exam_app/views/q_a_page.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -46,6 +51,9 @@ class HomePage extends StatelessWidget {
                 spacing: 10.w,
                 runSpacing: 10.h,
                 children: List.generate(4, (index) {
+                  Get.put(PracticeController(), tag: 'controller_12');
+                  Get.put(TimerController(), tag: 'controller_12');
+
                   return GestureDetector(
                     onTap: () {
                       if (index == 0) {
@@ -61,6 +69,20 @@ class HomePage extends StatelessWidget {
                               pdfAssetPath: 'assets/static/notes.pdf',
                               title: 'КР ЖКЕ',
                             ),
+                          ),
+                        );
+                      }
+                      if (index == 2) {}
+                      if (index == 3) {
+                        final controller =
+                            Get.find<PracticeController>(tag: 'controller_12');
+                        final timerController =
+                            Get.find<TimerController>(tag: 'controller_12');
+                        controller.initializePracticeSet(12);
+                        NavigatorKey.push(
+                          QAPage(
+                            controller: controller,
+                            timerController: timerController,
                           ),
                         );
                       }

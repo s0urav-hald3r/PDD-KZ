@@ -47,7 +47,7 @@ class QAPage extends StatelessWidget {
                 ProgressBar(controller: controller),
                 Question(controller: controller),
                 Obx(() {
-                  if (controller.isPracticeSetComplete) {
+                  if (controller.isComplete) {
                     return InkWell(
                       onTap: () {
                         NavigatorKey.pop();
@@ -61,7 +61,7 @@ class QAPage extends StatelessWidget {
                         ),
                         child: const Center(
                           child: Text(
-                            'Back to practice',
+                            'Close',
                             style: TextStyle(
                               fontWeight: FontWeight.w700,
                               fontSize: 16,

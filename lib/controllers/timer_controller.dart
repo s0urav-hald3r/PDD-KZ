@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:exam_app/controllers/practice_controller.dart';
 import 'package:exam_app/services/navigator_key.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -49,6 +50,8 @@ class TimerController extends GetxController {
         );
 
         stopTimer();
+        Get.find<PracticeController>(tag: 'controller_$setIndex').isComplete =
+            true;
         LocalStorage.setData('complete_set_$setIndex', true);
       }
     });

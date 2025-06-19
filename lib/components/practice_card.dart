@@ -121,8 +121,7 @@ class _PracticeCardState extends State<PracticeCard> {
           Obx(() {
             return Row(children: [
               const SizedBox(width: 15),
-              if (controller.questionAnswered > 0 &&
-                  !controller.isPracticeSetComplete)
+              if (controller.questionAnswered > 0 && !controller.isComplete)
                 Text(
                   'In Progress'.tr,
                   style: const TextStyle(
@@ -131,7 +130,7 @@ class _PracticeCardState extends State<PracticeCard> {
                     fontSize: 12,
                   ),
                 ),
-              if (controller.isPracticeSetComplete)
+              if (controller.isComplete)
                 Text(
                   'Answered'.tr,
                   style: const TextStyle(
@@ -141,11 +140,10 @@ class _PracticeCardState extends State<PracticeCard> {
                   ),
                 ),
               const Spacer(),
-              if (controller.questionAnswered > 0 ||
-                  controller.isPracticeSetComplete)
+              if (controller.questionAnswered > 0 || controller.isComplete)
                 InkWell(
                   onTap: () {
-                    controller.resetPracticeSet();
+                    controller.resetPracticeSet(widget.index);
                   },
                   child: Container(
                     padding: const EdgeInsets.all(5),
