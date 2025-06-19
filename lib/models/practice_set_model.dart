@@ -14,6 +14,7 @@ class PracticeSetModel with _$PracticeSetModel {
     @Default(<OptionModel>[]) final List<OptionModel> options,
     @Default('') String explanation,
     @Default(false) bool isSubmitted,
+    @Default(false) bool isFavorite,
     OptionModel? submit,
   }) = _PracticeSetModel;
 

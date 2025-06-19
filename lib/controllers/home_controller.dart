@@ -3,6 +3,7 @@
 import 'dart:convert';
 
 import 'package:exam_app/models/practice_set_model.dart';
+import 'package:exam_app/services/local_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
@@ -17,21 +18,48 @@ class HomeController extends GetxController {
   final RxBool _isLoading = false.obs;
   final RxMap<int, List<PracticeSetModel>> _questionSets =
       <int, List<PracticeSetModel>>{}.obs;
+  final RxList<PracticeSetModel> _favoriteSets = <PracticeSetModel>[].obs;
 
   // Getters
   int get homeIndex => _homeIndex.value;
   bool get isLoading => _isLoading.value;
   Map<int, List<PracticeSetModel>> get questionSets => _questionSets;
+  List<PracticeSetModel> get favoriteSets => _favoriteSets;
 
   // Setters
   set homeIndex(value) => _homeIndex.value = value;
   set isLoading(value) => _isLoading.value = value;
   set questionSets(value) => _questionSets.value = value;
+  set favoriteSets(value) => _favoriteSets.value = value;
 
   @override
   void onInit() {
     fetchQuestionSet();
     super.onInit();
+    fetchFavorite();
+  }
+
+  void addToFavorite(PracticeSetModel set) {
+    favoriteSets.add(set);
+
+    final practiceSetData = favoriteSets.map((e) => e.toJson()).toList();
+    LocalStorage.setData('favorite', jsonEncode(practiceSetData));
+  }
+
+  void removeFromFavorite(PracticeSetModel set) {
+    favoriteSets.removeWhere((e) => e.question == set.question);
+
+    final practiceSetData = favoriteSets.map((e) => e.toJson()).toList();
+    LocalStorage.setData('favorite', jsonEncode(practiceSetData));
+  }
+
+  Future<void> fetchFavorite() async {
+    final favorite = await LocalStorage.getData('favorite');
+    if (favorite != null) {
+      favoriteSets = (jsonDecode(favorite) as List)
+          .map((e) => PracticeSetModel.fromJson(e))
+          .toList();
+    }
   }
 
   // Methods

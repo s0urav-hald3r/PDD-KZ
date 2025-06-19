@@ -104,23 +104,45 @@ class QAPage extends StatelessWidget {
                           ),
                         ),
                         SizedBox(width: 10.w),
-                        Container(
-                          width: 45.w,
-                          height: 45.w,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(5),
-                            gradient: containerGradient,
-                          ),
-                          child: Center(
-                            child: SvgPicture.asset(
-                              unSelectedFavIcon,
-                              color: whiteColor,
+                        InkWell(
+                          onTap: () {
+                            controller.toggleFavorite();
+                          },
+                          child: Container(
+                            width: 45.w,
+                            height: 45.w,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(5),
+                              color: controller
+                                      .praciceSets[controller.currentIndex]
+                                      .isFavorite
+                                  ? null
+                                  : whiteColor,
+                              border: controller
+                                      .praciceSets[controller.currentIndex]
+                                      .isFavorite
+                                  ? null
+                                  : Border.all(color: primaryColor),
+                              gradient: controller
+                                      .praciceSets[controller.currentIndex]
+                                      .isFavorite
+                                  ? containerGradient
+                                  : null,
+                            ),
+                            child: Center(
+                              child: SvgPicture.asset(
+                                unSelectedFavIcon,
+                                color: controller
+                                        .praciceSets[controller.currentIndex]
+                                        .isFavorite
+                                    ? whiteColor
+                                    : primaryColor,
+                              ),
                             ),
                           ),
                         ),
                       ]);
                 }),
-                // SizedBox(height: MediaQuery.of(context).padding.bottom)
               ]),
             ),
           )

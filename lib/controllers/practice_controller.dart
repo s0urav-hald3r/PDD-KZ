@@ -98,7 +98,7 @@ class PracticeController extends GetxController {
     }
   }
 
-  void doAnswer(int index) {
+  void doAnswer(int index) async {
     if (isPracticeSetComplete) return;
     if (praciceSets[currentIndex].isSubmitted) return;
 
@@ -108,7 +108,10 @@ class PracticeController extends GetxController {
       isSubmitted: true,
     );
 
-    savePracticeState();
+    final practiceSetData = praciceSets.map((e) => e.toJson()).toList();
+    await LocalStorage.setData(
+        'set_$currentSetIndex', jsonEncode(practiceSetData));
+    await LocalStorage.setData('answered_$currentSetIndex', questionAnswered);
   }
 
   int submitAnswerIndex() {
@@ -129,10 +132,19 @@ class PracticeController extends GetxController {
     return praciceSets[currentIndex].options.indexWhere((opt) => opt.answer);
   }
 
-  void savePracticeState() async {
+  void toggleFavorite() async {
+    praciceSets[currentIndex] = praciceSets[currentIndex].copyWith(
+      isFavorite: !praciceSets[currentIndex].isFavorite,
+    );
+
+    if (praciceSets[currentIndex].isFavorite) {
+      HomeController.instance.addToFavorite(praciceSets[currentIndex]);
+    } else {
+      HomeController.instance.removeFromFavorite(praciceSets[currentIndex]);
+    }
+
     final practiceSetData = praciceSets.map((e) => e.toJson()).toList();
     await LocalStorage.setData(
         'set_$currentSetIndex', jsonEncode(practiceSetData));
-    await LocalStorage.setData('answered_$currentSetIndex', questionAnswered);
   }
 }
