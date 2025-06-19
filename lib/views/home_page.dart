@@ -7,6 +7,7 @@ import 'package:exam_app/services/navigator_key.dart';
 import 'package:exam_app/utils/extension.dart';
 import 'package:exam_app/views/pdf_viewer_page.dart';
 import 'package:exam_app/views/q_a_page.dart';
+import 'package:exam_app/views/youtube_player_page.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -62,17 +63,19 @@ class HomePage extends StatelessWidget {
                       }
                       if (index == 1) {
                         // Open PDF viewer for the second button
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const PDFViewerPage(
-                              pdfAssetPath: 'assets/static/notes.pdf',
-                              title: 'КР ЖКЕ',
-                            ),
+                        NavigatorKey.push(
+                          const PDFViewerPage(
+                            pdfAssetPath: 'assets/static/notes.pdf',
+                            title: 'КР ЖКЕ',
                           ),
                         );
                       }
-                      if (index == 2) {}
+                      if (index == 2) {
+                        // Open YouTube player for the third button
+                        NavigatorKey.push(
+                          const YouTubePlayerPage(title: 'АвтоДром сабақтары'),
+                        );
+                      }
                       if (index == 3) {
                         final controller =
                             Get.find<PracticeController>(tag: 'controller_12');
