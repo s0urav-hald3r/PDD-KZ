@@ -65,7 +65,7 @@ class FavouritePage extends GetView<HomeController> {
                                 width: 157.w,
                                 decoration: BoxDecoration(
                                   color: const Color(0xFFF5F7FA),
-                                  borderRadius: BorderRadius.circular(20),
+                                  borderRadius: BorderRadius.circular(15),
                                 ),
                                 padding: EdgeInsets.symmetric(
                                   horizontal: 10.w,
@@ -77,8 +77,8 @@ class FavouritePage extends GetView<HomeController> {
                                     height: 90.h,
                                     child: ClipRRect(
                                       borderRadius: const BorderRadius.only(
-                                        topLeft: Radius.circular(10),
-                                        topRight: Radius.circular(10),
+                                        topLeft: Radius.circular(5),
+                                        topRight: Radius.circular(5),
                                       ),
                                       child: CachedNetworkImage(
                                         imageUrl: controller
@@ -95,7 +95,7 @@ class FavouritePage extends GetView<HomeController> {
                                   SizedBox(height: 10.h),
                                   SizedBox(
                                     width: 137.w,
-                                    height: 40.h,
+                                    height: 55.h,
                                     child: Text(
                                       controller.favoriteSets[index].question,
                                       overflow: TextOverflow.ellipsis,
