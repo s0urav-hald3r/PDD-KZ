@@ -1,3 +1,6 @@
+import 'package:exam_app/config/store_config.dart';
+import 'package:exam_app/controllers/purchase_controller.dart';
+import 'package:exam_app/utils/utility_functions.dart';
 import 'package:flutter/material.dart';
 
 class PremiumLinks extends StatelessWidget {
@@ -7,7 +10,9 @@ class PremiumLinks extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
       InkWell(
-        onTap: () {},
+        onTap: () {
+          PurchaseController.instance.restorePurchases();
+        },
         child: const Text(
           'Restore Purchase',
           style: TextStyle(
@@ -19,7 +24,9 @@ class PremiumLinks extends StatelessWidget {
         ),
       ),
       InkWell(
-        onTap: () {},
+        onTap: () {
+          UtilityFunctions.openUrl(privacyPolicyUrl);
+        },
         child: const Text(
           'Privacy Policy',
           style: TextStyle(
@@ -31,7 +38,9 @@ class PremiumLinks extends StatelessWidget {
         ),
       ),
       InkWell(
-        onTap: () {},
+        onTap: () {
+          UtilityFunctions.openUrl(termsOfUseUrl);
+        },
         child: const Text(
           'Terms of Use',
           style: TextStyle(

@@ -1,5 +1,6 @@
 import 'package:exam_app/config/colors.dart';
 import 'package:exam_app/config/icons.dart';
+import 'package:exam_app/config/store_config.dart';
 import 'package:exam_app/controllers/home_controller.dart';
 import 'package:exam_app/controllers/locale_controller.dart';
 import 'package:exam_app/controllers/purchase_controller.dart';
@@ -10,14 +11,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:in_app_review/in_app_review.dart';
-import 'package:package_info_plus/package_info_plus.dart';
 import 'package:share_plus/share_plus.dart';
 
 class SettingsPage extends StatelessWidget {
   const SettingsPage({super.key});
-
-  static const String shareText =
-      'PDD KZ - A helpful application designed to prepare users for the driving license exam in Kazaksthan:\nhttps://apps.apple.com/app/id6743699602';
 
   @override
   Widget build(BuildContext context) {

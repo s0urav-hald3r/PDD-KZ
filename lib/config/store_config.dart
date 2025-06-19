@@ -26,3 +26,9 @@ const String entitlementID = 'premium_access';
 const String monthlyPlanIdentifier = 'pdd_999_1m_3d0';
 
 const String appleApiKey = 'appl_ExmcLZoyDILwJuSwUidlIJwoKgN';
+
+const String privacyPolicyUrl = 'https://sites.google.com/view/pinsavve/home';
+const String termsOfUseUrl =
+    'https://sites.google.com/view/pinsavve/terms-of-use';
+const String shareText =
+    'PDD KZ - A helpful application designed to prepare users for the driving license exam in Kazaksthan:\nhttps://apps.apple.com/app/id6743699602';
