@@ -12,10 +12,11 @@ class QuizCompletionDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     return Dialog(
       insetPadding: EdgeInsets.symmetric(horizontal: 25.w),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(5),
-      ),
       child: Container(
+        decoration: BoxDecoration(
+          color: whiteColor,
+          borderRadius: BorderRadius.circular(15),
+        ),
         width: MediaQuery.of(context).size.width,
         padding: EdgeInsets.symmetric(vertical: 25.h, horizontal: 25.w),
         child: Column(mainAxisSize: MainAxisSize.min, children: [

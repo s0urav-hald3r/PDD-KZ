@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:exam_app/components/quiz_completion_dialog.dart';
+import 'package:exam_app/components/quiz_submitted.dart';
 import 'package:exam_app/controllers/home_controller.dart';
 import 'package:exam_app/controllers/timer_controller.dart';
 import 'package:exam_app/models/practice_set_model.dart';
@@ -106,7 +107,13 @@ class PracticeController extends GetxController {
   }
 
   void doAnswer(int index) async {
-    if (isPracticeSetComplete) return;
+    if (isPracticeSetComplete) {
+      showDialog(
+        context: NavigatorKey.context,
+        builder: (context) => const QuizSubmitted(),
+      );
+      return;
+    }
     if (praciceSets[currentIndex].isSubmitted) return;
 
     questionAnswered = questionAnswered + 1;

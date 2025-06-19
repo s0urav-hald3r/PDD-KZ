@@ -131,49 +131,53 @@ class Question extends StatelessWidget {
                 controller.praciceSets[controller.currentIndex].isSubmitted,
             child: InkWell(
               onTap: () {
-                showModalBottomSheet(
-                    context: context,
-                    builder: (_) {
-                      return Container(
-                        width: MediaQuery.of(context).size.width,
-                        decoration: const BoxDecoration(
-                          color: whiteColor,
-                          borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(25),
-                            topRight: Radius.circular(25),
+                if (controller
+                    .praciceSets[controller.currentIndex].isSubmitted) {
+                  showModalBottomSheet(
+                      context: context,
+                      builder: (_) {
+                        return Container(
+                          width: MediaQuery.of(context).size.width,
+                          decoration: const BoxDecoration(
+                            color: whiteColor,
+                            borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(25),
+                              topRight: Radius.circular(25),
+                            ),
                           ),
-                        ),
-                        padding: EdgeInsets.fromLTRB(
-                          25.w,
-                          25.h,
-                          25.w,
-                          25.h + MediaQuery.of(context).padding.bottom,
-                        ),
-                        child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              const Text(
-                                'Explanation! 🔭',
-                                style: TextStyle(
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: 18,
-                                  color: Color(0xFF333333),
+                          padding: EdgeInsets.fromLTRB(
+                            25.w,
+                            25.h,
+                            25.w,
+                            25.h + MediaQuery.of(context).padding.bottom,
+                          ),
+                          child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                const Text(
+                                  'Explanation! 🔭',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 18,
+                                    color: Color(0xFF333333),
+                                  ),
                                 ),
-                              ),
-                              SizedBox(height: 10.h),
-                              Text(
-                                controller.praciceSets[controller.currentIndex]
-                                    .explanation,
-                                style: const TextStyle(
-                                  fontWeight: FontWeight.w400,
-                                  fontSize: 13,
-                                  color: Color(0xFF333333),
+                                SizedBox(height: 10.h),
+                                Text(
+                                  controller
+                                      .praciceSets[controller.currentIndex]
+                                      .explanation,
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.w400,
+                                    fontSize: 13,
+                                    color: Color(0xFF333333),
+                                  ),
                                 ),
-                              ),
-                            ]),
-                      );
-                    });
+                              ]),
+                        );
+                      });
+                }
               },
               child: Container(
                 height: 74.h,
