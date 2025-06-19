@@ -1,5 +1,6 @@
 import 'package:exam_app/config/colors.dart';
 import 'package:exam_app/config/icons.dart';
+import 'package:exam_app/controllers/home_controller.dart';
 import 'package:exam_app/controllers/locale_controller.dart';
 import 'package:exam_app/controllers/purchase_controller.dart';
 import 'package:exam_app/services/navigator_key.dart';
@@ -9,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:in_app_review/in_app_review.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:share_plus/share_plus.dart';
 
 class SettingsPage extends StatelessWidget {
@@ -270,7 +272,7 @@ class LanguageBottomSheet extends GetView<LocaleController> {
   }
 }
 
-class AboutAppBottomSheet extends StatelessWidget {
+class AboutAppBottomSheet extends GetView<HomeController> {
   const AboutAppBottomSheet({super.key});
 
   @override
@@ -307,7 +309,7 @@ class AboutAppBottomSheet extends StatelessWidget {
           ),
           SizedBox(height: 10.h),
           Text(
-            '${'Version'.tr}: 1.0.0',
+            '${'Version'.tr}: ${controller.version}+${controller.buildNumber}',
             style: const TextStyle(
               fontWeight: FontWeight.w500,
               fontSize: 14,

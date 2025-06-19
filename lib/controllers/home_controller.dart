@@ -7,6 +7,7 @@ import 'package:exam_app/services/local_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+import 'package:package_info_plus/package_info_plus.dart';
 
 class HomeController extends GetxController {
   static HomeController get instance => Get.find();
@@ -20,11 +21,17 @@ class HomeController extends GetxController {
       <int, List<PracticeSetModel>>{}.obs;
   final RxList<PracticeSetModel> _favoriteSets = <PracticeSetModel>[].obs;
 
+  final RxString _version = ''.obs;
+  final RxString _buildNumber = ''.obs;
+
   // Getters
   int get homeIndex => _homeIndex.value;
   bool get isLoading => _isLoading.value;
   Map<int, List<PracticeSetModel>> get questionSets => _questionSets;
   List<PracticeSetModel> get favoriteSets => _favoriteSets;
+
+  String get version => _version.value;
+  String get buildNumber => _buildNumber.value;
 
   // Setters
   set homeIndex(value) => _homeIndex.value = value;
@@ -32,11 +39,22 @@ class HomeController extends GetxController {
   set questionSets(value) => _questionSets.value = value;
   set favoriteSets(value) => _favoriteSets.value = value;
 
+  set version(value) => _version.value = value;
+  set buildNumber(value) => _buildNumber.value = value;
+
   @override
   void onInit() {
     fetchQuestionSet();
-    super.onInit();
     fetchFavorite();
+    fetchPackageInfo();
+    super.onInit();
+  }
+
+  void fetchPackageInfo() async {
+    PackageInfo packageInfo = await PackageInfo.fromPlatform();
+
+    version = packageInfo.version;
+    buildNumber = packageInfo.buildNumber;
   }
 
   void addToFavorite(PracticeSetModel set) {
