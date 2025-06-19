@@ -1,5 +1,6 @@
 import 'package:exam_app/config/colors.dart';
 import 'package:exam_app/controllers/home_controller.dart';
+import 'package:exam_app/controllers/locale_controller.dart';
 import 'package:exam_app/services/navigator_key.dart';
 import 'package:exam_app/views/navbar_page.dart';
 import 'package:flutter/material.dart';
@@ -14,6 +15,7 @@ void main() async {
 
   // Dependency injection
   Get.lazyPut(() => HomeController());
+  Get.lazyPut(() => LocaleController());
 
   await SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
@@ -28,7 +30,9 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    final localeController = Get.find<LocaleController>();
+
+    return GetMaterialApp(
       theme: ThemeData(
         useMaterial3: true,
         fontFamily: 'Nunito Sans',
@@ -48,6 +52,8 @@ class MyApp extends StatelessWidget {
           ),
         ),
       ),
+      locale: localeController.currentLocale ?? const Locale('en', 'US'),
+      translations: localeController,
       navigatorKey: NavigatorKey.navigatorKey,
       home: const NavBarPage(),
     );

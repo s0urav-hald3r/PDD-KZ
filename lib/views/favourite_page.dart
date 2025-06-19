@@ -23,9 +23,9 @@ class FavouritePage extends GetView<HomeController> {
               0,
               15.h,
             ),
-            child: const Text(
-              'Favourite',
-              style: TextStyle(
+            child: Text(
+              'Favourite'.tr,
+              style: const TextStyle(
                 fontWeight: FontWeight.w700,
                 fontSize: 20,
                 color: whiteColor,

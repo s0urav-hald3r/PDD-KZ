@@ -24,9 +24,9 @@ class PracticePage extends StatelessWidget {
               0,
               15.h,
             ),
-            child: const Text(
-              'Practice',
-              style: TextStyle(
+            child: Text(
+              'Practice'.tr,
+              style: const TextStyle(
                 fontWeight: FontWeight.w700,
                 fontSize: 20,
                 color: whiteColor,

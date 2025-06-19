@@ -40,20 +40,21 @@ class NavBarPage extends StatelessWidget {
           color: greyColor,
           child:
               Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
-            _navItem(0, selectedHomeIcon, unSelectedHomeIcon, 'Home', () {
+            _navItem(0, selectedHomeIcon, unSelectedHomeIcon, 'Home'.tr, () {
               controller.homeIndex = 0;
               controller.pageController.jumpToPage(0);
             }),
-            _navItem(1, selectedPracIcon, unSelectedPracIcon, 'Practice', () {
+            _navItem(1, selectedPracIcon, unSelectedPracIcon, 'Practice'.tr,
+                () {
               controller.homeIndex = 1;
               controller.pageController.jumpToPage(1);
             }),
-            _navItem(2, selectedFavIcon, unSelectedFavIcon, 'Favourite', () {
+            _navItem(2, selectedFavIcon, unSelectedFavIcon, 'Favourite'.tr, () {
               controller.homeIndex = 2;
               controller.pageController.jumpToPage(2);
             }),
             _navItem(
-                3, selectedSettingsIcon, unSelectedSettingsIcon, 'Settings',
+                3, selectedSettingsIcon, unSelectedSettingsIcon, 'Settings'.tr,
                 () {
               controller.homeIndex = 3;
               controller.pageController.jumpToPage(3);
