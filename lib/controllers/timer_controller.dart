@@ -6,7 +6,7 @@ import 'package:exam_app/services/local_storage.dart';
 import 'package:exam_app/components/quiz_completion_dialog.dart';
 
 class TimerController extends GetxController {
-  RxInt sec = (30 * 60).obs;
+  RxInt sec = (1 * 60).obs;
 
   Timer? _timer;
 
@@ -27,10 +27,10 @@ class TimerController extends GetxController {
       if (savedSec != null) {
         sec.value = savedSec;
       } else {
-        sec.value = 30 * 60;
+        sec.value = 1 * 60;
       }
     } else {
-      sec.value = 30 * 60;
+      sec.value = 1 * 60;
     }
 
     _timer?.cancel(); // Cancel any existing timer before starting a new one
@@ -49,7 +49,7 @@ class TimerController extends GetxController {
         );
 
         stopTimer();
-        LocalStorage.setData('complete_practice_set_$setIndex', true);
+        LocalStorage.setData('complete_set_$setIndex', true);
       }
     });
   }
