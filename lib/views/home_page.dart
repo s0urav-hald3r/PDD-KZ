@@ -2,7 +2,6 @@ import 'package:exam_app/config/colors.dart';
 import 'package:exam_app/config/images.dart';
 import 'package:exam_app/controllers/home_controller.dart';
 import 'package:exam_app/controllers/practice_controller.dart';
-import 'package:exam_app/controllers/purchase_controller.dart';
 import 'package:exam_app/controllers/timer_controller.dart';
 import 'package:exam_app/services/navigator_key.dart';
 import 'package:exam_app/utils/extension.dart';
