@@ -48,10 +48,17 @@ class PurchaseController extends GetxController {
     isLoading = true;
 
     try {
+      debugPrint('Fetching products with ID: $monthlyPlanIdentifier');
       final products = await Purchases.getProducts([monthlyPlanIdentifier]);
 
+      debugPrint('Products fetched: ${products.length}');
       for (var product in products) {
-        debugPrint('product :: $product');
+        debugPrint(
+            'Product: ${product.identifier}, Price: ${product.priceString}');
+      }
+
+      if (products.isEmpty) {
+        debugPrint('Warning: No products were returned from the store');
       }
 
       storeProduct = products;
