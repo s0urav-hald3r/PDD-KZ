@@ -118,7 +118,7 @@ class SettingsPage extends StatelessWidget {
           try {
             await SharePlus.instance.share(
               ShareParams(
-                subject: 'PDD KZ',
+                subject: 'PDD Kz',
                 text: shareText,
               ),
             );
@@ -297,7 +297,7 @@ class AboutAppBottomSheet extends GetView<HomeController> {
           ),
           SizedBox(height: 25.h),
           const Text(
-            'PDD KZ',
+            'PDD Kz',
             style: TextStyle(
               fontWeight: FontWeight.w700,
               fontSize: 16,

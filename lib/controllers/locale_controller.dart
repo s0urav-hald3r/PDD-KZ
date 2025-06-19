@@ -25,7 +25,7 @@ class LocaleController extends GetxController implements Translations {
           'Version': 'Version',
           'Description': 'Description',
           'PDD KZ Description':
-              'PDD kz – A helpful application designed to prepare users for the driving license exam in Kazaksthan',
+              'PDD Kz – A helpful application designed to prepare users for the driving license exam in Kazaksthan',
         },
         'kk_KZ': {
           'Language': 'Тіл',
@@ -43,7 +43,7 @@ class LocaleController extends GetxController implements Translations {
           'Version': 'Нұсқасы',
           'Description': 'Сипаттама',
           'PDD KZ Description':
-              'PDD kz – Қазақстанда жүргізуші куәлігін алуға дайындалуға арналған пайдалы қосымша',
+              'PDD Kz – Қазақстанда жүргізуші куәлігін алуға дайындалуға арналған пайдалы қосымша',
         },
       };
 
