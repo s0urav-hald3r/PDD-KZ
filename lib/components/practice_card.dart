@@ -44,98 +44,120 @@ class _PracticeCardState extends State<PracticeCard> {
       child: Container(
         width: MediaQuery.of(context).size.width,
         height: 100.h,
-        margin: EdgeInsets.only(top: 10.h),
+        margin: EdgeInsets.only(top: 10.h, left: 25.w, right: 25.w),
         decoration: BoxDecoration(
           color: greyColor,
           borderRadius: BorderRadius.circular(10),
         ),
-        child: Column(children: [
-          const SizedBox(height: 13),
-          Row(children: [
-            // if (widget.index != 0 && !HomeController.instance.isProUser)
-            //   SvgPicture.asset(lockTutorialsIcon)
-            // else
-            //   const SizedBox(width: 5),
-            const SizedBox(width: 10),
-            GradientText(
-              'Practice ${widget.index + 1}',
-              style: const TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.w800,
+        child: Stack(clipBehavior: Clip.none, children: [
+          Column(children: [
+            const SizedBox(height: 13),
+            Row(children: [
+              // if (widget.index != 0 && !HomeController.instance.isProUser)
+              //   SvgPicture.asset(lockTutorialsIcon)
+              // else
+              //   const SizedBox(width: 5),
+              const SizedBox(width: 10),
+              GradientText(
+                'Practice ${widget.index + 1}',
+                style: const TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w800,
+                ),
+                colors: const [primaryColor, primaryColor, secondaryColor],
               ),
-              colors: const [primaryColor, primaryColor, secondaryColor],
-            ),
-            const Spacer(),
-            Obx(() {
-              return RichText(
-                text: TextSpan(children: [
-                  TextSpan(
-                    text: '${controller.questionAnswered}',
-                    style: const TextStyle(
-                      fontWeight: FontWeight.w400,
-                      color: blackColor,
-                      fontSize: 16,
-                    ),
-                  ),
-                  TextSpan(
-                    text: '/${controller.practiceSetLen}',
-                    style: const TextStyle(
-                      fontWeight: FontWeight.w700,
-                      color: blackColor,
-                      fontSize: 16,
-                    ),
-                  )
-                ]),
-              );
-            }),
-            const SizedBox(width: 15),
-          ]),
-          const Spacer(),
-          Row(
-            children: [
-              const SizedBox(width: 15),
+              const Spacer(),
               Obx(() {
-                return LinearPercentIndicator(
-                  width: 295.w,
-                  lineHeight: 5.h,
-                  percent: controller.practiceSetLen > 0
-                      ? (controller.questionAnswered /
-                          controller.practiceSetLen)
-                      : 0.0,
-                  padding: EdgeInsets.zero,
-                  barRadius: const Radius.circular(10),
-                  backgroundColor: whiteColor,
-                  linearGradient: const LinearGradient(
-                    colors: [primaryColor, secondaryColor],
-                  ),
+                return RichText(
+                  text: TextSpan(children: [
+                    TextSpan(
+                      text: '${controller.questionAnswered}',
+                      style: const TextStyle(
+                        fontWeight: FontWeight.w400,
+                        color: blackColor,
+                        fontSize: 16,
+                      ),
+                    ),
+                    TextSpan(
+                      text: '/${controller.practiceSetLen}',
+                      style: const TextStyle(
+                        fontWeight: FontWeight.w700,
+                        color: blackColor,
+                        fontSize: 16,
+                      ),
+                    )
+                  ]),
                 );
               }),
               const SizedBox(width: 15),
-            ],
-          ),
-          const Spacer(),
-          const Row(children: [
-            SizedBox(width: 15),
-            Text(
-              'Bastalmady',
-              style: TextStyle(
-                color: blackColor,
-                fontWeight: FontWeight.w500,
-                fontSize: 12,
-              ),
+            ]),
+            const Spacer(),
+            Row(
+              children: [
+                const SizedBox(width: 15),
+                Obx(() {
+                  return LinearPercentIndicator(
+                    width: 295.w,
+                    lineHeight: 5.h,
+                    percent: controller.practiceSetLen > 0
+                        ? (controller.questionAnswered /
+                            controller.practiceSetLen)
+                        : 0.0,
+                    padding: EdgeInsets.zero,
+                    barRadius: const Radius.circular(10),
+                    backgroundColor: whiteColor,
+                    linearGradient: const LinearGradient(
+                      colors: [primaryColor, secondaryColor],
+                    ),
+                  );
+                }),
+                const SizedBox(width: 15),
+              ],
             ),
-            Spacer(),
-            Text(
-              'Answered',
-              style: TextStyle(
-                color: blackColor,
-                fontWeight: FontWeight.w500,
-                fontSize: 12,
+            const Spacer(),
+            const Row(children: [
+              SizedBox(width: 15),
+              Text(
+                'Bastalmady',
+                style: TextStyle(
+                  color: blackColor,
+                  fontWeight: FontWeight.w500,
+                  fontSize: 12,
+                ),
               ),
-            ),
-            SizedBox(width: 15),
+              Spacer(),
+              Text(
+                'Answered',
+                style: TextStyle(
+                  color: blackColor,
+                  fontWeight: FontWeight.w500,
+                  fontSize: 12,
+                ),
+              ),
+              SizedBox(width: 15),
+            ]),
+            const SizedBox(height: 15),
           ]),
-          const SizedBox(height: 15),
+          Obx(() {
+            if (controller.practiceSetLen > 0 &&
+                controller.questionAnswered > 0) {
+              return Positioned(
+                right: -20,
+                top: -20,
+                child: IconButton(
+                  onPressed: () {
+                    controller.resetPracticeSet();
+                  },
+                  icon: const Icon(
+                    Icons.refresh,
+                    color: primaryColor,
+                  ),
+                ),
+              );
+            }
+
+            return const SizedBox.shrink();
+          }),
         ]),
       ),
     );

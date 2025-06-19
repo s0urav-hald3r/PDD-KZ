@@ -42,7 +42,7 @@ class PracticePage extends StatelessWidget {
                   topRight: Radius.circular(25),
                 ),
               ),
-              padding: EdgeInsets.fromLTRB(25.w, 15.h, 25.w, 0),
+              padding: EdgeInsets.fromLTRB(0, 15.h, 0, 0),
               child: ListView.builder(
                   itemCount: 12,
                   padding: EdgeInsets.zero,

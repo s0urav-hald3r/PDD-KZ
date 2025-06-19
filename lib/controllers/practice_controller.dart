@@ -32,13 +32,6 @@ class PracticeController extends GetxController {
   set questionAnswered(int value) => _questionAnswered.value = value;
   set praciceSets(List<PracticeSetModel> value) => _praciceSets.value = value;
 
-  @override
-  void onInit() {
-    super.onInit();
-    currentIndex = LocalStorage.getData('current_index_$currentSetIndex') ?? 0;
-    questionAnswered = LocalStorage.getData('answered_$currentSetIndex') ?? 0;
-  }
-
   void initializeController(TickerProvider vsync) {
     tabController = TabController(
       initialIndex: currentIndex,
@@ -49,6 +42,10 @@ class PracticeController extends GetxController {
 
   void initializePracticeSet(int index) {
     currentSetIndex = index;
+
+    currentIndex = LocalStorage.getData('current_index_$currentSetIndex') ?? 0;
+    questionAnswered = LocalStorage.getData('answered_$currentSetIndex') ?? 0;
+
     var temp = <PracticeSetModel>[];
 
     String? savedPracticeSet = LocalStorage.getData('set_$currentSetIndex');
@@ -67,6 +64,16 @@ class PracticeController extends GetxController {
     }
 
     praciceSets = temp;
+  }
+
+  void resetPracticeSet() async {
+    await LocalStorage.removeData('current_index_$currentSetIndex');
+    await LocalStorage.removeData('answered_$currentSetIndex');
+    await LocalStorage.removeData('set_$currentSetIndex');
+    await LocalStorage.removeData('complete_set_$currentSetIndex');
+    await LocalStorage.removeData('timer_$currentSetIndex');
+    praciceSets = <PracticeSetModel>[];
+    initializePracticeSet(currentSetIndex);
   }
 
   void changeTab(int index) {

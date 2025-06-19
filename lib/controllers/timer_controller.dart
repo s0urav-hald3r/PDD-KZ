@@ -59,10 +59,6 @@ class TimerController extends GetxController {
     sec.value = 0;
   }
 
-  void clearSavedTimer(int setIndex) {
-    LocalStorage.removeData('timer_$setIndex');
-  }
-
   bool get isTimerStop => sec.value == 0;
 
   @override
