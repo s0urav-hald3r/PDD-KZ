@@ -2,6 +2,7 @@ import 'package:exam_app/components/premium_links.dart';
 import 'package:exam_app/config/colors.dart';
 import 'package:exam_app/config/icons.dart';
 import 'package:exam_app/config/images.dart';
+import 'package:exam_app/controllers/purchase_controller.dart';
 import 'package:exam_app/services/navigator_key.dart';
 import 'package:exam_app/utils/extension.dart';
 import 'package:flutter/material.dart';
@@ -12,6 +13,8 @@ class PremiumPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final purchaseController = PurchaseController.instance;
+
     return Scaffold(
       backgroundColor: greyColor,
       body: SafeArea(
@@ -65,7 +68,9 @@ class PremiumPage extends StatelessWidget {
                 gradient: containerGradient,
               ),
               child: ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    purchaseController.purchaseProduct();
+                  },
                   child: const Text(
                     'Yes, Activate',
                     style: TextStyle(
@@ -78,9 +83,9 @@ class PremiumPage extends StatelessWidget {
             SizedBox(height: 10.h),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 25.w),
-              child: const Text(
-                '3 Days free trial, after \$8.99 | week',
-                style: TextStyle(
+              child: Text(
+                '3 days free trial, after ${purchaseController.storeProduct[0].priceString}/month',
+                style: const TextStyle(
                   fontWeight: FontWeight.w400,
                   fontSize: 12,
                   color: Color(0xFF6C6C6C),

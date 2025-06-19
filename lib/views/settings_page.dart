@@ -1,6 +1,7 @@
 import 'package:exam_app/config/colors.dart';
 import 'package:exam_app/config/icons.dart';
 import 'package:exam_app/controllers/locale_controller.dart';
+import 'package:exam_app/controllers/purchase_controller.dart';
 import 'package:exam_app/services/navigator_key.dart';
 import 'package:exam_app/utils/extension.dart';
 import 'package:exam_app/views/premium_page.dart';
@@ -58,8 +59,10 @@ class SettingsPage extends StatelessWidget {
                   _card(3),
                   const Divider(height: 1),
                   _card(4),
-                  const Divider(height: 1),
-                  _card(5),
+                  if (!PurchaseController.instance.isPremium) ...[
+                    const Divider(height: 1),
+                    _card(5),
+                  ]
                   // const Spacer(),
                   // const Text(
                   //   'Connect Now',

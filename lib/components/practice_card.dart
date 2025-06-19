@@ -1,9 +1,11 @@
 import 'package:exam_app/config/colors.dart';
 import 'package:exam_app/config/icons.dart';
 import 'package:exam_app/controllers/practice_controller.dart';
+import 'package:exam_app/controllers/purchase_controller.dart';
 import 'package:exam_app/controllers/timer_controller.dart';
 import 'package:exam_app/services/navigator_key.dart';
 import 'package:exam_app/utils/extension.dart';
+import 'package:exam_app/views/premium_page.dart';
 import 'package:exam_app/views/q_a_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -39,6 +41,11 @@ class _PracticeCardState extends State<PracticeCard> {
       onTap: () {
         if (controller.practiceSetLen == 0) return;
 
+        if (widget.index != 0 && !PurchaseController.instance.isPremium) {
+          NavigatorKey.push(const PremiumPage());
+          return;
+        }
+
         NavigatorKey.push(
           QAPage(controller: controller, timerController: timerController),
         );
@@ -56,7 +63,7 @@ class _PracticeCardState extends State<PracticeCard> {
         child: Column(children: [
           const SizedBox(height: 13),
           Row(children: [
-            if (widget.index != 0)
+            if (widget.index != 0 && !PurchaseController.instance.isPremium)
               SvgPicture.asset(lockTutorialsIcon)
             else
               const SizedBox(width: 5),
@@ -121,7 +128,17 @@ class _PracticeCardState extends State<PracticeCard> {
           Obx(() {
             return Row(children: [
               const SizedBox(width: 15),
-              if (controller.questionAnswered > 0 && !controller.isComplete)
+              if (widget.index != 0 && !PurchaseController.instance.isPremium)
+                Text(
+                  'Locked'.tr,
+                  style: const TextStyle(
+                    color: blackColor,
+                    fontWeight: FontWeight.w500,
+                    fontSize: 12,
+                  ),
+                )
+              else if (controller.questionAnswered > 0 &&
+                  !controller.isComplete)
                 Text(
                   'In Progress'.tr,
                   style: const TextStyle(
@@ -129,8 +146,8 @@ class _PracticeCardState extends State<PracticeCard> {
                     fontWeight: FontWeight.w500,
                     fontSize: 12,
                   ),
-                ),
-              if (controller.isComplete)
+                )
+              else if (controller.isComplete)
                 Text(
                   'Answered'.tr,
                   style: const TextStyle(
@@ -138,7 +155,9 @@ class _PracticeCardState extends State<PracticeCard> {
                     fontWeight: FontWeight.w500,
                     fontSize: 12,
                   ),
-                ),
+                )
+              else
+                const SizedBox.shrink(),
               const Spacer(),
               if (controller.questionAnswered > 0 || controller.isComplete)
                 InkWell(
