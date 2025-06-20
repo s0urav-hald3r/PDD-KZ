@@ -2,6 +2,7 @@ import 'package:exam_app/config/store_config.dart';
 import 'package:exam_app/controllers/purchase_controller.dart';
 import 'package:exam_app/utils/utility_functions.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class PremiumLinks extends StatelessWidget {
   const PremiumLinks({super.key});
@@ -13,9 +14,9 @@ class PremiumLinks extends StatelessWidget {
         onTap: () {
           PurchaseController.instance.restorePurchases();
         },
-        child: const Text(
-          'Restore Purchase',
-          style: TextStyle(
+        child: Text(
+          'Restore Purchase'.tr,
+          style: const TextStyle(
             fontWeight: FontWeight.w400,
             fontSize: 10,
             color: Color(0xFF6C6C6C),
@@ -27,9 +28,9 @@ class PremiumLinks extends StatelessWidget {
         onTap: () {
           UtilityFunctions.openUrl(privacyPolicyUrl);
         },
-        child: const Text(
-          'Privacy Policy',
-          style: TextStyle(
+        child: Text(
+          'Privacy Policy'.tr,
+          style: const TextStyle(
             fontWeight: FontWeight.w400,
             fontSize: 10,
             color: Color(0xFF6C6C6C),
@@ -41,9 +42,9 @@ class PremiumLinks extends StatelessWidget {
         onTap: () {
           UtilityFunctions.openUrl(termsOfUseUrl);
         },
-        child: const Text(
-          'Terms of Use',
-          style: TextStyle(
+        child: Text(
+          'Terms of Use'.tr,
+          style: const TextStyle(
             fontWeight: FontWeight.w400,
             fontSize: 10,
             color: Color(0xFF6C6C6C),

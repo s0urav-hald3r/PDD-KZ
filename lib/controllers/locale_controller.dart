@@ -10,11 +10,25 @@ class LocaleController extends GetxController implements Translations {
   @override
   Map<String, Map<String, String>> get keys => {
         'en_US': {
+          // home page
+          'Welcome to PDD Kz': 'Welcome to PDD Kz',
+          // settings page
           'Language': 'Language',
           'About the App': 'About the App',
           'Share': 'Share',
           'Rate': 'Rate',
           'Get the full version': 'Get the full version',
+          // premium page
+          'Try PDD For Free Quiz Unlock to all the Pro Features':
+              'Try PDD For Free Quiz Unlock to all the Pro Features',
+          'Unlock to all the Pro Features?': 'Unlock to all the Pro Features?',
+          'Yes, Activate': 'Yes, Activate',
+          'Restore Purchase': 'Restore Purchase',
+          'Privacy Policy': 'Privacy Policy',
+          'Terms of Use': 'Terms of Use',
+          '3 days free trial, after': '3 days free trial, after',
+          'month': 'month',
+          // bottomnav bar
           'Home': 'Home',
           'Practice': 'Practice',
           'Favourite': 'Favourite',
@@ -28,11 +42,26 @@ class LocaleController extends GetxController implements Translations {
               'PDD Kz – A helpful application designed to prepare users for the driving license exam in Kazaksthan',
         },
         'kk_KZ': {
+          // home page
+          'Welcome to PDD Kz': 'PDD Kz-ге қош келдіңіз',
+          // settings page
           'Language': 'Тіл',
-          'About the App': 'Біріктірушілігі туралы',
+          'About the App': 'Қолданба туралы',
           'Share': 'Бөлісу',
           'Rate': 'Бағалау',
           'Get the full version': 'Қолданба толық нұсқасын алу',
+          // premium page
+          'Try PDD For Free Quiz Unlock to all the Pro Features':
+              'PDD сынағын 3 күн тегін өтіңіз Барлық Про мүмкіндіктерді ашыңыз',
+          'Unlock to all the Pro Features?':
+              'Барлық Про мүмкіндіктерді ашыңыз?',
+          'Yes, Activate': 'Иә, Қолдану',
+          'Restore Purchase': 'Сатып алынғандарды қалпына келтіру',
+          'Privacy Policy': 'Жекелік саясаты',
+          'Terms of Use': 'Қолданба шарттары',
+          '3 days free trial, after': '3 күн тегін сынақтан кейін',
+          'month': 'ай',
+          // bottomnav bar
           'Home': 'Үй',
           'Practice': 'Практика',
           'Favourite': 'Бекітілген',

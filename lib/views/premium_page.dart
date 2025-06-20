@@ -7,6 +7,7 @@ import 'package:exam_app/services/navigator_key.dart';
 import 'package:exam_app/utils/extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
 
 class PremiumPage extends StatelessWidget {
   const PremiumPage({super.key});
@@ -35,9 +36,9 @@ class PremiumPage extends StatelessWidget {
             SizedBox(height: 40.h),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 25.w),
-              child: const Text(
-                'Try PDD For Free Quiz Unlock to all the Pro Features',
-                style: TextStyle(
+              child: Text(
+                'Try PDD For Free Quiz Unlock to all the Pro Features'.tr,
+                style: const TextStyle(
                   fontWeight: FontWeight.w800,
                   fontSize: 30,
                   color: blackColor,
@@ -49,9 +50,9 @@ class PremiumPage extends StatelessWidget {
             SizedBox(height: 40.h),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 25.w),
-              child: const Text(
-                'Unlock to all the Pro Features?',
-                style: TextStyle(
+              child: Text(
+                'Unlock to all the Pro Features?'.tr,
+                style: const TextStyle(
                   fontWeight: FontWeight.w800,
                   fontSize: 20,
                   color: blackColor,
@@ -71,9 +72,9 @@ class PremiumPage extends StatelessWidget {
                   onPressed: () {
                     purchaseController.purchaseProduct();
                   },
-                  child: const Text(
-                    'Yes, Activate',
-                    style: TextStyle(
+                  child: Text(
+                    'Yes, Activate'.tr,
+                    style: const TextStyle(
                       fontWeight: FontWeight.w700,
                       fontSize: 16,
                       color: whiteColor,
@@ -84,7 +85,7 @@ class PremiumPage extends StatelessWidget {
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 25.w),
               child: Text(
-                '3 days free trial, after ${purchaseController.storeProduct[0].priceString}/month',
+                '${'3 days free trial, after'.tr} ${purchaseController.storeProduct[0].priceString}/${'month'.tr}',
                 style: const TextStyle(
                   fontWeight: FontWeight.w400,
                   fontSize: 12,

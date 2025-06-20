@@ -29,9 +29,9 @@ class HomePage extends StatelessWidget {
               0,
               15.h,
             ),
-            child: const Text(
-              'Welcome to PDD',
-              style: TextStyle(
+            child: Text(
+              'Welcome to PDD Kz'.tr,
+              style: const TextStyle(
                 fontWeight: FontWeight.w700,
                 fontSize: 20,
                 color: whiteColor,
