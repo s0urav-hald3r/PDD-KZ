@@ -30,6 +30,15 @@ class HomeController extends GetxController {
   Map<int, List<PracticeSetModel>> get questionSets => _questionSets;
   List<PracticeSetModel> get favoriteSets => _favoriteSets;
 
+  // New getter that returns favorite sets with sequential numbering
+  List<PracticeSetModel> get sequentialFavoriteSets {
+    List<PracticeSetModel> sequentialList = [];
+    for (int i = 0; i < _favoriteSets.length; i++) {
+      sequentialList.add(_favoriteSets[i].copyWith(no: i + 1));
+    }
+    return sequentialList;
+  }
+
   String get version => _version.value;
   String get buildNumber => _buildNumber.value;
 

@@ -1,6 +1,7 @@
 import 'package:exam_app/config/colors.dart';
 import 'package:exam_app/config/icons.dart';
 import 'package:exam_app/controllers/home_controller.dart';
+import 'package:exam_app/controllers/practice_controller.dart';
 import 'package:exam_app/utils/extension.dart';
 import 'package:exam_app/views/favourite_page.dart';
 import 'package:exam_app/views/home_page.dart';
@@ -52,6 +53,7 @@ class NavBarPage extends StatelessWidget {
             _navItem(2, selectedFavIcon, unSelectedFavIcon, 'Favourite'.tr, () {
               controller.homeIndex = 2;
               controller.pageController.jumpToPage(2);
+              Get.put(PracticeController(), tag: 'controller_fav');
             }),
             _navItem(
                 3, selectedSettingsIcon, unSelectedSettingsIcon, 'Settings'.tr,

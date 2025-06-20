@@ -45,27 +45,35 @@ class PracticeController extends GetxController {
   }
 
   void initializePracticeSet(int index) {
-    currentSetIndex = index;
-
-    currentIndex = LocalStorage.getData('current_index_$currentSetIndex') ?? 0;
-    questionAnswered = LocalStorage.getData('answered_$currentSetIndex') ?? 0;
-    isComplete = LocalStorage.getData('complete_set_$currentSetIndex') ?? false;
-
     var temp = <PracticeSetModel>[];
 
-    String? savedPracticeSet = LocalStorage.getData('set_$currentSetIndex');
-
-    if (savedPracticeSet != null) {
-      // Load saved practice state
-      temp = (jsonDecode(savedPracticeSet) as List)
-          .map((e) => PracticeSetModel.fromJson(e as Map<String, dynamic>))
-          .toList();
-    } else {
-      // Initialize new practice set
-      temp = HomeController.instance.questionSets[index + 1] ?? [];
-
+    if (index == 13) {
       currentIndex = 0;
-      questionAnswered = 0;
+      temp = HomeController.instance.sequentialFavoriteSets;
+    } else {
+      currentSetIndex = index;
+
+      currentIndex =
+          LocalStorage.getData('current_index_$currentSetIndex') ?? 0;
+      questionAnswered = LocalStorage.getData('answered_$currentSetIndex') ?? 0;
+      isComplete =
+          LocalStorage.getData('complete_set_$currentSetIndex') ?? false;
+
+      String? savedPracticeSet = LocalStorage.getData('set_$currentSetIndex');
+
+      if (savedPracticeSet != null) {
+        // Load saved practice state
+        temp = (jsonDecode(savedPracticeSet) as List)
+            .map((e) => PracticeSetModel.fromJson(e as Map<String, dynamic>))
+            .toList();
+      } else {
+        // Initialize new practice set
+
+        temp = HomeController.instance.questionSets[index + 1] ?? [];
+
+        currentIndex = 0;
+        questionAnswered = 0;
+      }
     }
 
     praciceSets = temp;
@@ -116,6 +124,8 @@ class PracticeController extends GetxController {
   void changeTab(int index) {
     currentIndex = index;
     tabController.index = index;
+    if (currentSetIndex == 13) return;
+
     LocalStorage.setData('current_index_$currentSetIndex', currentIndex);
   }
 
@@ -144,6 +154,14 @@ class PracticeController extends GetxController {
   }
 
   void doAnswer(int index) async {
+    if (currentSetIndex == 13) {
+      praciceSets[currentIndex] = praciceSets[currentIndex].copyWith(
+        submit: praciceSets[currentIndex].options[index],
+        isSubmitted: true,
+      );
+      return;
+    }
+
     if (isPracticeSetComplete) {
       showDialog(
         context: NavigatorKey.context,
@@ -189,7 +207,8 @@ class PracticeController extends GetxController {
     );
 
     if (praciceSets[currentIndex].isFavorite) {
-      HomeController.instance.addToFavorite(praciceSets[currentIndex]);
+      HomeController.instance.addToFavorite(
+          praciceSets[currentIndex].copyWith(isSubmitted: false, submit: null));
     } else {
       HomeController.instance.removeFromFavorite(praciceSets[currentIndex]);
     }
