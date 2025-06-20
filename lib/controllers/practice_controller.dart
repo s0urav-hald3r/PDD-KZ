@@ -48,8 +48,11 @@ class PracticeController extends GetxController {
     var temp = <PracticeSetModel>[];
 
     if (index == 13) {
+      currentSetIndex = index;
       currentIndex = 0;
       temp = HomeController.instance.sequentialFavoriteSets;
+
+      praciceSets = temp;
     } else {
       currentSetIndex = index;
 
@@ -74,9 +77,9 @@ class PracticeController extends GetxController {
         currentIndex = 0;
         questionAnswered = 0;
       }
-    }
 
-    praciceSets = temp;
+      praciceSets = temp;
+    }
   }
 
   void resetPracticeSet(int index) async {

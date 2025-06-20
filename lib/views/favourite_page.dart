@@ -3,11 +3,9 @@ import 'package:exam_app/components/question.dart';
 import 'package:exam_app/config/colors.dart';
 import 'package:exam_app/controllers/home_controller.dart';
 import 'package:exam_app/controllers/practice_controller.dart';
-import 'package:exam_app/services/navigator_key.dart';
 import 'package:exam_app/utils/extension.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:simple_gradient_text/simple_gradient_text.dart';
 
 class FavouritePage extends StatefulWidget {
   const FavouritePage({super.key});
@@ -73,13 +71,11 @@ class _FavouritePageState extends State<FavouritePage> {
                           ),
                         ),
                       )
-                    : SingleChildScrollView(
-                        child: Column(children: [
-                          SizedBox(height: 15.h),
-                          ProgressBar(controller: pController),
-                          Question(controller: pController),
-                        ]),
-                      ),
+                    : Column(children: [
+                        SizedBox(height: 15.h),
+                        ProgressBar(controller: pController),
+                        Question(controller: pController),
+                      ]),
               ),
             );
           }),

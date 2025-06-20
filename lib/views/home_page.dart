@@ -2,10 +2,12 @@ import 'package:exam_app/config/colors.dart';
 import 'package:exam_app/config/images.dart';
 import 'package:exam_app/controllers/home_controller.dart';
 import 'package:exam_app/controllers/practice_controller.dart';
+import 'package:exam_app/controllers/purchase_controller.dart';
 import 'package:exam_app/controllers/timer_controller.dart';
 import 'package:exam_app/services/navigator_key.dart';
 import 'package:exam_app/utils/extension.dart';
 import 'package:exam_app/views/pdf_viewer_page.dart';
+import 'package:exam_app/views/premium_page.dart';
 import 'package:exam_app/views/q_a_page.dart';
 import 'package:exam_app/views/youtube_player_page.dart';
 import 'package:flutter/material.dart';
@@ -83,14 +85,18 @@ class HomePage extends StatelessWidget {
                             Get.find<TimerController>(tag: 'controller_12');
                         controller.initializePracticeSet(12);
 
-                        if (controller.practiceSetLen == 0) return;
+                        if (PurchaseController.instance.isPremium) {
+                          if (controller.practiceSetLen == 0) return;
 
-                        NavigatorKey.push(
-                          QAPage(
-                            controller: controller,
-                            timerController: timerController,
-                          ),
-                        );
+                          NavigatorKey.push(
+                            QAPage(
+                              controller: controller,
+                              timerController: timerController,
+                            ),
+                          );
+                        } else {
+                          NavigatorKey.push(const PremiumPage());
+                        }
                       }
                     },
                     child: Container(

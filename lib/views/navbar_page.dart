@@ -37,7 +37,7 @@ class NavBarPage extends StatelessWidget {
           ],
         ),
         bottomNavigationBar: BottomAppBar(
-          height: 77.h,
+          height: 60.h,
           color: greyColor,
           child:
               Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [

@@ -67,6 +67,8 @@ class HomeController extends GetxController {
   }
 
   void addToFavorite(PracticeSetModel set) {
+    if (favoriteSets.any((e) => e.question == set.question)) return;
+
     favoriteSets.add(set);
 
     final practiceSetData = favoriteSets.map((e) => e.toJson()).toList();
