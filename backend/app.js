@@ -118,7 +118,7 @@ app.post('/method/question', async (req, res) => {
         const questionData = {
             questionSet: parseInt(questionSet),
             question,
-            mediaFile: imageUrl || '',
+            mediaFile: imageUrl,
             options,
             explanation,
             createdAt: admin.firestore.FieldValue.serverTimestamp()
