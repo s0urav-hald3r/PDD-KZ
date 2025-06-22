@@ -118,7 +118,7 @@ class SettingsPage extends StatelessWidget {
           try {
             await SharePlus.instance.share(
               ShareParams(
-                subject: 'PDD Kz',
+                subject: 'PDD TEST RESMI',
                 text: shareText,
               ),
             );
@@ -297,7 +297,7 @@ class AboutAppBottomSheet extends GetView<HomeController> {
           ),
           SizedBox(height: 25.h),
           const Text(
-            'PDD Kz',
+            'PDD TEST RESMI',
             style: TextStyle(
               fontWeight: FontWeight.w700,
               fontSize: 16,
@@ -324,7 +324,7 @@ class AboutAppBottomSheet extends GetView<HomeController> {
           ),
           SizedBox(height: 10.h),
           Text(
-            'PDD KZ Description'.tr,
+            'PDD TEST RESMI Description'.tr,
             style: const TextStyle(
               fontWeight: FontWeight.w500,
               fontSize: 14,

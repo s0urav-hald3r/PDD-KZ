@@ -32,7 +32,7 @@ class HomePage extends StatelessWidget {
               15.h,
             ),
             child: Text(
-              'Welcome to PDD Kz'.tr,
+              'Welcome to PDD TEST RESMI'.tr,
               style: const TextStyle(
                 fontWeight: FontWeight.w700,
                 fontSize: 20,

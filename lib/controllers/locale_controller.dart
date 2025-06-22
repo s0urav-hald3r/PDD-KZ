@@ -11,7 +11,7 @@ class LocaleController extends GetxController implements Translations {
   Map<String, Map<String, String>> get keys => {
         'en_US': {
           // home page
-          'Welcome to PDD Kz': 'Welcome to PDD Kz',
+          'Welcome to PDD TEST RESMI': 'Welcome to PDD TEST RESMI',
           // favourite page
           'No question added as favourite yet':
               'No question added as favourite yet',
@@ -41,12 +41,12 @@ class LocaleController extends GetxController implements Translations {
           'Locked': 'Locked',
           'Version': 'Version',
           'Description': 'Description',
-          'PDD KZ Description':
-              'PDD Kz – A helpful application designed to prepare users for the driving license exam in Kazaksthan',
+          'PDD TEST RESMI Description':
+              'PDD TEST RESMI – A helpful application designed to prepare users for the driving license exam in Kazaksthan',
         },
         'kk_KZ': {
           // home page
-          'Welcome to PDD Kz': 'PDD Kz-ге қош келдіңіз',
+          'Welcome to PDD TEST RESMI': 'PDD TEST RESMI-ге қош келдіңіз',
           // favourite page
           'No question added as favourite yet':
               'Бірде-бір сұрақ қолданбаға қосылмаған',
@@ -77,8 +77,8 @@ class LocaleController extends GetxController implements Translations {
           'Locked': 'Блокировка',
           'Version': 'Нұсқасы',
           'Description': 'Сипаттама',
-          'PDD KZ Description':
-              'PDD Kz – Қазақстанда жүргізуші куәлігін алуға дайындалуға арналған пайдалы қосымша',
+          'PDD TEST RESMI Description':
+              'PDD TEST RESMI – Қазақстанда жүргізуші куәлігін алуға дайындалуға арналған пайдалы қосымша',
         },
       };
 
