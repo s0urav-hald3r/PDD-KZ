@@ -127,6 +127,7 @@ class PracticeController extends GetxController {
   void changeTab(int index) {
     currentIndex = index;
     tabController.index = index;
+
     if (currentSetIndex == 13) return;
 
     LocalStorage.setData('current_index_$currentSetIndex', currentIndex);
@@ -138,8 +139,11 @@ class PracticeController extends GetxController {
     if (!isLastQuestion) {
       currentIndex = currentIndex + 1;
       tabController.index = tabController.index + 1;
-      await LocalStorage.setData(
-          'current_index_$currentSetIndex', currentIndex);
+
+      if (currentSetIndex != 13) {
+        await LocalStorage.setData(
+            'current_index_$currentSetIndex', currentIndex);
+      }
     } else {
       final controller =
           Get.find<TimerController>(tag: 'controller_$currentSetIndex');
@@ -151,20 +155,15 @@ class PracticeController extends GetxController {
         builder: (context) => const QuizCompletionDialog(isTimeUp: false),
       ).then((_) {
         isComplete = true;
-        LocalStorage.setData('complete_set_$currentSetIndex', isComplete);
+
+        if (currentSetIndex != 13) {
+          LocalStorage.setData('complete_set_$currentSetIndex', isComplete);
+        }
       });
     }
   }
 
   void doAnswer(int index) async {
-    if (currentSetIndex == 13) {
-      praciceSets[currentIndex] = praciceSets[currentIndex].copyWith(
-        submit: praciceSets[currentIndex].options[index],
-        isSubmitted: true,
-      );
-      return;
-    }
-
     if (isPracticeSetComplete) {
       showDialog(
         context: NavigatorKey.context,
@@ -172,13 +171,17 @@ class PracticeController extends GetxController {
       );
       return;
     }
+
     if (praciceSets[currentIndex].isSubmitted) return;
 
-    questionAnswered = questionAnswered + 1;
     praciceSets[currentIndex] = praciceSets[currentIndex].copyWith(
       submit: praciceSets[currentIndex].options[index],
       isSubmitted: true,
     );
+
+    if (currentSetIndex == 13) return;
+
+    questionAnswered = questionAnswered + 1;
 
     final practiceSetData = praciceSets.map((e) => e.toJson()).toList();
     await LocalStorage.setData(
@@ -216,8 +219,10 @@ class PracticeController extends GetxController {
       HomeController.instance.removeFromFavorite(praciceSets[currentIndex]);
     }
 
-    final practiceSetData = praciceSets.map((e) => e.toJson()).toList();
-    await LocalStorage.setData(
-        'set_$currentSetIndex', jsonEncode(practiceSetData));
+    if (currentSetIndex != 13) {
+      final practiceSetData = praciceSets.map((e) => e.toJson()).toList();
+      await LocalStorage.setData(
+          'set_$currentSetIndex', jsonEncode(practiceSetData));
+    }
   }
 }

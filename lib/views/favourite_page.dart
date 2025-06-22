@@ -1,11 +1,14 @@
 import 'package:exam_app/components/progress_bar.dart';
 import 'package:exam_app/components/question.dart';
 import 'package:exam_app/config/colors.dart';
+import 'package:exam_app/config/icons.dart';
 import 'package:exam_app/controllers/home_controller.dart';
 import 'package:exam_app/controllers/practice_controller.dart';
 import 'package:exam_app/utils/extension.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:simple_gradient_text/simple_gradient_text.dart';
 
 class FavouritePage extends StatefulWidget {
   const FavouritePage({super.key});
@@ -21,7 +24,7 @@ class _FavouritePageState extends State<FavouritePage> {
   @override
   void initState() {
     super.initState();
-    pController = Get.find<PracticeController>(tag: 'controller_fav');
+    pController = Get.find<PracticeController>(tag: 'controller_13');
     pController.initializePracticeSet(13);
   }
 
@@ -71,10 +74,89 @@ class _FavouritePageState extends State<FavouritePage> {
                           ),
                         ),
                       )
-                    : Column(children: [
+                    : ListView(padding: EdgeInsets.zero, children: [
                         SizedBox(height: 15.h),
                         ProgressBar(controller: pController),
                         Question(controller: pController),
+                        Obx(() {
+                          if (pController.isComplete) {
+                            return const SizedBox.shrink();
+                          }
+
+                          return Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                InkWell(
+                                  onTap: pController.submitQuestion,
+                                  child: Container(
+                                    width: 140.w,
+                                    height: 45.h,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(5),
+                                      color: whiteColor,
+                                      border: Border.all(color: primaryColor),
+                                    ),
+                                    child: Center(
+                                      child: GradientText(
+                                          pController.isLastQuestion
+                                              ? 'Submit'
+                                              : 'Continue',
+                                          style: const TextStyle(
+                                            fontWeight: FontWeight.w700,
+                                            fontSize: 16,
+                                          ),
+                                          colors: const [
+                                            primaryColor,
+                                            primaryColor,
+                                            secondaryColor
+                                          ]),
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(width: 10.w),
+                                InkWell(
+                                  onTap: () {
+                                    pController.toggleFavorite();
+                                  },
+                                  child: Container(
+                                    width: 45.w,
+                                    height: 45.w,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(5),
+                                      color: pController
+                                              .praciceSets[
+                                                  pController.currentIndex]
+                                              .isFavorite
+                                          ? null
+                                          : whiteColor,
+                                      border: pController
+                                              .praciceSets[
+                                                  pController.currentIndex]
+                                              .isFavorite
+                                          ? null
+                                          : Border.all(color: primaryColor),
+                                      gradient: pController
+                                              .praciceSets[
+                                                  pController.currentIndex]
+                                              .isFavorite
+                                          ? containerGradient
+                                          : null,
+                                    ),
+                                    child: Center(
+                                      child: SvgPicture.asset(
+                                        unSelectedFavIcon,
+                                        color: pController
+                                                .praciceSets[
+                                                    pController.currentIndex]
+                                                .isFavorite
+                                            ? whiteColor
+                                            : primaryColor,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ]);
+                        })
                       ]),
               ),
             );
