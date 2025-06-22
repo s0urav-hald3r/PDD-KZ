@@ -50,6 +50,8 @@ class PracticeController extends GetxController {
     if (index == 13) {
       currentSetIndex = index;
       currentIndex = 0;
+      isComplete = false;
+
       temp = HomeController.instance.sequentialFavoriteSets;
 
       praciceSets = temp;
@@ -158,6 +160,8 @@ class PracticeController extends GetxController {
 
         if (currentSetIndex != 13) {
           LocalStorage.setData('complete_set_$currentSetIndex', isComplete);
+        } else {
+          HomeController.instance.isNavbarHide = false;
         }
       });
     }

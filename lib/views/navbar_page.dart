@@ -14,32 +14,48 @@ import 'package:get/get.dart';
 import 'package:simple_gradient_text/simple_gradient_text.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
-class NavBarPage extends StatelessWidget {
+class NavBarPage extends GetView<HomeController> {
   const NavBarPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final controller = HomeController.instance;
-
     return Obx(() {
       return Scaffold(
-        body: PageView(
-          controller: controller.pageController,
-          physics: const NeverScrollableScrollPhysics(),
-          children: [
-            Skeletonizer(
-                enabled: controller.isLoading, child: const HomePage()),
-            Skeletonizer(
-                enabled: controller.isLoading, child: const PracticePage()),
-            Skeletonizer(
-                enabled: controller.isLoading, child: const FavouritePage()),
-            Skeletonizer(
-                enabled: controller.isLoading, child: const SettingsPage())
-          ],
+        body: SafeArea(
+          bottom: controller.isNavbarHide,
+          child: PageView(
+            controller: controller.pageController,
+            physics: const NeverScrollableScrollPhysics(),
+            children: [
+              Skeletonizer(
+                  enabled: controller.isLoading, child: const HomePage()),
+              Skeletonizer(
+                  enabled: controller.isLoading, child: const PracticePage()),
+              Skeletonizer(
+                  enabled: controller.isLoading, child: const FavouritePage()),
+              Skeletonizer(
+                  enabled: controller.isLoading, child: const SettingsPage())
+            ],
+          ),
         ),
-        bottomNavigationBar: BottomAppBar(
-          height: 60.h,
-          color: greyColor,
+        bottomNavigationBar: AnimatedContainer(
+          height: controller.isNavbarHide
+              ? 0
+              : (60.h + MediaQuery.of(context).padding.bottom),
+          padding:
+              EdgeInsets.only(bottom: MediaQuery.of(context).padding.bottom),
+          decoration: BoxDecoration(
+            color: whiteColor,
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.1),
+                blurRadius: 10,
+                offset: const Offset(0, -5),
+              )
+            ],
+          ),
+          duration: const Duration(milliseconds: 300),
+          curve: Curves.easeInOut,
           child:
               Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
             _navItem(0, selectedHomeIcon, unSelectedHomeIcon, 'Home'.tr, () {
@@ -54,6 +70,8 @@ class NavBarPage extends StatelessWidget {
             _navItem(2, selectedFavIcon, unSelectedFavIcon, 'Favourite'.tr, () {
               controller.homeIndex = 2;
               controller.pageController.jumpToPage(2);
+              controller.isNavbarHide = true;
+
               Get.put(PracticeController(), tag: 'controller_13');
               Get.put(TimerController(), tag: 'controller_13');
             }),
