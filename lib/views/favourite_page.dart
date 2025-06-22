@@ -64,10 +64,10 @@ class _FavouritePageState extends State<FavouritePage> {
                   ),
                 ),
                 child: controller.sequentialFavoriteSets.isEmpty
-                    ? const Center(
+                    ? Center(
                         child: Text(
-                          'No question added as favourite yet',
-                          style: TextStyle(
+                          'No question added as favourite yet'.tr,
+                          style: const TextStyle(
                             fontWeight: FontWeight.w500,
                             fontSize: 16,
                             color: textColor,
@@ -83,86 +83,79 @@ class _FavouritePageState extends State<FavouritePage> {
                             return const SizedBox.shrink();
                           }
 
-                          return Padding(
-                            padding: EdgeInsets.only(
-                              bottom: controller.isNavbarHide
-                                  ? MediaQuery.of(context).padding.bottom
-                                  : 0,
-                            ),
-                            child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  InkWell(
-                                    onTap: pController.submitQuestion,
-                                    child: Container(
-                                      width: 140.w,
-                                      height: 45.h,
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(5),
-                                        color: whiteColor,
-                                        border: Border.all(color: primaryColor),
-                                      ),
-                                      child: Center(
-                                        child: GradientText(
-                                            pController.isLastQuestion
-                                                ? 'Submit'
-                                                : 'Continue',
-                                            style: const TextStyle(
-                                              fontWeight: FontWeight.w700,
-                                              fontSize: 16,
-                                            ),
-                                            colors: const [
-                                              primaryColor,
-                                              primaryColor,
-                                              secondaryColor
-                                            ]),
-                                      ),
+                          return Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                InkWell(
+                                  onTap: pController.submitQuestion,
+                                  child: Container(
+                                    width: 140.w,
+                                    height: 45.h,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(5),
+                                      color: whiteColor,
+                                      border: Border.all(color: primaryColor),
+                                    ),
+                                    child: Center(
+                                      child: GradientText(
+                                          pController.isLastQuestion
+                                              ? 'Submit'
+                                              : 'Continue',
+                                          style: const TextStyle(
+                                            fontWeight: FontWeight.w700,
+                                            fontSize: 16,
+                                          ),
+                                          colors: const [
+                                            primaryColor,
+                                            primaryColor,
+                                            secondaryColor
+                                          ]),
                                     ),
                                   ),
-                                  SizedBox(width: 10.w),
-                                  InkWell(
-                                    onTap: () {
-                                      pController.toggleFavorite();
-                                    },
-                                    child: Container(
-                                      width: 45.w,
-                                      height: 45.w,
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(5),
+                                ),
+                                SizedBox(width: 10.w),
+                                InkWell(
+                                  onTap: () {
+                                    pController.toggleFavorite();
+                                  },
+                                  child: Container(
+                                    width: 45.w,
+                                    height: 45.w,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(5),
+                                      color: pController
+                                              .praciceSets[
+                                                  pController.currentIndex]
+                                              .isFavorite
+                                          ? null
+                                          : whiteColor,
+                                      border: pController
+                                              .praciceSets[
+                                                  pController.currentIndex]
+                                              .isFavorite
+                                          ? null
+                                          : Border.all(color: primaryColor),
+                                      gradient: pController
+                                              .praciceSets[
+                                                  pController.currentIndex]
+                                              .isFavorite
+                                          ? containerGradient
+                                          : null,
+                                    ),
+                                    child: Center(
+                                      child: SvgPicture.asset(
+                                        unSelectedFavIcon,
                                         color: pController
                                                 .praciceSets[
                                                     pController.currentIndex]
                                                 .isFavorite
-                                            ? null
-                                            : whiteColor,
-                                        border: pController
-                                                .praciceSets[
-                                                    pController.currentIndex]
-                                                .isFavorite
-                                            ? null
-                                            : Border.all(color: primaryColor),
-                                        gradient: pController
-                                                .praciceSets[
-                                                    pController.currentIndex]
-                                                .isFavorite
-                                            ? containerGradient
-                                            : null,
-                                      ),
-                                      child: Center(
-                                        child: SvgPicture.asset(
-                                          unSelectedFavIcon,
-                                          color: pController
-                                                  .praciceSets[
-                                                      pController.currentIndex]
-                                                  .isFavorite
-                                              ? whiteColor
-                                              : primaryColor,
-                                        ),
+                                            ? whiteColor
+                                            : primaryColor,
                                       ),
                                     ),
                                   ),
-                                ]),
-                          );
+                                ),
+                              ]);
                         })
                       ]),
               ),

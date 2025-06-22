@@ -21,22 +21,19 @@ class NavBarPage extends GetView<HomeController> {
   Widget build(BuildContext context) {
     return Obx(() {
       return Scaffold(
-        body: SafeArea(
-          bottom: controller.isNavbarHide,
-          child: PageView(
-            controller: controller.pageController,
-            physics: const NeverScrollableScrollPhysics(),
-            children: [
-              Skeletonizer(
-                  enabled: controller.isLoading, child: const HomePage()),
-              Skeletonizer(
-                  enabled: controller.isLoading, child: const PracticePage()),
-              Skeletonizer(
-                  enabled: controller.isLoading, child: const FavouritePage()),
-              Skeletonizer(
-                  enabled: controller.isLoading, child: const SettingsPage())
-            ],
-          ),
+        body: PageView(
+          controller: controller.pageController,
+          physics: const NeverScrollableScrollPhysics(),
+          children: [
+            Skeletonizer(
+                enabled: controller.isLoading, child: const HomePage()),
+            Skeletonizer(
+                enabled: controller.isLoading, child: const PracticePage()),
+            Skeletonizer(
+                enabled: controller.isLoading, child: const FavouritePage()),
+            Skeletonizer(
+                enabled: controller.isLoading, child: const SettingsPage())
+          ],
         ),
         bottomNavigationBar: AnimatedContainer(
           height: controller.isNavbarHide
@@ -70,7 +67,7 @@ class NavBarPage extends GetView<HomeController> {
             _navItem(2, selectedFavIcon, unSelectedFavIcon, 'Favourite'.tr, () {
               controller.homeIndex = 2;
               controller.pageController.jumpToPage(2);
-              controller.isNavbarHide = true;
+              controller.isNavbarHide = controller.favoriteSets.isNotEmpty;
 
               Get.put(PracticeController(), tag: 'controller_13');
               Get.put(TimerController(), tag: 'controller_13');

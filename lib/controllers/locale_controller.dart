@@ -12,6 +12,9 @@ class LocaleController extends GetxController implements Translations {
         'en_US': {
           // home page
           'Welcome to PDD Kz': 'Welcome to PDD Kz',
+          // favourite page
+          'No question added as favourite yet':
+              'No question added as favourite yet',
           // settings page
           'Language': 'Language',
           'About the App': 'About the App',
@@ -44,6 +47,9 @@ class LocaleController extends GetxController implements Translations {
         'kk_KZ': {
           // home page
           'Welcome to PDD Kz': 'PDD Kz-ге қош келдіңіз',
+          // favourite page
+          'No question added as favourite yet':
+              'Бірде-бір сұрақ қолданбаға қосылмаған',
           // settings page
           'Language': 'Тіл',
           'About the App': 'Қолданба туралы',

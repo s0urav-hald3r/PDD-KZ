@@ -84,7 +84,7 @@ class MyApp extends StatelessWidget {
           ),
         ),
       ),
-      locale: localeController.currentLocale ?? const Locale('en', 'US'),
+      locale: localeController.currentLocale ?? const Locale('kk', 'KZ'),
       translations: localeController,
       navigatorKey: NavigatorKey.navigatorKey,
       home: const NavBarPage(),

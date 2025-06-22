@@ -96,7 +96,7 @@
    </AnalyzeAction>
    <ArchiveAction
       buildConfiguration = "Release"
-      customArchiveName = "PDD Kz"
+      customArchiveName = "PDD TEST RESMI"
       revealArchiveInOrganizer = "YES">
    </ArchiveAction>
 </Scheme>
