@@ -43,6 +43,15 @@ class LocaleController extends GetxController implements Translations {
           'Description': 'Description',
           'PDD TEST RESMI Description':
               'PDD TEST RESMI – A helpful application designed to prepare users for the driving license exam in Kazaksthan',
+          '''What you get:
+•⁠  ⁠1000+ official exam questions, always up to date
+•⁠  ⁠All practice sets & timed mock tests
+•⁠  ⁠Instant explanations for every answer
+•⁠  ⁠Ad-free''': '''What you get:
+•⁠  ⁠1000+ official exam questions, always up to date
+•⁠  ⁠All practice sets & timed mock tests
+•⁠  ⁠Instant explanations for every answer
+•⁠  ⁠Ad-free'''
         },
         'kk_KZ': {
           // home page
@@ -79,6 +88,15 @@ class LocaleController extends GetxController implements Translations {
           'Description': 'Сипаттама',
           'PDD TEST RESMI Description':
               'PDD TEST RESMI – Қазақстанда жүргізуші куәлігін алуға дайындалуға арналған пайдалы қосымша',
+          '''What you get:
+•⁠  ⁠1000+ official exam questions, always up to date
+•⁠  ⁠All practice sets & timed mock tests
+•⁠  ⁠Instant explanations for every answer
+•⁠  ⁠Ad-free''': '''Сіз не аласыз:
+•⁠  ⁠1000+ ресми емтихан сұрақтары, әрдайым жаңартылып отырады
+•⁠  ⁠Барлық жаттығу жиынтықтары мен уақытпен шектелген сынақ тесттері
+•⁠  ⁠Әрбір жауапқа жедел түсіндірме
+•⁠  ⁠Жарнамасыз, кез келген құрылғыда офлайн қолжетімділік'''
         },
       };
 

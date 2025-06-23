@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:exam_app/components/premium_links.dart';
 import 'package:exam_app/config/colors.dart';
 import 'package:exam_app/config/icons.dart';
@@ -46,7 +48,44 @@ class PremiumPage extends StatelessWidget {
               ),
             ),
             SizedBox(height: 100.h),
-            Image.asset(premiumBanner),
+            SizedBox(
+              width: MediaQuery.of(context).size.width,
+              height: 200.h,
+              child: Stack(
+                alignment: Alignment.topLeft,
+                children: [
+                  Image.asset(premiumBanner),
+                  ClipRect(
+                    child: BackdropFilter(
+                      filter: ImageFilter.blur(sigmaX: 2.5, sigmaY: 2.5),
+                      child: Container(
+                        width: MediaQuery.of(context).size.width,
+                        height: 200.h,
+                        padding: EdgeInsets.symmetric(
+                            horizontal: 25.w, vertical: 10.h),
+                        decoration: BoxDecoration(
+                          color: whiteColor.withOpacity(0.25),
+                        ),
+                        child: Text(
+                          '''
+What you get:
+•⁠  ⁠1000+ official exam questions, always up to date
+•⁠  ⁠All practice sets & timed mock tests
+•⁠  ⁠Instant explanations for every answer
+•⁠  ⁠Ad-free'''
+                              .tr,
+                          style: const TextStyle(
+                            fontWeight: FontWeight.w400,
+                            fontSize: 12,
+                            color: blackColor,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
             SizedBox(height: 40.h),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 25.w),
