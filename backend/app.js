@@ -640,6 +640,82 @@ app.get('/api/coupons', async (req, res) => {
     }
 });
 
+// API endpoint to increase coupon usage by 1
+app.post('/api/coupon/use', async (req, res) => {
+    try {
+        const { couponId } = req.body;
+
+        // Validate required fields
+        if (!couponId) {
+            return res.status(400).json({
+                status: false,
+                error: 'Coupon ID is required!'
+            });
+        }
+
+        // Get the coupon document
+        const couponDoc = await firestore.collection('coupons').doc(couponId).get();
+
+        if (!couponDoc.exists) {
+            return res.status(404).json({
+                status: false,
+                error: 'Coupon not found!'
+            });
+        }
+
+        const coupon = couponDoc.data();
+
+        // Check if coupon is expired
+        let expirationDate;
+        if (coupon.expirationDate && coupon.expirationDate.toDate) {
+            expirationDate = coupon.expirationDate.toDate();
+        } else if (coupon.expirationDate) {
+            expirationDate = new Date(coupon.expirationDate);
+        } else {
+            expirationDate = new Date(0);
+        }
+
+        if (expirationDate <= new Date()) {
+            return res.status(400).json({
+                status: false,
+                error: 'Coupon has expired!'
+            });
+        }
+
+        // Check if coupon is fully used
+        if (coupon.usedQuantity >= coupon.totalQuantity) {
+            return res.status(400).json({
+                status: false,
+                error: 'Coupon has been fully used!'
+            });
+        }
+
+        // Increase used quantity by 1
+        const newUsedQuantity = coupon.usedQuantity + 1;
+
+        // Update the coupon in Firestore
+        await firestore.collection('coupons').doc(couponId).update({
+            usedQuantity: newUsedQuantity,
+            updatedAt: admin.firestore.FieldValue.serverTimestamp()
+        });
+
+        console.log(`✅ Coupon ${couponId} usage increased to ${newUsedQuantity}/${coupon.totalQuantity}`);
+
+        return res.json({
+            status: true,
+            message: 'Coupon usage increased successfully!',
+        });
+
+    } catch (error) {
+        console.error("Error increasing coupon usage: ", error);
+        return res.status(500).json({
+            status: false,
+            error: 'Failed to increase coupon usage!',
+            message: error.message
+        });
+    }
+});
+
 // Function to import mock coupons into database
 async function importMockCoupons() {
     try {
