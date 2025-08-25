@@ -2,6 +2,7 @@ require("dotenv").config();
 const express = require('express')
 const app = express()
 const path = require('path')
+const methodOverride = require('method-override')
 
 const PORT = process.env.PORT || 3000;
 
@@ -33,6 +34,7 @@ app.set("view engine", "ejs")
 app.set("views", path.join(__dirname, "views"))
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
+app.use(methodOverride('_method'))
 
 app.get('/', (req, res) => res.render('home'))
 
@@ -86,6 +88,77 @@ app.get('/screen/question', async (req, res) => {
     }
     res.render('question', { question: null });
 })
+
+// Coupon routes
+app.get('/screen/coupons', async (req, res) => {
+    try {
+        const snapshot = await firestore.collection('coupons').get();
+        const coupons = [];
+        let totalCoupons = 0;
+        let activeCoupons = 0;
+        let expiredCoupons = 0;
+
+        snapshot.forEach(doc => {
+            const coupon = { id: doc.id, ...doc.data() };
+            coupons.push(coupon);
+            totalCoupons++;
+
+            // Check if coupon is active or expired
+            const now = new Date();
+            let expirationDate;
+
+            // Handle Firestore timestamp or regular date
+            if (coupon.expirationDate && coupon.expirationDate.toDate) {
+                expirationDate = coupon.expirationDate.toDate();
+            } else if (coupon.expirationDate) {
+                expirationDate = new Date(coupon.expirationDate);
+            } else {
+                expirationDate = new Date(0); // Invalid date
+            }
+
+            // Check if coupon is active (not expired and not fully used)
+            if (expirationDate > now && coupon.usedQuantity < coupon.totalQuantity) {
+                activeCoupons++;
+            } else {
+                expiredCoupons++;
+            }
+        });
+
+        // Sort coupons by creation date (newest first)
+        coupons.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+
+        res.render('coupons', {
+            coupons,
+            totalCoupons,
+            activeCoupons,
+            expiredCoupons
+        });
+    } catch (error) {
+        console.error('Error fetching coupons:', error);
+        res.status(500).send('Error loading coupons');
+    }
+});
+
+app.get('/screen/coupon/new', (req, res) => {
+    res.render('coupon-form', { coupon: null });
+});
+
+app.get('/screen/coupon/edit/:id', async (req, res) => {
+    try {
+        const couponId = req.params.id;
+        const doc = await firestore.collection('coupons').doc(couponId).get();
+
+        if (doc.exists) {
+            const coupon = { id: doc.id, ...doc.data() };
+            res.render('coupon-form', { coupon });
+        } else {
+            res.status(404).send('Coupon not found');
+        }
+    } catch (error) {
+        console.error('Error fetching coupon:', error);
+        res.status(500).send('Error loading coupon');
+    }
+});
 
 app.post('/method/question', async (req, res) => {
     try {
@@ -183,6 +256,141 @@ app.delete('/method/question/:id', async (req, res) => {
     } catch (error) {
         console.error('Error deleting question:', error);
         res.status(500).json({ success: false, error: 'Failed to delete question' });
+    }
+});
+
+// Coupon CRUD operations
+app.post('/method/coupon', async (req, res) => {
+    try {
+        const { title, couponCode, category, discount, totalQuantity, expirationDate } = req.body;
+
+        // Validate required fields
+        if (!title || !couponCode || !category || !discount || !totalQuantity || !expirationDate) {
+            return res.status(400).json({
+                status: false,
+                error: 'Required fields are missing!'
+            });
+        }
+
+        // Validate discount and quantity
+        if (parseFloat(discount) <= 0 || parseInt(totalQuantity) <= 0) {
+            return res.status(400).json({
+                status: false,
+                error: 'Discount and quantity must be positive numbers!'
+            });
+        }
+
+        // Validate expiration date
+        if (new Date(expirationDate) <= new Date()) {
+            return res.status(400).json({
+                status: false,
+                error: 'Expiration date must be in the future!'
+            });
+        }
+
+        // Create coupon document
+        const couponData = {
+            title: title.trim(),
+            couponCode: couponCode.trim().toUpperCase(),
+            category,
+            discount: parseFloat(discount),
+            totalQuantity: parseInt(totalQuantity),
+            usedQuantity: 0,
+            expirationDate: new Date(expirationDate),
+            createdAt: admin.firestore.FieldValue.serverTimestamp(),
+            updatedAt: admin.firestore.FieldValue.serverTimestamp()
+        };
+
+        // Add coupon to Firestore
+        const docRef = await firestore.collection('coupons').add(couponData);
+        console.log(`✅ Coupon added with ID: ${docRef.id}`);
+
+        return res.redirect('/screen/coupons');
+    } catch (error) {
+        console.error("Error adding coupon: ", error);
+        return res.status(400).json({ 'status': false, 'error': 'Coupon addition failed!' });
+    }
+});
+
+app.post('/method/coupon/:id', async (req, res) => {
+    try {
+        const couponId = req.params.id;
+        const { title, couponCode, category, discount, totalQuantity, expirationDate } = req.body;
+
+        // Validate required fields
+        if (!title || !couponCode || !category || !discount || !totalQuantity || !expirationDate) {
+            return res.status(400).json({
+                status: false,
+                error: 'Required fields are missing!'
+            });
+        }
+
+        // Validate discount and quantity
+        if (parseFloat(discount) <= 0 || parseInt(totalQuantity) <= 0) {
+            return res.status(400).json({
+                status: false,
+                error: 'Discount and quantity must be positive numbers!'
+            });
+        }
+
+        // Validate expiration date
+        if (new Date(expirationDate) <= new Date()) {
+            return res.status(400).json({
+                status: false,
+                error: 'Expiration date must be in the future!'
+            });
+        }
+
+        // Get existing coupon to check used quantity
+        const existingDoc = await firestore.collection('coupons').doc(couponId).get();
+        if (!existingDoc.exists) {
+            return res.status(404).json({
+                status: false,
+                error: 'Coupon not found!'
+            });
+        }
+
+        const existingCoupon = existingDoc.data();
+        const newTotalQuantity = parseInt(totalQuantity);
+
+        // Ensure new total quantity is not less than used quantity
+        if (newTotalQuantity < existingCoupon.usedQuantity) {
+            return res.status(400).json({
+                status: false,
+                error: `Total quantity cannot be less than used quantity (${existingCoupon.usedQuantity})!`
+            });
+        }
+
+        // Update the coupon
+        await firestore.collection('coupons').doc(couponId).update({
+            title: title.trim(),
+            couponCode: couponCode.trim().toUpperCase(),
+            category,
+            discount: parseFloat(discount),
+            totalQuantity: newTotalQuantity,
+            expirationDate: new Date(expirationDate),
+            updatedAt: admin.firestore.FieldValue.serverTimestamp()
+        });
+
+        console.log(`✅ Coupon updated with ID: ${couponId}`);
+        res.redirect('/screen/coupons');
+    } catch (error) {
+        console.error('Error updating coupon:', error);
+        res.status(500).json({
+            status: false,
+            error: 'Failed to update coupon'
+        });
+    }
+});
+
+app.delete('/method/coupon/:id', async (req, res) => {
+    try {
+        const couponId = req.params.id;
+        await firestore.collection('coupons').doc(couponId).delete();
+        res.json({ success: true, message: 'Coupon deleted successfully' });
+    } catch (error) {
+        console.error('Error deleting coupon:', error);
+        res.status(500).json({ success: false, error: 'Failed to delete coupon' });
     }
 });
 

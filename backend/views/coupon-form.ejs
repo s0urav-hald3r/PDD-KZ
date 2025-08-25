@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>
+        <%= coupon ? 'Edit Coupon' : 'Create New Coupon' %>
+    </title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="min-h-screen bg-[#0d1117] text-[#c9d1d9]">
+    <div class="container mx-auto px-4 py-8">
+        <div
+            class="max-w-2xl mx-auto bg-[#161b22] rounded-2xl shadow-2xl p-8 transform hover:scale-[1.01] transition-transform duration-300">
+            <div class="flex justify-between items-center mb-8">
+                <h1 class="text-3xl font-bold">
+                    <%= coupon ? 'Edit Coupon' : 'Create New Coupon' %>
+                </h1>
+                <a href="/screen/coupons"
+                    class="px-6 py-3 bg-[#30363d] text-[#c9d1d9] rounded-xl hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300 hover:bg-[#484f58] focus:outline-none focus:ring-2 focus:ring-[#30363d] focus:ring-offset-2">
+                    Back to Coupons
+                </a>
+            </div>
+
+            <form action="<%= coupon ? `/method/coupon/${coupon.id}` : '/method/coupon' %>" method="POST"
+                class="space-y-6">
+                <% if (coupon) { %>
+                    <input type="hidden" name="_method" value="PUT">
+                    <% } %>
+
+                        <!-- Title -->
+                        <div>
+                            <label for="title" class="block text-sm font-medium text-[#c9d1d9] mb-2">Coupon Title
+                                *</label>
+                            <input type="text" id="title" name="title" required
+                                value="<%= coupon ? coupon.title : '' %>"
+                                placeholder="Enter coupon title (e.g., 'Summer Sale 20% Off')"
+                                class="w-full px-4 py-3 bg-[#0d1117] border border-[#30363d] rounded-xl text-[#c9d1d9] 
+                   focus:outline-none focus:ring-2 focus:ring-[#238636] focus:border-transparent placeholder-[#8b949e]">
+                        </div>
+
+                        <!-- Coupon Code -->
+                        <div>
+                            <label for="couponCode" class="block text-sm font-medium text-[#c9d1d9] mb-2">Coupon Code
+                                *</label>
+                            <input type="text" id="couponCode" name="couponCode" required
+                                value="<%= coupon ? coupon.couponCode : '' %>"
+                                placeholder="Enter coupon code (e.g., 'SUMMER20')"
+                                class="w-full px-4 py-3 bg-[#0d1117] border border-[#30363d] rounded-xl text-[#c9d1d9] 
+                   focus:outline-none focus:ring-2 focus:ring-[#238636] focus:border-transparent placeholder-[#8b949e]">
+                        </div>
+
+                        <!-- Category -->
+                        <div>
+                            <label for="category" class="block text-sm font-medium text-[#c9d1d9] mb-2">Category
+                                *</label>
+                            <div class="relative">
+                                <select id="category" name="category" required
+                                    class="w-full px-4 py-3 appearance-none bg-[#0d1117] border border-[#30363d] rounded-xl text-[#c9d1d9] 
+                     focus:outline-none focus:ring-2 focus:ring-[#238636] focus:border-transparent hover:border-[#58a6ff] transition-colors duration-200">
+                                    <option value="electronics" <%=coupon && coupon.category==='electronics'
+                                        ? 'selected' : '' %>>Electronics</option>
+                                    <option value="fashion" <%=coupon && coupon.category==='fashion' ? 'selected' : ''
+                                        %>>Fashion</option>
+                                    <option value="home" <%=coupon && coupon.category==='home' ? 'selected' : '' %>>Home
+                                    </option>
+                                    <option value="garden" <%=coupon && coupon.category==='garden' ? 'selected' : '' %>
+                                        >Garden
+                                    </option>
+                                    <option value="beauty" <%=coupon && coupon.category==='beauty' ? 'selected' : '' %>
+                                        >Beauty
+                                    </option>
+                                    <option value="health" <%=coupon && coupon.category==='health' ? 'selected' : '' %>
+                                        >Health
+                                    </option>
+                                    <option value="sports" <%=coupon && coupon.category==='sports' ? 'selected' : '' %>
+                                        >Sports
+                                    </option>
+                                    <option value="toys" <%=coupon && coupon.category==='toys' ? 'selected' : '' %>>Toys
+                                    </option>
+                                    <option value="automotive" <%=coupon && coupon.category==='automotive' ? 'selected'
+                                        : '' %>>Automotive</option>
+                                    <option value="books" <%=coupon && coupon.category==='books' ? 'selected' : '' %>
+                                        >Books
+                                    </option>
+                                    <option value="food" <%=coupon && coupon.category==='food' ? 'selected' : '' %>>Food
+                                    </option>
+                                    <option value="other" <%=coupon && coupon.category==='other' ? 'selected' : '' %>
+                                        >Other
+                                    </option>
+                                </select>
+                                <svg class="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#c9d1d9] pointer-events-none"
+                                    xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                    stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M19 9l-7 7-7-7" />
+                                </svg>
+                            </div>
+                        </div>
+
+                        <!-- Discount -->
+                        <div>
+                            <label for="discount" class="block text-sm font-medium text-[#c9d1d9] mb-2">Discount (%)
+                                *</label>
+                            <input type="number" id="discount" name="discount" required min="0" step="0.01"
+                                value="<%= coupon ? coupon.discount : '' %>"
+                                placeholder="Enter discount amount (e.g., 23%)"
+                                class="w-full px-4 py-3 bg-[#0d1117] border border-[#30363d] rounded-xl text-[#c9d1d9] 
+                   focus:outline-none focus:ring-2 focus:ring-[#238636] focus:border-transparent placeholder-[#8b949e]">
+                        </div>
+
+                        <!-- Total Quantity -->
+                        <div>
+                            <label for="totalQuantity" class="block text-sm font-medium text-[#c9d1d9] mb-2">Total
+                                Quantity *</label>
+                            <input type="number" id="totalQuantity" name="totalQuantity" required min="1"
+                                value="<%= coupon ? coupon.totalQuantity : '' %>"
+                                placeholder="Enter total number of coupons available"
+                                class="w-full px-4 py-3 bg-[#0d1117] border border-[#30363d] rounded-xl text-[#c9d1d9] 
+                   focus:outline-none focus:ring-2 focus:ring-[#238636] focus:border-transparent placeholder-[#8b949e]">
+                        </div>
+
+                        <!-- Expiration Date -->
+                        <div>
+                            <label for="expirationDate" class="block text-sm font-medium text-[#c9d1d9] mb-2">Expiration
+                                Date *</label>
+                            <input type="date" id="expirationDate" name="expirationDate" required value="<%= 
+                                coupon && coupon.expirationDate ? 
+                                    (coupon.expirationDate.toDate ? 
+                                        coupon.expirationDate.toDate().toISOString().split('T')[0] : 
+                                        new Date(coupon.expirationDate).toISOString().split('T')[0]
+                                    ) : '' 
+                                %>"
+                                class="w-full px-4 py-3 bg-[#0d1117] border border-[#30363d] rounded-xl text-[#c9d1d9] focus:outline-none focus:ring-2 focus:ring-[#238636] focus:border-transparent">
+                        </div>
+
+
+                        <!-- Submit Button -->
+                        <div class="pt-4">
+                            <button type="submit"
+                                class="w-full px-6 py-4 bg-[#238636] text-white font-semibold rounded-xl hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300 hover:bg-[#2ea043] focus:outline-none focus:ring-2 focus:ring-[#238636] focus:ring-offset-2">
+                                <%= coupon ? 'Update Coupon' : 'Create Coupon' %>
+                            </button>
+                        </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Set minimum date to tomorrow for expiration date
+        const today = new Date();
+        const tomorrow = new Date(today);
+        tomorrow.setDate(tomorrow.getDate() + 1);
+        document.getElementById('expirationDate').min = tomorrow.toISOString().split('T')[0];
+
+        // Form validation
+        document.querySelector('form').addEventListener('submit', function (e) {
+            const title = document.getElementById('title').value.trim();
+            const couponCode = document.getElementById('couponCode').value.trim();
+            const category = document.getElementById('category').value;
+            const discount = parseFloat(document.getElementById('discount').value);
+            const totalQuantity = parseInt(document.getElementById('totalQuantity').value);
+            const expirationDate = new Date(document.getElementById('expirationDate').value);
+
+            if (!title) {
+                e.preventDefault();
+                alert('Please enter a coupon title');
+                return;
+            }
+
+            if (!couponCode) {
+                e.preventDefault();
+                alert('Please enter a coupon code');
+                return;
+            }
+
+            if (!category) {
+                e.preventDefault();
+                alert('Please select a category');
+                return;
+            }
+
+            if (isNaN(discount) || discount <= 0) {
+                e.preventDefault();
+                alert('Please enter a valid discount amount');
+                return;
+            }
+
+            if (isNaN(totalQuantity) || totalQuantity <= 0) {
+                e.preventDefault();
+                alert('Please enter a valid quantity');
+                return;
+            }
+
+            if (expirationDate <= new Date()) {
+                e.preventDefault();
+                alert('Expiration date must be in the future');
+                return;
+            }
+        });
+    </script>
+</body>
+
+</html>
