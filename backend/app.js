@@ -640,6 +640,124 @@ app.get('/api/coupons', async (req, res) => {
     }
 });
 
+// Function to import mock coupons into database
+async function importMockCoupons() {
+    try {
+        console.log('🚀 Starting mock coupons import...');
+
+        // Import mock coupons data
+        const mockCoupons = require('./mock-coupons');
+
+        if (!Array.isArray(mockCoupons) || mockCoupons.length === 0) {
+            throw new Error('No mock coupons found or invalid format');
+        }
+
+        console.log(`📦 Found ${mockCoupons.length} mock coupons to import`);
+
+        let successCount = 0;
+        let errorCount = 0;
+        const errors = [];
+
+        // Process each coupon one by one
+        for (let i = 0; i < mockCoupons.length; i++) {
+            const mockCoupon = mockCoupons[i];
+
+            try {
+                // Check if coupon already exists (by coupon code)
+                const existingSnapshot = await firestore
+                    .collection('coupons')
+                    .where('couponCode', '==', mockCoupon.couponCode)
+                    .get();
+
+                if (!existingSnapshot.empty) {
+                    console.log(`⚠️  Coupon ${mockCoupon.couponCode} already exists, skipping...`);
+                    continue;
+                }
+
+                // Prepare coupon data for database
+                const couponData = {
+                    title: mockCoupon.title,
+                    couponCode: mockCoupon.couponCode,
+                    category: mockCoupon.category,
+                    discount: mockCoupon.discount,
+                    totalQuantity: mockCoupon.totalQuantity,
+                    usedQuantity: mockCoupon.usedQuantity || 0,
+                    expirationDate: new Date(mockCoupon.expirationDate),
+                    createdAt: new Date(mockCoupon.createdAt),
+                    updatedAt: new Date(mockCoupon.updatedAt)
+                };
+
+                // Add coupon to Firestore
+                const docRef = await firestore.collection('coupons').add(couponData);
+
+                console.log(`✅ Imported coupon ${mockCoupon.couponCode} with ID: ${docRef.id}`);
+                successCount++;
+
+                // Add small delay to avoid overwhelming the database
+                await new Promise(resolve => setTimeout(resolve, 100));
+
+            } catch (error) {
+                console.error(`❌ Error importing coupon ${mockCoupon.couponCode}:`, error.message);
+                errors.push({
+                    couponCode: mockCoupon.couponCode,
+                    error: error.message
+                });
+                errorCount++;
+            }
+        }
+
+        // Summary
+        console.log('\n📊 Import Summary:');
+        console.log(`✅ Successfully imported: ${successCount} coupons`);
+        console.log(`❌ Failed to import: ${errorCount} coupons`);
+
+        if (errors.length > 0) {
+            console.log('\n❌ Errors encountered:');
+            errors.forEach(error => {
+                console.log(`   - ${error.couponCode}: ${error.error}`);
+            });
+        }
+
+        if (successCount > 0) {
+            console.log(`\n🎉 Successfully imported ${successCount} out of ${mockCoupons.length} mock coupons!`);
+        }
+
+        return {
+            success: true,
+            total: mockCoupons.length,
+            imported: successCount,
+            failed: errorCount,
+            errors: errors
+        };
+
+    } catch (error) {
+        console.error('💥 Fatal error during mock coupons import:', error);
+        return {
+            success: false,
+            error: error.message
+        };
+    }
+}
+
+// CLI command to import mock coupons (for development/testing)
+if (process.argv.includes('--import-mock-coupons')) {
+    console.log('🔄 CLI import triggered');
+    importMockCoupons()
+        .then(result => {
+            if (result.success) {
+                console.log('✅ CLI import completed successfully');
+                process.exit(0);
+            } else {
+                console.error('❌ CLI import failed');
+                process.exit(1);
+            }
+        })
+        .catch(error => {
+            console.error('💥 CLI import error:', error);
+            process.exit(1);
+        });
+}
+
 app.listen(PORT, () => {
     console.log('🚗 Driving Mock Test Admin Portal');
     console.log(`🌐 Server running on: http://localhost:${PORT}`);
