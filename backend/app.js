@@ -558,7 +558,7 @@ app.get('/api/coupons', async (req, res) => {
             case 'expiry-soon':
                 // Coupons expiring in approximately 7 days or less
                 filteredCoupons = coupons.filter(coupon =>
-                    coupon.isActive && coupon.daysUntilExpiry <= 7 && coupon.daysUntilExpiry > 0
+                    coupon.isActive && coupon.daysUntilExpiry <= 30 && coupon.daysUntilExpiry > 0
                 );
                 break;
 
@@ -566,15 +566,15 @@ app.get('/api/coupons', async (req, res) => {
                 // Coupons with 80-85% usage (almost used up but still available)
                 filteredCoupons = coupons.filter(coupon =>
                     coupon.isActive &&
-                    coupon.usagePercentage >= 80 &&
-                    coupon.usagePercentage <= 85
+                    coupon.usagePercentage >= 70 &&
+                    coupon.usagePercentage < 90
                 );
                 break;
 
             case 'almost-gone':
                 // Coupons with 95%+ usage (very few left)
                 filteredCoupons = coupons.filter(coupon =>
-                    coupon.isActive && coupon.usagePercentage >= 95
+                    coupon.isActive && coupon.usagePercentage >= 90
                 );
                 break;
 
