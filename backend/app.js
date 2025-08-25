@@ -500,6 +500,146 @@ app.get('/api/question', async (req, res) => {
     }
 });
 
+// API endpoint for getting coupons with various filters
+app.get('/api/coupons', async (req, res) => {
+    try {
+        const { type } = req.query;
+        const now = new Date();
+
+        // Get all coupons from Firestore
+        const snapshot = await firestore.collection('coupons').get();
+
+        if (snapshot.empty) {
+            return res.json({
+                status: true,
+                data: [],
+                total: 0,
+                message: 'No coupons found'
+            });
+        }
+
+        let coupons = [];
+
+        // Process each coupon
+        snapshot.forEach(doc => {
+            const coupon = { id: doc.id, ...doc.data() };
+
+            // Handle Firestore timestamp or regular date
+            let expirationDate;
+            if (coupon.expirationDate && coupon.expirationDate.toDate) {
+                expirationDate = coupon.expirationDate.toDate();
+            } else if (coupon.expirationDate) {
+                expirationDate = new Date(coupon.expirationDate);
+            } else {
+                expirationDate = new Date(0);
+            }
+
+            // Calculate usage percentage
+            const usagePercentage = coupon.totalQuantity > 0 ?
+                (coupon.usedQuantity / coupon.totalQuantity) * 100 : 0;
+
+            // Calculate days until expiration
+            const daysUntilExpiry = Math.ceil((expirationDate - now) / (1000 * 60 * 60 * 24));
+
+            // Add calculated fields
+            coupon.expirationDate = expirationDate;
+            coupon.usagePercentage = Math.round(usagePercentage * 100) / 100; // Round to 2 decimal places
+            coupon.daysUntilExpiry = daysUntilExpiry;
+            coupon.isActive = expirationDate > now && coupon.usedQuantity < coupon.totalQuantity;
+            coupon.isExpired = expirationDate <= now;
+
+            coupons.push(coupon);
+        });
+
+        // Filter based on type parameter
+        let filteredCoupons = [];
+
+        switch (type) {
+            case 'expiry-soon':
+                // Coupons expiring in approximately 7 days or less
+                filteredCoupons = coupons.filter(coupon =>
+                    coupon.isActive && coupon.daysUntilExpiry <= 7 && coupon.daysUntilExpiry > 0
+                );
+                break;
+
+            case 'most-popular':
+                // Coupons with 80-85% usage (almost used up but still available)
+                filteredCoupons = coupons.filter(coupon =>
+                    coupon.isActive &&
+                    coupon.usagePercentage >= 80 &&
+                    coupon.usagePercentage <= 85
+                );
+                break;
+
+            case 'almost-gone':
+                // Coupons with 95%+ usage (very few left)
+                filteredCoupons = coupons.filter(coupon =>
+                    coupon.isActive && coupon.usagePercentage >= 95
+                );
+                break;
+
+            case 'active':
+                // All active coupons (not expired and not fully used)
+                filteredCoupons = coupons.filter(coupon => coupon.isActive);
+                break;
+
+            case 'expired':
+                // All expired coupons
+                filteredCoupons = coupons.filter(coupon => coupon.isExpired);
+                break;
+        }
+
+        // Sort coupons by relevance
+        if (type === 'expiry-soon') {
+            // Sort by days until expiry (ascending - expiring soonest first)
+            filteredCoupons.sort((a, b) => a.daysUntilExpiry - b.daysUntilExpiry);
+        } else if (type === 'most-popular' || type === 'almost-gone') {
+            // Sort by usage percentage (descending - most used first)
+            filteredCoupons.sort((a, b) => b.usagePercentage - a.usagePercentage);
+        } else {
+            // Sort by creation date (newest first)
+            filteredCoupons.sort((a, b) => {
+                const timeA = a.createdAt ? a.createdAt.toDate() : new Date(0);
+                const timeB = b.createdAt ? b.createdAt.toDate() : new Date(0);
+                return timeB - timeA;
+            });
+        }
+
+        // Format response data
+        const formattedCoupons = filteredCoupons.map(coupon => ({
+            id: coupon.id,
+            title: coupon.title,
+            couponCode: coupon.couponCode,
+            category: coupon.category,
+            discount: coupon.discount,
+            totalQuantity: coupon.totalQuantity,
+            usedQuantity: coupon.usedQuantity,
+            usagePercentage: coupon.usagePercentage,
+            expirationDate: coupon.expirationDate.toISOString(),
+            daysUntilExpiry: coupon.daysUntilExpiry,
+            isActive: coupon.isActive,
+            isExpired: coupon.isExpired,
+            createdAt: coupon.createdAt ? coupon.createdAt.toDate().toISOString() : null,
+            updatedAt: coupon.updatedAt ? coupon.updatedAt.toDate().toISOString() : null
+        }));
+
+        return res.json({
+            status: true,
+            data: formattedCoupons,
+            total: formattedCoupons.length,
+            message: `Successfully retrieved ${formattedCoupons.length} coupons`
+        });
+
+    } catch (error) {
+        console.error("Error retrieving coupons: ", error);
+        return res.status(500).json({
+            status: false,
+            error: 'Failed to retrieve coupons!',
+            message: error.message
+        });
+    }
+});
+
 app.listen(PORT, () => {
     console.log('🚗 Driving Mock Test Admin Portal');
     console.log(`🌐 Server running on: http://localhost:${PORT}`);
