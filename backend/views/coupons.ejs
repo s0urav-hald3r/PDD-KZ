@@ -127,7 +127,7 @@
                                     <td class="px-6 py-4">
                                         <span
                                             class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-[#1f2937] text-[#c9d1d9]">
-                                            <%= coupon.category %>
+                                            <%= coupon.category.charAt(0).toUpperCase() + coupon.category.slice(1) %>
                                         </span>
                                     </td>
                                     <td class="px-6 py-4">
@@ -138,13 +138,8 @@
                                     <td class="px-6 py-4">
                                         <div class="flex items-center">
                                             <span class="text-[#c9d1d9]">
-                                                <%= coupon.usedQuantity %>/<%= coupon.totalQuantity %>
+                                                <%= coupon.usedQuantity %> / <%= coupon.totalQuantity %>
                                             </span>
-                                            <div class="ml-2 w-16 bg-[#30363d] rounded-full h-2">
-                                                <div class="bg-[#238636] h-2 rounded-full"
-                                                    style="width: <%= ((coupon.usedQuantity / coupon.totalQuantity) * 100).toFixed(2) %>%">
-                                                </div>
-                                            </div>
                                         </div>
                                     </td>
                                     <td class="px-6 py-4">
@@ -238,21 +233,21 @@
         document.getElementById('statusFilter').addEventListener('change', filterCoupons);
 
         function filterCoupons() {
-            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
-            const categoryFilter = document.getElementById('categoryFilter').value;
-            const statusFilter = document.getElementById('statusFilter').value;
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase().trim();
+            const categoryFilter = document.getElementById('categoryFilter').value.toLowerCase().trim();
+            const statusFilter = document.getElementById('statusFilter').value.toLowerCase().trim();
 
             const rows = document.querySelectorAll('#couponsTableBody tr');
 
             rows.forEach(row => {
-                const title = row.querySelector('td:first-child').textContent.toLowerCase();
-                const couponCode = row.querySelector('td:nth-child(2)').textContent.toLowerCase();
-                const category = row.querySelector('td:nth-child(3) span').textContent.toLowerCase();
-                const status = row.querySelector('td:nth-child(7) span').textContent.toLowerCase();
+                const title = row.querySelector('td:first-child').textContent.toLowerCase().trim();
+                const couponCode = row.querySelector('td:nth-child(2)').textContent.toLowerCase().trim();
+                const category = row.querySelector('td:nth-child(3) span').textContent.toLowerCase().trim();
+                const status = row.querySelector('td:nth-child(7) span').textContent.toLowerCase().trim();
 
                 let showRow = true;
 
-                // Search filter (search in both title and coupon code)
+                // Search filter
                 if (searchTerm && !title.includes(searchTerm) && !couponCode.includes(searchTerm)) {
                     showRow = false;
                 }
@@ -270,6 +265,7 @@
                 row.style.display = showRow ? '' : 'none';
             });
         }
+
 
         function deleteCoupon(couponId) {
             if (confirm('Are you sure you want to delete this coupon?')) {
