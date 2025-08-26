@@ -8,8 +8,7 @@ const mockCoupons = [
         totalQuantity: 100,
         usedQuantity: 85,
         expirationDate: '2024-12-25',
-        createdAt: '2024-01-15T10:00:00.000Z',
-        updatedAt: '2024-12-20T15:30:00.000Z'
+        type: 'most-popular'
     },
     {
         id: 2,
@@ -20,8 +19,7 @@ const mockCoupons = [
         totalQuantity: 150,
         usedQuantity: 142,
         expirationDate: '2024-12-31',
-        createdAt: '2024-01-20T09:00:00.000Z',
-        updatedAt: '2024-12-22T14:20:00.000Z'
+        type: 'almost-gone'
     },
     {
         id: 3,
@@ -32,8 +30,7 @@ const mockCoupons = [
         totalQuantity: 80,
         usedQuantity: 76,
         expirationDate: '2024-12-28',
-        createdAt: '2024-02-01T11:00:00.000Z',
-        updatedAt: '2024-12-21T16:45:00.000Z'
+        type: 'almost-gone'
     },
     {
         id: 4,
@@ -44,8 +41,7 @@ const mockCoupons = [
         totalQuantity: 120,
         usedQuantity: 114,
         expirationDate: '2025-01-05',
-        createdAt: '2024-02-15T08:00:00.000Z',
-        updatedAt: '2024-12-23T10:15:00.000Z'
+        type: 'almost-gone'
     },
     {
         id: 5,
@@ -56,8 +52,7 @@ const mockCoupons = [
         totalQuantity: 200,
         usedQuantity: 190,
         expirationDate: '2024-12-30',
-        createdAt: '2024-03-01T12:00:00.000Z',
-        updatedAt: '2024-12-24T13:30:00.000Z'
+        type: 'almost-gone'
     },
     {
         id: 6,
@@ -68,8 +63,7 @@ const mockCoupons = [
         totalQuantity: 90,
         usedQuantity: 86,
         expirationDate: '2025-01-10',
-        createdAt: '2024-03-15T10:00:00.000Z',
-        updatedAt: '2024-12-25T11:20:00.000Z'
+        type: 'almost-gone'
     },
     {
         id: 7,
@@ -80,8 +74,6 @@ const mockCoupons = [
         totalQuantity: 110,
         usedQuantity: 105,
         expirationDate: '2024-12-29',
-        createdAt: '2024-04-01T09:00:00.000Z',
-        updatedAt: '2024-12-26T14:45:00.000Z'
     },
     {
         id: 8,
@@ -92,8 +84,7 @@ const mockCoupons = [
         totalQuantity: 180,
         usedQuantity: 171,
         expirationDate: '2024-12-26',
-        createdAt: '2024-04-15T11:00:00.000Z',
-        updatedAt: '2024-12-27T15:10:00.000Z'
+        type: 'almost-gone'
     },
     {
         id: 9,
@@ -104,8 +95,7 @@ const mockCoupons = [
         totalQuantity: 70,
         usedQuantity: 67,
         expirationDate: '2025-01-15',
-        createdAt: '2024-05-01T08:00:00.000Z',
-        updatedAt: '2024-12-28T12:30:00.000Z'
+        type: 'almost-gone'
     },
     {
         id: 10,
@@ -116,8 +106,7 @@ const mockCoupons = [
         totalQuantity: 160,
         usedQuantity: 152,
         expirationDate: '2024-12-27',
-        createdAt: '2024-05-15T10:00:00.000Z',
-        updatedAt: '2024-12-29T16:20:00.000Z'
+        type: 'almost-gone'
     },
     {
         id: 11,
@@ -128,8 +117,7 @@ const mockCoupons = [
         totalQuantity: 300,
         usedQuantity: 285,
         expirationDate: '2024-12-31',
-        createdAt: '2024-06-01T12:00:00.000Z',
-        updatedAt: '2024-12-30T13:45:00.000Z'
+        type: 'almost-gone'
     },
     {
         id: 12,
@@ -140,8 +128,6 @@ const mockCoupons = [
         totalQuantity: 250,
         usedQuantity: 238,
         expirationDate: '2025-01-20',
-        createdAt: '2024-06-15T09:00:00.000Z',
-        updatedAt: '2024-12-31T10:15:00.000Z'
     },
     {
         id: 13,
@@ -152,8 +138,7 @@ const mockCoupons = [
         totalQuantity: 95,
         usedQuantity: 90,
         expirationDate: '2024-12-24',
-        createdAt: '2024-07-01T11:00:00.000Z',
-        updatedAt: '2024-12-31T17:30:00.000Z'
+        type: 'expiry-soon'
     },
     {
         id: 14,
@@ -164,8 +149,7 @@ const mockCoupons = [
         totalQuantity: 130,
         usedQuantity: 124,
         expirationDate: '2025-01-01',
-        createdAt: '2024-07-15T10:00:00.000Z',
-        updatedAt: '2024-12-31T18:45:00.000Z'
+        type: 'expiry-soon'
     },
     {
         id: 15,
@@ -176,8 +160,7 @@ const mockCoupons = [
         totalQuantity: 140,
         usedQuantity: 133,
         expirationDate: '2025-03-31',
-        createdAt: '2024-08-01T08:00:00.000Z',
-        updatedAt: '2024-12-31T19:20:00.000Z'
+        type: 'almost-gone'
     },
     {
         id: 16,
@@ -188,8 +171,7 @@ const mockCoupons = [
         totalQuantity: 175,
         usedQuantity: 168,
         expirationDate: '2025-06-30',
-        createdAt: '2024-08-15T12:00:00.000Z',
-        updatedAt: '2024-12-31T20:10:00.000Z'
+        type: 'almost-gone'
     },
     {
         id: 17,
@@ -200,8 +182,6 @@ const mockCoupons = [
         totalQuantity: 220,
         usedQuantity: 209,
         expirationDate: '2025-09-15',
-        createdAt: '2024-09-01T09:00:00.000Z',
-        updatedAt: '2024-12-31T21:30:00.000Z'
     },
     {
         id: 18,
@@ -212,8 +192,7 @@ const mockCoupons = [
         totalQuantity: 85,
         usedQuantity: 81,
         expirationDate: '2024-11-30',
-        createdAt: '2024-09-15T10:00:00.000Z',
-        updatedAt: '2024-11-29T22:15:00.000Z'
+        type: 'expiry-soon'
     },
     {
         id: 19,
@@ -224,8 +203,7 @@ const mockCoupons = [
         totalQuantity: 160,
         usedQuantity: 152,
         expirationDate: '2024-12-02',
-        createdAt: '2024-10-01T11:00:00.000Z',
-        updatedAt: '2024-12-01T23:45:00.000Z'
+        type: 'expiry-soon'
     },
     {
         id: 20,
@@ -236,8 +214,6 @@ const mockCoupons = [
         totalQuantity: 190,
         usedQuantity: 181,
         expirationDate: '2024-12-25',
-        createdAt: '2024-10-15T08:00:00.000Z',
-        updatedAt: '2024-12-24T00:30:00.000Z'
     },
     {
         id: 21,
@@ -248,8 +224,6 @@ const mockCoupons = [
         totalQuantity: 120,
         usedQuantity: 45,
         expirationDate: '2025-02-14',
-        createdAt: '2024-11-01T10:00:00.000Z',
-        updatedAt: '2024-12-31T22:00:00.000Z'
     },
     {
         id: 22,
@@ -260,8 +234,7 @@ const mockCoupons = [
         totalQuantity: 95,
         usedQuantity: 28,
         expirationDate: '2025-04-20',
-        createdAt: '2024-11-15T09:00:00.000Z',
-        updatedAt: '2024-12-31T23:15:00.000Z'
+        type: 'expiry-soon'
     },
     {
         id: 23,
@@ -272,8 +245,7 @@ const mockCoupons = [
         totalQuantity: 140,
         usedQuantity: 42,
         expirationDate: '2025-05-11',
-        createdAt: '2024-12-01T11:00:00.000Z',
-        updatedAt: '2024-12-31T00:30:00.000Z'
+        type: 'expiry-soon'
     },
     {
         id: 24,
@@ -284,8 +256,6 @@ const mockCoupons = [
         totalQuantity: 85,
         usedQuantity: 17,
         expirationDate: '2025-06-15',
-        createdAt: '2024-12-05T08:00:00.000Z',
-        updatedAt: '2024-12-31T01:45:00.000Z'
     },
     {
         id: 25,
@@ -296,8 +266,7 @@ const mockCoupons = [
         totalQuantity: 110,
         usedQuantity: 33,
         expirationDate: '2025-07-04',
-        createdAt: '2024-12-10T12:00:00.000Z',
-        updatedAt: '2024-12-31T02:20:00.000Z'
+        type: 'expiry-soon'
     },
     {
         id: 26,
@@ -308,8 +277,7 @@ const mockCoupons = [
         totalQuantity: 75,
         usedQuantity: 15,
         expirationDate: '2025-09-01',
-        createdAt: '2024-12-12T10:00:00.000Z',
-        updatedAt: '2024-12-31T03:10:00.000Z'
+        type: 'expiry-soon'
     },
     {
         id: 27,
@@ -320,8 +288,7 @@ const mockCoupons = [
         totalQuantity: 160,
         usedQuantity: 48,
         expirationDate: '2025-10-31',
-        createdAt: '2024-12-14T09:00:00.000Z',
-        updatedAt: '2024-12-31T04:25:00.000Z'
+        type: 'expiry-soon'
     },
     {
         id: 28,
@@ -332,8 +299,7 @@ const mockCoupons = [
         totalQuantity: 200,
         usedQuantity: 60,
         expirationDate: '2025-11-27',
-        createdAt: '2024-12-16T11:00:00.000Z',
-        updatedAt: '2024-12-31T05:40:00.000Z'
+        type: 'expiry-soon'
     },
     {
         id: 29,
@@ -344,8 +310,6 @@ const mockCoupons = [
         totalQuantity: 130,
         usedQuantity: 26,
         expirationDate: '2025-01-31',
-        createdAt: '2024-12-18T08:00:00.000Z',
-        updatedAt: '2024-12-31T06:55:00.000Z'
     },
     {
         id: 30,
@@ -356,8 +320,7 @@ const mockCoupons = [
         totalQuantity: 95,
         usedQuantity: 19,
         expirationDate: '2025-06-30',
-        createdAt: '2024-12-20T10:00:00.000Z',
-        updatedAt: '2024-12-31T07:30:00.000Z'
+        type: 'expiry-soon'
     },
     {
         id: 31,
@@ -368,8 +331,6 @@ const mockCoupons = [
         totalQuantity: 110,
         usedQuantity: 22,
         expirationDate: '2025-08-31',
-        createdAt: '2024-12-22T12:00:00.000Z',
-        updatedAt: '2024-12-31T08:15:00.000Z'
     },
     {
         id: 32,
@@ -380,8 +341,7 @@ const mockCoupons = [
         totalQuantity: 85,
         usedQuantity: 17,
         expirationDate: '2025-05-31',
-        createdAt: '2024-12-24T09:00:00.000Z',
-        updatedAt: '2024-12-31T09:00:00.000Z'
+        type: 'expiry-soon'
     },
     {
         id: 33,
@@ -392,8 +352,7 @@ const mockCoupons = [
         totalQuantity: 120,
         usedQuantity: 24,
         expirationDate: '2025-12-31',
-        createdAt: '2024-12-26T11:00:00.000Z',
-        updatedAt: '2024-12-31T10:45:00.000Z'
+        type: 'expiry-soon'
     },
     {
         id: 34,
@@ -404,8 +363,7 @@ const mockCoupons = [
         totalQuantity: 70,
         usedQuantity: 14,
         expirationDate: '2025-07-31',
-        createdAt: '2024-12-28T10:00:00.000Z',
-        updatedAt: '2024-12-31T11:20:00.000Z'
+        type: 'expiry-soon'
     },
     {
         id: 35,
@@ -416,8 +374,6 @@ const mockCoupons = [
         totalQuantity: 90,
         usedQuantity: 18,
         expirationDate: '2025-09-30',
-        createdAt: '2024-12-30T08:00:00.000Z',
-        updatedAt: '2024-12-31T12:35:00.000Z'
     },
     {
         id: 36,
@@ -428,8 +384,7 @@ const mockCoupons = [
         totalQuantity: 100,
         usedQuantity: 20,
         expirationDate: '2025-12-15',
-        createdAt: '2025-01-01T09:00:00.000Z',
-        updatedAt: '2025-01-01T13:50:00.000Z'
+        type: 'expiry-soon'
     },
     {
         id: 37,
@@ -440,8 +395,7 @@ const mockCoupons = [
         totalQuantity: 150,
         usedQuantity: 30,
         expirationDate: '2025-01-07',
-        createdAt: '2025-01-02T10:00:00.000Z',
-        updatedAt: '2025-01-02T14:25:00.000Z'
+        type: 'expiry-soon'
     },
     {
         id: 38,
@@ -452,8 +406,7 @@ const mockCoupons = [
         totalQuantity: 120,
         usedQuantity: 24,
         expirationDate: '2025-01-14',
-        createdAt: '2025-01-03T11:00:00.000Z',
-        updatedAt: '2025-01-03T15:40:00.000Z'
+        type: 'expiry-soon'
     },
     {
         id: 39,
@@ -464,8 +417,7 @@ const mockCoupons = [
         totalQuantity: 95,
         usedQuantity: 19,
         expirationDate: '2025-01-17',
-        createdAt: '2025-01-04T12:00:00.000Z',
-        updatedAt: '2025-01-04T16:15:00.000Z'
+        type: 'expiry-soon'
     },
     {
         id: 40,
@@ -476,8 +428,6 @@ const mockCoupons = [
         totalQuantity: 180,
         usedQuantity: 36,
         expirationDate: '2025-01-18',
-        createdAt: '2025-01-05T09:00:00.000Z',
-        updatedAt: '2025-01-05T17:30:00.000Z'
     },
     // MOST POPULAR COUPONS (80-85% usage)
     {
@@ -489,8 +439,7 @@ const mockCoupons = [
         totalQuantity: 200,
         usedQuantity: 168, // 84% usage
         expirationDate: '2025-02-15',
-        createdAt: '2025-01-06T10:00:00.000Z',
-        updatedAt: '2025-01-06T18:45:00.000Z'
+        type: 'most-popular'
     },
     {
         id: 42,
@@ -501,8 +450,7 @@ const mockCoupons = [
         totalQuantity: 150,
         usedQuantity: 127, // 84.7% usage
         expirationDate: '2025-02-20',
-        createdAt: '2025-01-07T11:00:00.000Z',
-        updatedAt: '2025-01-07T19:20:00.000Z'
+        type: 'most-popular'
     },
     {
         id: 43,
@@ -513,8 +461,7 @@ const mockCoupons = [
         totalQuantity: 120,
         usedQuantity: 98, // 81.7% usage
         expirationDate: '2025-02-25',
-        createdAt: '2025-01-08T12:00:00.000Z',
-        updatedAt: '2025-01-08T20:15:00.000Z'
+        type: 'most-popular'
     },
     {
         id: 44,
@@ -525,8 +472,7 @@ const mockCoupons = [
         totalQuantity: 180,
         usedQuantity: 153, // 85% usage
         expirationDate: '2025-03-01',
-        createdAt: '2025-01-09T13:00:00.000Z',
-        updatedAt: '2025-01-09T21:30:00.000Z'
+        type: 'most-popular'
     },
     {
         id: 45,
@@ -537,8 +483,6 @@ const mockCoupons = [
         totalQuantity: 100,
         usedQuantity: 82, // 82% usage
         expirationDate: '2025-03-05',
-        createdAt: '2025-01-10T14:00:00.000Z',
-        updatedAt: '2025-01-10T22:45:00.000Z'
     },
     {
         id: 46,
@@ -549,8 +493,7 @@ const mockCoupons = [
         totalQuantity: 160,
         usedQuantity: 136, // 85% usage
         expirationDate: '2025-03-10',
-        createdAt: '2025-01-11T15:00:00.000Z',
-        updatedAt: '2025-01-11T23:20:00.000Z'
+        type: 'most-popular'
     },
     {
         id: 47,
@@ -561,8 +504,7 @@ const mockCoupons = [
         totalQuantity: 140,
         usedQuantity: 119, // 85% usage
         expirationDate: '2025-03-15',
-        createdAt: '2025-01-12T16:00:00.000Z',
-        updatedAt: '2025-01-12T00:35:00.000Z'
+        type: 'most-popular'
     },
     {
         id: 48,
@@ -573,8 +515,7 @@ const mockCoupons = [
         totalQuantity: 200,
         usedQuantity: 168, // 84% usage
         expirationDate: '2025-03-20',
-        createdAt: '2025-01-13T17:00:00.000Z',
-        updatedAt: '2025-01-13T01:50:00.000Z'
+        type: 'most-popular'
     },
     // ALMOST GONE COUPONS (95%+ usage)
     {
@@ -586,8 +527,7 @@ const mockCoupons = [
         totalQuantity: 80,
         usedQuantity: 77, // 96.3% usage
         expirationDate: '2025-02-28',
-        createdAt: '2025-01-14T18:00:00.000Z',
-        updatedAt: '2025-01-14T02:25:00.000Z'
+        type: 'almost-gone'
     },
     {
         id: 50,
@@ -598,8 +538,6 @@ const mockCoupons = [
         totalQuantity: 60,
         usedQuantity: 58, // 96.7% usage
         expirationDate: '2025-03-02',
-        createdAt: '2025-01-15T19:00:00.000Z',
-        updatedAt: '2025-01-15T03:40:00.000Z'
     },
     {
         id: 51,
@@ -610,8 +548,7 @@ const mockCoupons = [
         totalQuantity: 120,
         usedQuantity: 115, // 95.8% usage
         expirationDate: '2025-03-08',
-        createdAt: '2025-01-16T20:00:00.000Z',
-        updatedAt: '2025-01-16T04:15:00.000Z'
+        type: 'almost-gone'
     },
     {
         id: 52,
@@ -622,8 +559,7 @@ const mockCoupons = [
         totalQuantity: 90,
         usedQuantity: 87, // 96.7% usage
         expirationDate: '2025-03-12',
-        createdAt: '2025-01-17T21:00:00.000Z',
-        updatedAt: '2025-01-17T05:30:00.000Z'
+        type: 'almost-gone'
     },
     {
         id: 53,
@@ -634,8 +570,7 @@ const mockCoupons = [
         totalQuantity: 70,
         usedQuantity: 68, // 97.1% usage
         expirationDate: '2025-03-18',
-        createdAt: '2025-01-18T22:00:00.000Z',
-        updatedAt: '2025-01-18T06:45:00.000Z'
+        type: 'almost-gone'
     },
     {
         id: 54,
@@ -646,8 +581,7 @@ const mockCoupons = [
         totalQuantity: 100,
         usedQuantity: 96, // 96% usage
         expirationDate: '2025-03-25',
-        createdAt: '2025-01-19T23:00:00.000Z',
-        updatedAt: '2025-01-19T07:20:00.000Z'
+        type: 'almost-gone'
     },
     {
         id: 55,
@@ -658,8 +592,6 @@ const mockCoupons = [
         totalQuantity: 85,
         usedQuantity: 82, // 96.5% usage
         expirationDate: '2025-03-30',
-        createdAt: '2025-01-20T00:00:00.000Z',
-        updatedAt: '2025-01-20T08:10:00.000Z'
     },
     {
         id: 56,
@@ -670,8 +602,7 @@ const mockCoupons = [
         totalQuantity: 75,
         usedQuantity: 72, // 96% usage
         expirationDate: '2025-04-05',
-        createdAt: '2025-01-21T01:00:00.000Z',
-        updatedAt: '2025-01-21T09:35:00.000Z'
+        type: 'almost-gone'
     },
     {
         id: 57,
@@ -682,8 +613,7 @@ const mockCoupons = [
         totalQuantity: 110,
         usedQuantity: 106, // 96.4% usage
         expirationDate: '2025-04-10',
-        createdAt: '2025-01-22T02:00:00.000Z',
-        updatedAt: '2025-01-22T10:50:00.000Z'
+        type: 'almost-gone'
     },
     {
         id: 58,
@@ -694,8 +624,7 @@ const mockCoupons = [
         totalQuantity: 50,
         usedQuantity: 48, // 96% usage
         expirationDate: '2025-04-15',
-        createdAt: '2025-01-23T03:00:00.000Z',
-        updatedAt: '2025-01-23T11:25:00.000Z'
+        type: 'almost-gone'
     },
     {
         id: 59,
@@ -706,8 +635,7 @@ const mockCoupons = [
         totalQuantity: 160,
         usedQuantity: 154, // 96.3% usage
         expirationDate: '2025-04-20',
-        createdAt: '2025-01-24T04:00:00.000Z',
-        updatedAt: '2025-01-24T12:40:00.000Z'
+        type: 'almost-gone'
     },
     {
         id: 60,
@@ -718,8 +646,6 @@ const mockCoupons = [
         totalQuantity: 95,
         usedQuantity: 91, // 95.8% usage
         expirationDate: '2025-04-25',
-        createdAt: '2025-01-25T05:00:00.000Z',
-        updatedAt: '2025-01-25T13:55:00.000Z'
     },
     // ADDITIONAL MOST POPULAR COUPONS (80-85% usage)
     {
@@ -731,8 +657,7 @@ const mockCoupons = [
         totalQuantity: 300,
         usedQuantity: 252, // 84% usage
         expirationDate: '2025-05-01',
-        createdAt: '2025-01-26T06:00:00.000Z',
-        updatedAt: '2025-01-26T14:20:00.000Z'
+        type: 'most-popular'
     },
     {
         id: 62,
@@ -743,8 +668,7 @@ const mockCoupons = [
         totalQuantity: 180,
         usedQuantity: 153, // 85% usage
         expirationDate: '2025-05-15',
-        createdAt: '2025-01-27T07:00:00.000Z',
-        updatedAt: '2025-01-27T15:35:00.000Z'
+        type: 'most-popular'
     },
     {
         id: 63,
@@ -755,8 +679,7 @@ const mockCoupons = [
         totalQuantity: 120,
         usedQuantity: 98, // 81.7% usage
         expirationDate: '2025-06-01',
-        createdAt: '2025-01-28T08:00:00.000Z',
-        updatedAt: '2025-01-28T16:50:00.000Z'
+        type: 'most-popular'
     },
     {
         id: 64,
@@ -767,8 +690,6 @@ const mockCoupons = [
         totalQuantity: 150,
         usedQuantity: 127, // 84.7% usage
         expirationDate: '2025-06-15',
-        createdAt: '2025-01-29T09:00:00.000Z',
-        updatedAt: '2025-01-29T17:25:00.000Z'
     },
     {
         id: 65,
@@ -779,8 +700,7 @@ const mockCoupons = [
         totalQuantity: 200,
         usedQuantity: 168, // 84% usage
         expirationDate: '2025-07-01',
-        createdAt: '2025-01-30T10:00:00.000Z',
-        updatedAt: '2025-01-30T18:40:00.000Z'
+        type: 'most-popular'
     },
     {
         id: 66,
@@ -791,8 +711,7 @@ const mockCoupons = [
         totalQuantity: 160,
         usedQuantity: 136, // 85% usage
         expirationDate: '2025-07-15',
-        createdAt: '2025-01-31T11:00:00.000Z',
-        updatedAt: '2025-01-31T19:15:00.000Z'
+        type: 'most-popular'
     },
     {
         id: 67,
@@ -803,8 +722,7 @@ const mockCoupons = [
         totalQuantity: 100,
         usedQuantity: 82, // 82% usage
         expirationDate: '2025-08-01',
-        createdAt: '2025-02-01T12:00:00.000Z',
-        updatedAt: '2025-02-01T20:30:00.000Z'
+        type: 'most-popular'
     },
     {
         id: 68,
@@ -815,8 +733,6 @@ const mockCoupons = [
         totalQuantity: 140,
         usedQuantity: 119, // 85% usage
         expirationDate: '2025-08-15',
-        createdAt: '2025-02-02T13:00:00.000Z',
-        updatedAt: '2025-02-02T21:45:00.000Z'
     },
     {
         id: 69,
@@ -827,8 +743,7 @@ const mockCoupons = [
         totalQuantity: 250,
         usedQuantity: 210, // 84% usage
         expirationDate: '2025-09-01',
-        createdAt: '2025-02-03T14:00:00.000Z',
-        updatedAt: '2025-02-03T22:20:00.000Z'
+        type: 'most-popular'
     },
     {
         id: 70,
@@ -839,8 +754,7 @@ const mockCoupons = [
         totalQuantity: 180,
         usedQuantity: 153, // 85% usage
         expirationDate: '2025-09-15',
-        createdAt: '2025-02-04T15:00:00.000Z',
-        updatedAt: '2025-02-04T23:35:00.000Z'
+        type: 'most-popular'
     },
     {
         id: 71,
@@ -851,8 +765,7 @@ const mockCoupons = [
         totalQuantity: 80,
         usedQuantity: 66, // 82.5% usage
         expirationDate: '2025-10-01',
-        createdAt: '2025-02-05T16:00:00.000Z',
-        updatedAt: '2025-02-05T00:50:00.000Z'
+        type: 'most-popular'
     },
     {
         id: 72,
@@ -863,8 +776,7 @@ const mockCoupons = [
         totalQuantity: 220,
         usedQuantity: 187, // 85% usage
         expirationDate: '2025-10-15',
-        createdAt: '2025-02-06T17:00:00.000Z',
-        updatedAt: '2025-02-06T01:25:00.000Z'
+        type: 'most-popular'
     },
     {
         id: 73,
@@ -875,8 +787,7 @@ const mockCoupons = [
         totalQuantity: 300,
         usedQuantity: 252, // 84% usage
         expirationDate: '2025-11-01',
-        createdAt: '2025-02-07T18:00:00.000Z',
-        updatedAt: '2025-02-07T02:40:00.000Z'
+        type: 'most-popular'
     },
     {
         id: 74,
@@ -887,8 +798,7 @@ const mockCoupons = [
         totalQuantity: 200,
         usedQuantity: 168, // 84% usage
         expirationDate: '2025-11-15',
-        createdAt: '2025-02-08T19:00:00.000Z',
-        updatedAt: '2025-02-08T03:15:00.000Z'
+        type: 'most-popular'
     },
     {
         id: 75,
@@ -899,8 +809,6 @@ const mockCoupons = [
         totalQuantity: 160,
         usedQuantity: 136, // 85% usage
         expirationDate: '2025-12-01',
-        createdAt: '2025-02-09T20:00:00.000Z',
-        updatedAt: '2025-02-09T04:30:00.000Z'
     },
     {
         id: 76,
@@ -911,8 +819,7 @@ const mockCoupons = [
         totalQuantity: 140,
         usedQuantity: 119, // 85% usage
         expirationDate: '2025-12-15',
-        createdAt: '2025-02-10T21:00:00.000Z',
-        updatedAt: '2025-02-10T05:45:00.000Z'
+        type: 'most-popular'
     },
     {
         id: 77,
@@ -923,8 +830,7 @@ const mockCoupons = [
         totalQuantity: 60,
         usedQuantity: 51, // 85% usage
         expirationDate: '2026-01-01',
-        createdAt: '2025-02-11T22:00:00.000Z',
-        updatedAt: '2025-02-11T06:20:00.000Z'
+        type: 'most-popular'
     },
     {
         id: 78,
@@ -935,8 +841,7 @@ const mockCoupons = [
         totalQuantity: 120,
         usedQuantity: 102, // 85% usage
         expirationDate: '2026-01-15',
-        createdAt: '2025-02-12T23:00:00.000Z',
-        updatedAt: '2025-02-12T07:35:00.000Z'
+        type: 'most-popular'
     },
     {
         id: 79,
@@ -947,8 +852,7 @@ const mockCoupons = [
         totalQuantity: 180,
         usedQuantity: 153, // 85% usage
         expirationDate: '2026-02-01',
-        createdAt: '2025-02-13T00:00:00.000Z',
-        updatedAt: '2025-02-13T08:50:00.000Z'
+        type: 'most-popular'
     },
     {
         id: 80,
@@ -959,8 +863,6 @@ const mockCoupons = [
         totalQuantity: 250,
         usedQuantity: 210, // 84% usage
         expirationDate: '2026-02-15',
-        createdAt: '2025-02-14T01:00:00.000Z',
-        updatedAt: '2025-02-14T09:25:00.000Z'
     },
     // ADDITIONAL ALMOST GONE COUPONS (95%+ usage)
     {
@@ -972,8 +874,7 @@ const mockCoupons = [
         totalQuantity: 75,
         usedQuantity: 72, // 96% usage
         expirationDate: '2025-05-20',
-        createdAt: '2025-02-15T02:00:00.000Z',
-        updatedAt: '2025-02-15T10:40:00.000Z'
+        type: 'almost-gone'
     },
     {
         id: 82,
@@ -984,8 +885,7 @@ const mockCoupons = [
         totalQuantity: 50,
         usedQuantity: 48, // 96% usage
         expirationDate: '2025-06-05',
-        createdAt: '2025-02-16T03:00:00.000Z',
-        updatedAt: '2025-02-16T11:15:00.000Z'
+        type: 'almost-gone'
     },
     {
         id: 83,
@@ -996,8 +896,6 @@ const mockCoupons = [
         totalQuantity: 40,
         usedQuantity: 39, // 97.5% usage
         expirationDate: '2025-06-20',
-        createdAt: '2025-02-17T04:00:00.000Z',
-        updatedAt: '2025-02-17T12:30:00.000Z'
     },
     {
         id: 84,
@@ -1008,8 +906,7 @@ const mockCoupons = [
         totalQuantity: 30,
         usedQuantity: 29, // 96.7% usage
         expirationDate: '2025-07-05',
-        createdAt: '2025-02-18T05:00:00.000Z',
-        updatedAt: '2025-02-18T13:45:00.000Z'
+        type: 'almost-gone'
     },
     {
         id: 85,
@@ -1020,8 +917,7 @@ const mockCoupons = [
         totalQuantity: 65,
         usedQuantity: 63, // 96.9% usage
         expirationDate: '2025-07-20',
-        createdAt: '2025-02-19T06:00:00.000Z',
-        updatedAt: '2025-02-19T14:20:00.000Z'
+        type: 'almost-gone'
     },
     {
         id: 86,
@@ -1032,8 +928,7 @@ const mockCoupons = [
         totalQuantity: 55,
         usedQuantity: 53, // 96.4% usage
         expirationDate: '2025-08-05',
-        createdAt: '2025-02-20T07:00:00.000Z',
-        updatedAt: '2025-02-20T15:35:00.000Z'
+        type: 'almost-gone'
     },
     {
         id: 87,
@@ -1044,8 +939,7 @@ const mockCoupons = [
         totalQuantity: 85,
         usedQuantity: 82, // 96.5% usage
         expirationDate: '2025-08-20',
-        createdAt: '2025-02-21T08:00:00.000Z',
-        updatedAt: '2025-02-21T16:50:00.000Z'
+        type: 'almost-gone'
     },
     {
         id: 88,
@@ -1056,8 +950,6 @@ const mockCoupons = [
         totalQuantity: 70,
         usedQuantity: 68, // 97.1% usage
         expirationDate: '2025-09-05',
-        createdAt: '2025-02-22T09:00:00.000Z',
-        updatedAt: '2025-02-22T17:25:00.000Z'
     },
     {
         id: 89,
@@ -1068,8 +960,7 @@ const mockCoupons = [
         totalQuantity: 45,
         usedQuantity: 43, // 95.6% usage
         expirationDate: '2025-09-20',
-        createdAt: '2025-02-23T10:00:00.000Z',
-        updatedAt: '2025-02-23T18:40:00.000Z'
+        type: 'almost-gone'
     },
     {
         id: 90,
@@ -1080,8 +971,7 @@ const mockCoupons = [
         totalQuantity: 80,
         usedQuantity: 77, // 96.3% usage
         expirationDate: '2025-10-05',
-        createdAt: '2025-02-24T11:00:00.000Z',
-        updatedAt: '2025-02-24T19:15:00.000Z'
+        type: 'almost-gone'
     },
     {
         id: 91,
@@ -1092,8 +982,7 @@ const mockCoupons = [
         totalQuantity: 95,
         usedQuantity: 91, // 95.8% usage
         expirationDate: '2025-10-20',
-        createdAt: '2025-02-25T12:00:00.000Z',
-        updatedAt: '2025-02-25T20:30:00.000Z'
+        type: 'almost-gone'
     },
     {
         id: 92,
@@ -1104,8 +993,7 @@ const mockCoupons = [
         totalQuantity: 60,
         usedQuantity: 58, // 96.7% usage
         expirationDate: '2025-11-05',
-        createdAt: '2025-02-26T13:00:00.000Z',
-        updatedAt: '2025-02-26T21:45:00.000Z'
+        type: 'almost-gone'
     },
     {
         id: 93,
@@ -1116,8 +1004,7 @@ const mockCoupons = [
         totalQuantity: 35,
         usedQuantity: 34, // 97.1% usage
         expirationDate: '2025-11-20',
-        createdAt: '2025-02-27T14:00:00.000Z',
-        updatedAt: '2025-02-27T22:20:00.000Z'
+        type: 'almost-gone'
     },
     {
         id: 94,
@@ -1128,8 +1015,7 @@ const mockCoupons = [
         totalQuantity: 50,
         usedQuantity: 48, // 96% usage
         expirationDate: '2025-12-05',
-        createdAt: '2025-02-28T15:00:00.000Z',
-        updatedAt: '2025-02-28T23:35:00.000Z'
+        type: 'almost-gone'
     },
     {
         id: 95,
@@ -1140,9 +1026,6 @@ const mockCoupons = [
         totalQuantity: 40,
         usedQuantity: 39, // 97.5% usage
         expirationDate: '2025-12-20',
-        createdAt: '2025-03-01T16:00:00.000Z',
-        updatedAt: '2025-03-01T00:50:00.000Z'
     }
 ];
-
 module.exports = mockCoupons;

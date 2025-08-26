@@ -3,6 +3,7 @@ const express = require('express')
 const app = express()
 const path = require('path')
 const methodOverride = require('method-override')
+const NodeCache = require('node-cache')
 
 const PORT = process.env.PORT || 3000;
 
@@ -29,6 +30,108 @@ try {
 
 const firestore = admin.firestore(); // Firestore Database Reference
 
+// Cache Configuration
+const cache = new NodeCache({
+    stdTTL: 300, // Default TTL of 5 minutes (300 seconds)
+    checkperiod: 60, // Check for expired keys every minute
+    useClones: false, // Disable cloning for better performance
+    deleteOnExpire: true,
+    maxKeys: 1000 // Maximum number of keys to prevent memory overflow
+});
+
+// Cache Helper Functions
+const cacheHelper = {
+    // Get data from cache
+    get: (key) => {
+        try {
+            const data = cache.get(key);
+            if (data !== undefined) {
+                console.log(`🎯 Cache HIT for key: ${key}`);
+                return data;
+            }
+            console.log(`❌ Cache MISS for key: ${key}`);
+            return null;
+        } catch (error) {
+            console.error(`Error getting cache key ${key}:`, error);
+            return null;
+        }
+    },
+
+    // Set data in cache with optional TTL
+    set: (key, data, ttl = null) => {
+        try {
+            const success = cache.set(key, data, ttl);
+            if (success) {
+                console.log(`✅ Cache SET for key: ${key}${ttl ? ` (TTL: ${ttl}s)` : ''}`);
+            }
+            return success;
+        } catch (error) {
+            console.error(`Error setting cache key ${key}:`, error);
+            return false;
+        }
+    },
+
+    // Delete specific cache key
+    delete: (key) => {
+        try {
+            const deleted = cache.del(key);
+            if (deleted > 0) {
+                console.log(`🗑️  Cache DELETE for key: ${key}`);
+            }
+            return deleted;
+        } catch (error) {
+            console.error(`Error deleting cache key ${key}:`, error);
+            return 0;
+        }
+    },
+
+    // Delete multiple cache keys
+    deleteMultiple: (keys) => {
+        try {
+            const deleted = cache.del(keys);
+            if (deleted > 0) {
+                console.log(`🗑️  Cache DELETE for keys: ${keys.join(', ')}`);
+            }
+            return deleted;
+        } catch (error) {
+            console.error(`Error deleting cache keys:`, error);
+            return 0;
+        }
+    },
+
+    // Clear all cache
+    flush: () => {
+        try {
+            cache.flushAll();
+            console.log(`🧹 Cache FLUSH - All keys cleared`);
+            return true;
+        } catch (error) {
+            console.error(`Error flushing cache:`, error);
+            return false;
+        }
+    },
+
+    // Get cache statistics
+    getStats: () => {
+        return cache.getStats();
+    },
+
+    // Get all cache keys
+    getKeys: () => {
+        return cache.keys();
+    }
+};
+
+// Cache key generators
+const getCacheKey = {
+    questions: () => 'questions:all',
+    questionsBySet: (setNumber) => `questions:set:${setNumber}`,
+    question: (id) => `question:${id}`,
+    coupons: (type = 'all') => `coupons:${type}`,
+    coupon: (id) => `coupon:${id}`,
+    dashboard: () => 'dashboard:data'
+};
+
 // configuration
 app.set("view engine", "ejs")
 app.set("views", path.join(__dirname, "views"))
@@ -38,8 +141,18 @@ app.use(methodOverride('_method'))
 
 app.get('/', (req, res) => res.render('home'))
 
-app.get('/screen/dashboard', async (req, res) => {
+
+// Question Dashboard
+app.get('/screen/q-dashboard', async (req, res) => {
     try {
+        const cacheKey = getCacheKey.dashboard();
+
+        // Try to get data from cache first
+        let cachedData = cacheHelper.get(cacheKey);
+        if (cachedData) {
+            return res.render('q-dashboard', cachedData);
+        }
+
         // Fetch all questions
         const snapshot = await firestore.collection('questions').get();
         const questions = {};
@@ -66,31 +179,49 @@ app.get('/screen/dashboard', async (req, res) => {
             questions[setNumber].sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
         }
 
-        res.render('dashboard', { questions, questionsBySet, totalQuestions });
+        const dashboardData = { questions, questionsBySet, totalQuestions };
+
+        // Cache the dashboard data for 5 minutes
+        cacheHelper.set(cacheKey, dashboardData, 300);
+
+        res.render('q-dashboard', dashboardData);
     } catch (error) {
         console.error('Error fetching dashboard data:', error);
         res.status(500).send('Error loading dashboard');
     }
 })
 
+// Question Form
 app.get('/screen/question', async (req, res) => {
     const questionId = req.query.id;
     if (questionId) {
         try {
+            const cacheKey = getCacheKey.question(questionId);
+
+            // Try to get question from cache first
+            let cachedQuestion = cacheHelper.get(cacheKey);
+            if (cachedQuestion) {
+                return res.render('question-form', { question: cachedQuestion });
+            }
+
             const doc = await firestore.collection('questions').doc(questionId).get();
             if (doc.exists) {
                 const question = { id: doc.id, ...doc.data() };
-                return res.render('question', { question });
+
+                // Cache the question for 10 minutes
+                cacheHelper.set(cacheKey, question, 600);
+
+                return res.render('question-form', { question });
             }
         } catch (error) {
             console.error('Error fetching question:', error);
         }
     }
-    res.render('question', { question: null });
+    res.render('question-form', { question: null });
 })
 
-// Coupon routes
-app.get('/screen/coupons', async (req, res) => {
+// Coupon Dashboard
+app.get('/screen/c-dashboard', async (req, res) => {
     try {
         const snapshot = await firestore.collection('coupons').get();
         const coupons = [];
@@ -127,7 +258,7 @@ app.get('/screen/coupons', async (req, res) => {
         // Sort coupons by creation date (newest first)
         coupons.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
 
-        res.render('coupons', {
+        res.render('c-dashboard', {
             coupons,
             totalCoupons,
             activeCoupons,
@@ -139,27 +270,41 @@ app.get('/screen/coupons', async (req, res) => {
     }
 });
 
-app.get('/screen/coupon/new', (req, res) => {
+// Coupon Form
+app.get('/screen/coupon', async (req, res) => {
+    const couponId = req.query.id;
+    if (couponId) {
+        try {
+            const cacheKey = getCacheKey.coupon(couponId);
+
+            // Try to get coupon from cache first
+            let cachedCoupon = cacheHelper.get(cacheKey);
+            if (cachedCoupon) {
+                return res.render('coupon-form', { coupon: cachedCoupon });
+            }
+
+            const doc = await firestore.collection('coupons').doc(couponId).get();
+
+            if (doc.exists) {
+                const coupon = { id: doc.id, ...doc.data() };
+
+                // Cache the coupon for 5 minutes
+                cacheHelper.set(cacheKey, coupon, 300);
+
+                res.render('coupon-form', { coupon });
+            } else {
+                res.status(404).send('Coupon not found');
+            }
+        } catch (error) {
+            console.error('Error fetching coupon:', error);
+            res.status(500).send('Error loading coupon');
+        }
+    }
     res.render('coupon-form', { coupon: null });
 });
 
-app.get('/screen/coupon/edit/:id', async (req, res) => {
-    try {
-        const couponId = req.params.id;
-        const doc = await firestore.collection('coupons').doc(couponId).get();
-
-        if (doc.exists) {
-            const coupon = { id: doc.id, ...doc.data() };
-            res.render('coupon-form', { coupon });
-        } else {
-            res.status(404).send('Coupon not found');
-        }
-    } catch (error) {
-        console.error('Error fetching coupon:', error);
-        res.status(500).send('Error loading coupon');
-    }
-});
-
+// Question CRUD operations
+// Question Create
 app.post('/method/question', async (req, res) => {
     try {
         const { questionSet, question, imageUrl, correctAnswer, explanation } = req.body;
@@ -201,13 +346,19 @@ app.post('/method/question', async (req, res) => {
         const docRef = await firestore.collection('questions').add(questionData);
         console.log(`✅ Question added with ID: ${docRef.id}`);
 
-        return res.redirect('/screen/dashboard');
+        // Invalidate related caches
+        cacheHelper.delete(getCacheKey.questions());
+        cacheHelper.delete(getCacheKey.dashboard());
+        cacheHelper.delete(getCacheKey.questionsBySet(parseInt(questionSet)));
+
+        return res.redirect('/screen/q-dashboard');
     } catch (error) {
         console.error("Error adding document: ", error);
         return res.status(400).json({ 'status': false, 'error': 'Question addition failed!' })
     }
 })
 
+// Question Update
 app.post('/method/question/:id', async (req, res) => {
     try {
         const questionId = req.params.id;
@@ -238,7 +389,13 @@ app.post('/method/question/:id', async (req, res) => {
             updatedAt: new Date().toISOString()
         });
 
-        res.redirect('/screen/dashboard');
+        // Invalidate related caches
+        cacheHelper.delete(getCacheKey.questions());
+        cacheHelper.delete(getCacheKey.dashboard());
+        cacheHelper.delete(getCacheKey.question(questionId));
+        cacheHelper.delete(getCacheKey.questionsBySet(parseInt(questionSet)));
+
+        res.redirect('/screen/q-dashboard');
     } catch (error) {
         console.error('Error updating question:', error);
         res.status(500).json({
@@ -248,10 +405,28 @@ app.post('/method/question/:id', async (req, res) => {
     }
 });
 
+// Question Delete
 app.delete('/method/question/:id', async (req, res) => {
     try {
         const questionId = req.params.id;
+
+        // Get question data before deletion for cache invalidation
+        const doc = await firestore.collection('questions').doc(questionId).get();
+        let questionSet = null;
+        if (doc.exists) {
+            questionSet = doc.data().questionSet;
+        }
+
         await firestore.collection('questions').doc(questionId).delete();
+
+        // Invalidate related caches
+        cacheHelper.delete(getCacheKey.questions());
+        cacheHelper.delete(getCacheKey.dashboard());
+        cacheHelper.delete(getCacheKey.question(questionId));
+        if (questionSet !== null) {
+            cacheHelper.delete(getCacheKey.questionsBySet(questionSet));
+        }
+
         res.json({ success: true, message: 'Question deleted successfully' });
     } catch (error) {
         console.error('Error deleting question:', error);
@@ -260,9 +435,10 @@ app.delete('/method/question/:id', async (req, res) => {
 });
 
 // Coupon CRUD operations
+// Coupon Create
 app.post('/method/coupon', async (req, res) => {
     try {
-        const { title, couponCode, category, discount, totalQuantity, expirationDate } = req.body;
+        const { title, couponCode, category, discount, totalQuantity, expirationDate, type } = req.body;
 
         // Validate required fields
         if (!title || !couponCode || !category || !discount || !totalQuantity || !expirationDate) {
@@ -301,21 +477,40 @@ app.post('/method/coupon', async (req, res) => {
             updatedAt: admin.firestore.FieldValue.serverTimestamp()
         };
 
+        // Add type field only if provided
+        if (type) {
+            const validTypes = ['expiry-soon', 'most-popular', 'almost-gone'];
+            if (validTypes.includes(type)) {
+                couponData.type = type;
+            }
+        }
+
         // Add coupon to Firestore
         const docRef = await firestore.collection('coupons').add(couponData);
         console.log(`✅ Coupon added with ID: ${docRef.id}`);
 
-        return res.redirect('/screen/coupons');
+        // Invalidate all coupon caches
+        cacheHelper.deleteMultiple([
+            getCacheKey.coupons('all'),
+            getCacheKey.coupons('active'),
+            getCacheKey.coupons('expired'),
+            getCacheKey.coupons('expiry-soon'),
+            getCacheKey.coupons('most-popular'),
+            getCacheKey.coupons('almost-gone')
+        ]);
+
+        return res.redirect('/screen/c-dashboard');
     } catch (error) {
         console.error("Error adding coupon: ", error);
         return res.status(400).json({ 'status': false, 'error': 'Coupon addition failed!' });
     }
 });
 
+// Coupon Update
 app.post('/method/coupon/:id', async (req, res) => {
     try {
         const couponId = req.params.id;
-        const { title, couponCode, category, discount, totalQuantity, expirationDate } = req.body;
+        const { title, couponCode, category, discount, totalQuantity, expirationDate, type } = req.body;
 
         // Validate required fields
         if (!title || !couponCode || !category || !discount || !totalQuantity || !expirationDate) {
@@ -361,8 +556,8 @@ app.post('/method/coupon/:id', async (req, res) => {
             });
         }
 
-        // Update the coupon
-        await firestore.collection('coupons').doc(couponId).update({
+        // Prepare update data
+        const updateData = {
             title: title.trim(),
             couponCode: couponCode.trim().toUpperCase(),
             category,
@@ -370,10 +565,36 @@ app.post('/method/coupon/:id', async (req, res) => {
             totalQuantity: newTotalQuantity,
             expirationDate: new Date(expirationDate),
             updatedAt: admin.firestore.FieldValue.serverTimestamp()
-        });
+        };
+
+        // Add type field only if provided and valid
+        if (type) {
+            const validTypes = ['expiry-soon', 'most-popular', 'almost-gone'];
+            if (validTypes.includes(type)) {
+                updateData.type = type;
+            }
+        } else {
+            // Remove type field if not provided (make it optional)
+            updateData.type = admin.firestore.FieldValue.delete();
+        }
+
+        // Update the coupon
+        await firestore.collection('coupons').doc(couponId).update(updateData);
 
         console.log(`✅ Coupon updated with ID: ${couponId}`);
-        res.redirect('/screen/coupons');
+
+        // Invalidate all coupon caches
+        cacheHelper.deleteMultiple([
+            getCacheKey.coupons('all'),
+            getCacheKey.coupons('active'),
+            getCacheKey.coupons('expired'),
+            getCacheKey.coupons('expiry-soon'),
+            getCacheKey.coupons('most-popular'),
+            getCacheKey.coupons('almost-gone'),
+            getCacheKey.coupon(couponId)
+        ]);
+
+        res.redirect('/screen/c-dashboard');
     } catch (error) {
         console.error('Error updating coupon:', error);
         res.status(500).json({
@@ -383,10 +604,23 @@ app.post('/method/coupon/:id', async (req, res) => {
     }
 });
 
+// Coupon Delete
 app.delete('/method/coupon/:id', async (req, res) => {
     try {
         const couponId = req.params.id;
         await firestore.collection('coupons').doc(couponId).delete();
+
+        // Invalidate all coupon caches
+        cacheHelper.deleteMultiple([
+            getCacheKey.coupons('all'),
+            getCacheKey.coupons('active'),
+            getCacheKey.coupons('expired'),
+            getCacheKey.coupons('expiry-soon'),
+            getCacheKey.coupons('most-popular'),
+            getCacheKey.coupons('almost-gone'),
+            getCacheKey.coupon(couponId)
+        ]);
+
         res.json({ success: true, message: 'Coupon deleted successfully' });
     } catch (error) {
         console.error('Error deleting coupon:', error);
@@ -396,6 +630,14 @@ app.delete('/method/coupon/:id', async (req, res) => {
 
 app.get('/api/question', async (req, res) => {
     try {
+        const cacheKey = getCacheKey.questions();
+
+        // Try to get data from cache first
+        let cachedResult = cacheHelper.get(cacheKey);
+        if (cachedResult) {
+            return res.json(cachedResult);
+        }
+
         // Get all questions from Firestore, ordered by createdAt
         const questionsSnapshot = await firestore
             .collection('questions')
@@ -403,7 +645,9 @@ app.get('/api/question', async (req, res) => {
             .get();
 
         if (questionsSnapshot.empty) {
-            return res.json([]);
+            const emptyResult = [];
+            cacheHelper.set(cacheKey, emptyResult, 60); // Cache empty result for 1 minute
+            return res.json(emptyResult);
         }
 
         // Group questions by questionSet
@@ -489,6 +733,9 @@ app.get('/api/question', async (req, res) => {
             result.push(examSet);
         }
 
+        // Cache the result for 10 minutes (600 seconds)
+        cacheHelper.set(cacheKey, result, 600);
+
         return res.json(result);
 
     } catch (error) {
@@ -501,21 +748,67 @@ app.get('/api/question', async (req, res) => {
 });
 
 // API endpoint for getting coupons with various filters
-app.get('/api/coupons', async (req, res) => {
+app.get('/api/coupon/list', async (req, res) => {
     try {
         const { type } = req.query;
-        const now = new Date();
+        const cacheKey = getCacheKey.coupons(type || 'all');
 
-        // Get all coupons from Firestore
-        const snapshot = await firestore.collection('coupons').get();
+        // Try to get data from cache first
+        let cachedResult = cacheHelper.get(cacheKey);
+        if (cachedResult) {
+            return res.json(cachedResult);
+        }
+
+        const now = new Date();
+        let query = firestore.collection('coupons');
+        let snapshot;
+
+        // Build optimized queries based on type
+        switch (type) {
+            case 'active':
+                // Active coupons: not expired and not fully used
+                query = query.where('expirationDate', '>', now);
+                snapshot = await query.get();
+                break;
+
+            case 'expired':
+                // Expired coupons
+                query = query.where('expirationDate', '<=', now);
+                snapshot = await query.get();
+                break;
+
+            case 'expiry-soon':
+                // Filter by type field
+                query = query.where('type', '==', 'expiry-soon').where('expirationDate', '>', now);
+                snapshot = await query.get();
+                break;
+
+            case 'most-popular':
+                // Filter by type field
+                query = query.where('type', '==', 'most-popular').where('expirationDate', '>', now);
+                snapshot = await query.get();
+                break;
+
+            case 'almost-gone':
+                // Filter by type field
+                query = query.where('type', '==', 'almost-gone').where('expirationDate', '>', now);
+                snapshot = await query.get();
+                break;
+            default:
+                // Get all coupons
+                snapshot = await query.get();
+                break;
+        }
 
         if (snapshot.empty) {
-            return res.json({
+            const emptyResult = {
                 status: true,
                 data: [],
                 total: 0,
                 message: 'No coupons found'
-            });
+            };
+            cacheHelper.set(cacheKey, emptyResult, 60); // Cache empty result for 1 minute
+            return res.json(emptyResult);
         }
 
         let coupons = [];
@@ -534,19 +827,9 @@ app.get('/api/coupons', async (req, res) => {
                 expirationDate = new Date(0);
             }
 
-            // Calculate usage percentage
-            const usagePercentage = coupon.totalQuantity > 0 ?
-                (coupon.usedQuantity / coupon.totalQuantity) * 100 : 0;
-
-            // Calculate days until expiration
-            const daysUntilExpiry = Math.ceil((expirationDate - now) / (1000 * 60 * 60 * 24));
-
             // Add calculated fields
             coupon.expirationDate = expirationDate;
-            coupon.usagePercentage = Math.round(usagePercentage * 100) / 100; // Round to 2 decimal places
-            coupon.daysUntilExpiry = daysUntilExpiry;
-            coupon.isActive = expirationDate > now && coupon.usedQuantity < coupon.totalQuantity;
-            coupon.isExpired = expirationDate <= now;
+            coupon.daysUntilExpiry = Math.ceil((expirationDate - now) / (1000 * 60 * 60 * 24));
 
             coupons.push(coupon);
         });
@@ -554,56 +837,16 @@ app.get('/api/coupons', async (req, res) => {
         // Filter based on type parameter
         let filteredCoupons = [];
 
-        switch (type) {
-            case 'expiry-soon':
-                // Coupons expiring in approximately 7 days or less
-                filteredCoupons = coupons.filter(coupon =>
-                    coupon.isActive && coupon.daysUntilExpiry <= 30 && coupon.daysUntilExpiry > 0
-                );
-                break;
+        filteredCoupons = coupons.filter(coupon =>
+            coupon.usedQuantity < coupon.totalQuantity
+        );
 
-            case 'most-popular':
-                // Coupons with 80-85% usage (almost used up but still available)
-                filteredCoupons = coupons.filter(coupon =>
-                    coupon.isActive &&
-                    coupon.usagePercentage >= 70 &&
-                    coupon.usagePercentage < 90
-                );
-                break;
-
-            case 'almost-gone':
-                // Coupons with 95%+ usage (very few left)
-                filteredCoupons = coupons.filter(coupon =>
-                    coupon.isActive && coupon.usagePercentage >= 90
-                );
-                break;
-
-            case 'active':
-                // All active coupons (not expired and not fully used)
-                filteredCoupons = coupons.filter(coupon => coupon.isActive);
-                break;
-
-            case 'expired':
-                // All expired coupons
-                filteredCoupons = coupons.filter(coupon => coupon.isExpired);
-                break;
-        }
-
-        // Sort coupons by relevance
-        if (type === 'expiry-soon') {
-            // Sort by days until expiry (ascending - expiring soonest first)
-            filteredCoupons.sort((a, b) => a.daysUntilExpiry - b.daysUntilExpiry);
-        } else if (type === 'most-popular' || type === 'almost-gone') {
-            // Sort by usage percentage (descending - most used first)
-            filteredCoupons.sort((a, b) => b.usagePercentage - a.usagePercentage);
-        } else {
-            // Sort by creation date (newest first)
-            filteredCoupons.sort((a, b) => {
-                const timeA = a.createdAt ? a.createdAt.toDate() : new Date(0);
-                const timeB = b.createdAt ? b.createdAt.toDate() : new Date(0);
-                return timeB - timeA;
-            });
-        }
+        // Sort by creation date (newest first)
+        filteredCoupons.sort((a, b) => {
+            const timeA = a.createdAt ? a.createdAt.toDate() : new Date(0);
+            const timeB = b.createdAt ? b.createdAt.toDate() : new Date(0);
+            return timeB - timeA;
+        });
 
         // Format response data
         const formattedCoupons = filteredCoupons.map(coupon => ({
@@ -614,21 +857,31 @@ app.get('/api/coupons', async (req, res) => {
             discount: coupon.discount,
             totalQuantity: coupon.totalQuantity,
             usedQuantity: coupon.usedQuantity,
-            usagePercentage: coupon.usagePercentage,
             expirationDate: coupon.expirationDate.toISOString(),
             daysUntilExpiry: coupon.daysUntilExpiry,
-            isActive: coupon.isActive,
-            isExpired: coupon.isExpired,
+            type: coupon.type || null, // Type is optional, no default value
             createdAt: coupon.createdAt ? coupon.createdAt.toDate().toISOString() : null,
             updatedAt: coupon.updatedAt ? coupon.updatedAt.toDate().toISOString() : null
         }));
 
-        return res.json({
+        const result = {
             status: true,
             data: formattedCoupons,
             total: formattedCoupons.length,
             message: `Successfully retrieved ${formattedCoupons.length} coupons`
-        });
+        };
+
+        // Cache the result for different durations based on type
+        let cacheTTL = 300; // Default 5 minutes
+        if (type === 'expiry-soon' || type === 'almost-gone') {
+            cacheTTL = 120; // 2 minutes for time-sensitive data
+        } else if (type === 'most-popular') {
+            cacheTTL = 180; // 3 minutes for usage-based data
+        }
+
+        cacheHelper.set(cacheKey, result, cacheTTL);
+
+        return res.json(result);
 
     } catch (error) {
         console.error("Error retrieving coupons: ", error);
@@ -701,6 +954,15 @@ app.post('/api/coupon/use', async (req, res) => {
 
         console.log(`✅ Coupon ${couponId} usage increased to ${newUsedQuantity}/${coupon.totalQuantity}`);
 
+        // Invalidate coupon caches since usage data changed
+        cacheHelper.deleteMultiple([
+            getCacheKey.coupons('all'),
+            getCacheKey.coupons('active'),
+            getCacheKey.coupons('most-popular'),
+            getCacheKey.coupons('almost-gone'),
+            getCacheKey.coupon(couponId)
+        ]);
+
         return res.json({
             status: true,
             message: 'Coupon usage increased successfully!',
@@ -759,9 +1021,14 @@ async function importMockCoupons() {
                     totalQuantity: mockCoupon.totalQuantity,
                     usedQuantity: mockCoupon.usedQuantity || 0,
                     expirationDate: new Date(mockCoupon.expirationDate),
-                    createdAt: new Date(mockCoupon.createdAt),
-                    updatedAt: new Date(mockCoupon.updatedAt)
+                    createdAt: admin.firestore.FieldValue.serverTimestamp(),
+                    updatedAt: admin.firestore.FieldValue.serverTimestamp()
                 };
+
+                // Add type field only if specified in mock data
+                if (mockCoupon.type) {
+                    couponData.type = mockCoupon.type;
+                }
 
                 // Add coupon to Firestore
                 const docRef = await firestore.collection('coupons').add(couponData);

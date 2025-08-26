@@ -122,6 +122,44 @@
                    focus:outline-none focus:ring-2 focus:ring-[#238636] focus:border-transparent placeholder-[#8b949e]">
                         </div>
 
+                        <!-- Coupon Type -->
+                        <div>
+                            <label class="block text-sm font-medium text-[#c9d1d9] mb-4">Coupon Type (Optional)</label>
+                            <div class="space-y-3">
+                                <div class="flex items-center">
+                                    <input type="radio" id="type-expiry-soon" name="type" value="expiry-soon" <%=coupon
+                                        && coupon.type==='expiry-soon' ? 'checked' : '' %>
+                                    class="w-4 h-4 text-[#238636] bg-[#0d1117] border-[#30363d] focus:ring-[#238636]
+                                    focus:ring-2">
+                                    <label for="type-expiry-soon" class="ml-3 text-sm text-[#c9d1d9]">
+                                        <span class="font-medium">Expiry Soon</span>
+                                        <span class="block text-xs text-[#8b949e]">Coupons that are expiring soon</span>
+                                    </label>
+                                </div>
+                                <div class="flex items-center">
+                                    <input type="radio" id="type-most-popular" name="type" value="most-popular"
+                                        <%=coupon && coupon.type==='most-popular' ? 'checked' : '' %>
+                                    class="w-4 h-4 text-[#238636] bg-[#0d1117] border-[#30363d] focus:ring-[#238636]
+                                    focus:ring-2">
+                                    <label for="type-most-popular" class="ml-3 text-sm text-[#c9d1d9]">
+                                        <span class="font-medium">Most Popular</span>
+                                        <span class="block text-xs text-[#8b949e]">Highly demanded coupons</span>
+                                    </label>
+                                </div>
+                                <div class="flex items-center">
+                                    <input type="radio" id="type-almost-gone" name="type" value="almost-gone" <%=coupon
+                                        && coupon.type==='almost-gone' ? 'checked' : '' %>
+                                    class="w-4 h-4 text-[#238636] bg-[#0d1117] border-[#30363d] focus:ring-[#238636]
+                                    focus:ring-2">
+                                    <label for="type-almost-gone" class="ml-3 text-sm text-[#c9d1d9]">
+                                        <span class="font-medium">Almost Gone</span>
+                                        <span class="block text-xs text-[#8b949e]">Coupons with very limited quantity
+                                            left</span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
                         <!-- Expiration Date -->
                         <div>
                             <label for="expirationDate" class="block text-sm font-medium text-[#c9d1d9] mb-2">Expiration

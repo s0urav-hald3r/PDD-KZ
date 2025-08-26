@@ -19,7 +19,7 @@
                         class="px-6 py-3 bg-[#30363d] text-[#c9d1d9] rounded-xl hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300 hover:bg-[#484f58] focus:outline-none focus:ring-2 focus:ring-[#30363d] focus:ring-offset-2">
                         Back to Dashboard
                     </a>
-                    <a href="/screen/coupon/new"
+                    <a href="/screen/coupon"
                         class="px-6 py-3 bg-[#238636] text-[#c9d1d9] rounded-xl hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300 hover:bg-[#2ea043] focus:outline-none focus:ring-2 focus:ring-[#238636] focus:ring-offset-2">
                         Create New Coupon
                     </a>
@@ -81,6 +81,19 @@
                         </svg>
                     </div>
                     <div class="relative">
+                        <select id="typeFilter"
+                            class="px-4 py-3 appearance-none bg-[#0d1117] border border-[#30363d] rounded-xl text-[#c9d1d9] focus:outline-none focus:ring-2 focus:ring-[#238636] focus:border-transparent hover:border-[#58a6ff] transition-colors duration-200 min-w-[150px]">
+                            <option value="">All Types</option>
+                            <option value="expiry-soon">⏰ Expiry Soon</option>
+                            <option value="most-popular">🔥 Most Popular</option>
+                            <option value="almost-gone">⚡ Almost Gone</option>
+                        </select>
+                        <svg class="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#c9d1d9] pointer-events-none"
+                            xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                        </svg>
+                    </div>
+                    <div class="relative">
                         <select id="statusFilter"
                             class="px-4 py-3 appearance-none bg-[#0d1117] border border-[#30363d] rounded-xl text-[#c9d1d9] focus:outline-none focus:ring-2 focus:ring-[#238636] focus:border-transparent hover:border-[#58a6ff] transition-colors duration-200 min-w-[140px]">
                             <option value="">All Status</option>
@@ -97,12 +110,13 @@
 
             <!-- Coupons Table -->
             <div class="overflow-x-auto">
-                <table class="w-full text-left">
+                <table class="w-full text-center">
                     <thead class="bg-[#0d1117] border-b border-[#30363d]">
                         <tr>
                             <th class="px-6 py-4 text-sm font-semibold text-[#c9d1d9]">Title</th>
                             <th class="px-6 py-4 text-sm font-semibold text-[#c9d1d9]">Code</th>
                             <th class="px-6 py-4 text-sm font-semibold text-[#c9d1d9]">Category</th>
+                            <th class="px-6 py-4 text-sm font-semibold text-[#c9d1d9]">Type</th>
                             <th class="px-6 py-4 text-sm font-semibold text-[#c9d1d9]">Discount</th>
                             <th class="px-6 py-4 text-sm font-semibold text-[#c9d1d9]">Quantity</th>
                             <th class="px-6 py-4 text-sm font-semibold text-[#c9d1d9]">Expiration</th>
@@ -129,6 +143,18 @@
                                             class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-[#1f2937] text-[#c9d1d9]">
                                             <%= coupon.category.charAt(0).toUpperCase() + coupon.category.slice(1) %>
                                         </span>
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        <% const couponType=coupon.type; let typeClass='bg-[#6b7280] text-white' ; let
+                                            typeDisplay='' ; if (couponType==='expiry-soon' ) {
+                                            typeClass='bg-[#d1a627] text-[#1c1917]' ; typeDisplay='⏰ Expiry Soon' ; }
+                                            else if (couponType==='most-popular' ) { typeClass='bg-[#2ea043] text-white'
+                                            ; typeDisplay='🔥 Most Popular' ; } else if (couponType==='almost-gone' ) {
+                                            typeClass='bg-[#f85149] text-white' ; typeDisplay='⚡ Almost Gone' ; } %>
+                                            <div
+                                                class="font-mono text-sm text-[#58a6ff] bg-[#1f2937] px-2 py-1 rounded">
+                                                <%= typeDisplay %>
+                                            </div>
                                     </td>
                                     <td class="px-6 py-4">
                                         <span class="text-lg font-semibold text-[#f85149]">
@@ -194,22 +220,47 @@
                                                     <% } %>
                                     </td>
                                     <td class="px-6 py-4">
-                                        <div class="flex space-x-2">
-                                            <a href="/screen/coupon/edit/<%= coupon.id %>"
-                                                class="text-[#58a6ff] hover:text-[#79b6ff] transition-colors">
-                                                Edit
-                                            </a>
-                                            <button onclick="deleteCoupon('<%= coupon.id %>')"
-                                                class="text-[#f85149] hover:text-[#ff6b64] transition-colors">
-                                                Delete
+                                        <div class="relative">
+                                            <button onclick="toggleDropdown('<%= coupon.id %>')"
+                                                class="p-2 hover:bg-[#30363d] rounded-full transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-[#238636]">
+                                                <svg class="w-5 h-5 text-[#c9d1d9]" fill="currentColor"
+                                                    viewBox="0 0 20 20">
+                                                    <path
+                                                        d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z" />
+                                                </svg>
                                             </button>
+                                            <div id="dropdown-<%= coupon.id %>"
+                                                class="absolute right-0 top-8 mt-2 w-48 bg-[#161b22] border border-[#30363d] rounded-lg shadow-lg z-10 hidden">
+                                                <div class="py-1">
+                                                    <a href="/screen/coupon?id=<%= coupon.id %>"
+                                                        class="flex items-center px-4 py-2 text-sm text-[#c9d1d9] hover:bg-[#30363d] transition-colors">
+                                                        <svg class="w-4 h-4 mr-3" fill="none" stroke="currentColor"
+                                                            viewBox="0 0 24 24">
+                                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                                stroke-width="2"
+                                                                d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                                                        </svg>
+                                                        Edit Coupon
+                                                    </a>
+                                                    <button onclick="deleteCoupon('<%= coupon.id %>')"
+                                                        class="flex items-center w-full px-4 py-2 text-sm text-[#f85149] hover:bg-[#30363d] transition-colors">
+                                                        <svg class="w-4 h-4 mr-3" fill="none" stroke="currentColor"
+                                                            viewBox="0 0 24 24">
+                                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                                stroke-width="2"
+                                                                d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                                        </svg>
+                                                        Delete Coupon
+                                                    </button>
+                                                </div>
+                                            </div>
                                         </div>
                                     </td>
                                 </tr>
                                 <% }) %>
                                     <% } else { %>
                                         <tr>
-                                            <td colspan="8" class="px-6 py-8 text-center text-[#8b949e]">
+                                            <td colspan="9" class="px-6 py-8 text-center text-[#8b949e]">
                                                 <div class="text-lg">No coupons found</div>
                                                 <div class="text-sm mt-2">Create your first coupon to get started</div>
                                             </td>
@@ -230,11 +281,13 @@
 
         // Filter functionality
         document.getElementById('categoryFilter').addEventListener('change', filterCoupons);
+        document.getElementById('typeFilter').addEventListener('change', filterCoupons);
         document.getElementById('statusFilter').addEventListener('change', filterCoupons);
 
         function filterCoupons() {
             const searchTerm = document.getElementById('searchInput').value.toLowerCase().trim();
             const categoryFilter = document.getElementById('categoryFilter').value.toLowerCase().trim();
+            const typeFilter = document.getElementById('typeFilter').value.toLowerCase().trim();
             const statusFilter = document.getElementById('statusFilter').value.toLowerCase().trim();
 
             const rows = document.querySelectorAll('#couponsTableBody tr');
@@ -243,7 +296,9 @@
                 const title = row.querySelector('td:first-child').textContent.toLowerCase().trim();
                 const couponCode = row.querySelector('td:nth-child(2)').textContent.toLowerCase().trim();
                 const category = row.querySelector('td:nth-child(3) span').textContent.toLowerCase().trim();
-                const status = row.querySelector('td:nth-child(7) span').textContent.toLowerCase().trim();
+                const typeSpan = row.querySelector('td:nth-child(4) span');
+                const type = typeSpan ? typeSpan.textContent.toLowerCase().trim() : '';
+                const status = row.querySelector('td:nth-child(8) span').textContent.toLowerCase().trim(); // Updated column index
 
                 let showRow = true;
 
@@ -257,6 +312,18 @@
                     showRow = false;
                 }
 
+                // Type filter
+                if (typeFilter) {
+                    const normalizedType = type.replace(/[📋⏰🔥⚡]/g, '').trim(); // Remove emojis for comparison
+                    if (typeFilter === 'expiry-soon' && !normalizedType.includes('expiry soon')) {
+                        showRow = false;
+                    } else if (typeFilter === 'most-popular' && !normalizedType.includes('most popular')) {
+                        showRow = false;
+                    } else if (typeFilter === 'almost-gone' && !normalizedType.includes('almost gone')) {
+                        showRow = false;
+                    }
+                }
+
                 // Status filter
                 if (statusFilter && status !== statusFilter) {
                     showRow = false;
@@ -267,7 +334,41 @@
         }
 
 
+        function toggleDropdown(couponId) {
+            const dropdown = document.getElementById(`dropdown-${couponId}`);
+            const isHidden = dropdown.classList.contains('hidden');
+
+            // Close all other dropdowns
+            document.querySelectorAll('[id^="dropdown-"]').forEach(d => {
+                if (d.id !== `dropdown-${couponId}`) {
+                    d.classList.add('hidden');
+                }
+            });
+
+            // Toggle current dropdown
+            if (isHidden) {
+                dropdown.classList.remove('hidden');
+            } else {
+                dropdown.classList.add('hidden');
+            }
+        }
+
+        // Close dropdowns when clicking outside
+        document.addEventListener('click', function (event) {
+            if (!event.target.closest('.relative')) {
+                document.querySelectorAll('[id^="dropdown-"]').forEach(dropdown => {
+                    dropdown.classList.add('hidden');
+                });
+            }
+        });
+
         function deleteCoupon(couponId) {
+            // Close the dropdown first
+            const dropdown = document.getElementById(`dropdown-${couponId}`);
+            if (dropdown) {
+                dropdown.classList.add('hidden');
+            }
+
             if (confirm('Are you sure you want to delete this coupon?')) {
                 fetch(`/method/coupon/${couponId}`, {
                     method: 'DELETE',
