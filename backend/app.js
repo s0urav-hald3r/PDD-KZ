@@ -796,6 +796,7 @@ app.get('/api/coupon/list', async (req, res) => {
                 break;
             default:
                 // Get all coupons
+                query = query.where('category', '==', type).where('expirationDate', '>', now);
                 snapshot = await query.get();
                 break;
         }
@@ -973,6 +974,90 @@ app.post('/api/coupon/use', async (req, res) => {
         return res.status(500).json({
             status: false,
             error: 'Failed to increase coupon usage!',
+            message: error.message
+        });
+    }
+});
+
+// Get categories with coupon counts (optimized with Firestore aggregation)
+app.get('/api/category/list', async (req, res) => {
+    try {
+        console.log('📊 Fetching categories with coupon counts (optimized)...');
+
+        // Check cache first
+        const cacheKey = 'category-list';
+        const cachedResult = cacheHelper.get(cacheKey);
+
+        if (cachedResult) {
+            console.log('📋 Returning cached categories data');
+            return res.json(cachedResult);
+        }
+
+        // Define all possible categories based on your form options
+        const allCategories = [
+            'electronics', 'fashion', 'home', 'garden', 'beauty',
+            'health', 'sports', 'toys', 'automotive', 'books',
+            'food', 'other'
+        ];
+
+        const categoryCounts = {};
+
+        // Use Firestore aggregation to count documents efficiently
+        console.log('🔥 Using optimized Firestore count aggregation...');
+
+        // Execute all category count queries in parallel for maximum performance
+        const countPromises = allCategories.map(async (category) => {
+            try {
+                // Use getCountFromServer for efficient counting (Firebase Admin SDK v11+)
+                const query = firestore.collection('coupons').where('category', '==', category);
+
+                // Try using count aggregation first
+                try {
+                    const snapshot = await query.count().get();
+                    const count = snapshot.data().count;
+
+                    if (count > 0) {
+                        return { category, count };
+                    }
+                    return null;
+                } catch (countError) {
+                    // Fallback to traditional query if count aggregation is not available
+                    console.warn(`⚠️ Count aggregation not available for ${category}, using fallback`);
+                    const snapshot = await query.select().get();
+                    const count = snapshot.size;
+
+                    if (count > 0) {
+                        return { category, count };
+                    }
+                    return null;
+                }
+            } catch (error) {
+                console.warn(`⚠️ Failed to count category '${category}':`, error.message);
+                return null;
+            }
+        });
+
+        // Wait for all count queries to complete
+        const results = await Promise.all(countPromises);
+
+        // Build the final counts object
+        results.forEach(result => {
+            if (result && result.count > 0) {
+                categoryCounts[result.category] = result.count;
+            }
+        });
+
+        console.log('📈 Category counts calculated (optimized):', categoryCounts);
+
+        // Cache the result for 5 minutes
+        cacheHelper.set(cacheKey, categoryCounts, 300);
+
+        res.json(categoryCounts);
+
+    } catch (error) {
+        console.error('❌ Error fetching categories:', error);
+        res.status(500).json({
+            error: 'Failed to fetch categories',
             message: error.message
         });
     }
