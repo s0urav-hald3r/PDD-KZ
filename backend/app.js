@@ -465,13 +465,16 @@ app.post('/method/coupon', async (req, res) => {
         }
 
         // Create coupon document
+        const totalQty = parseInt(totalQuantity);
+        const usedQty = 0;
         const couponData = {
             title: title.trim(),
             couponCode: couponCode.trim().toUpperCase(),
             category,
             discount: parseFloat(discount),
-            totalQuantity: parseInt(totalQuantity),
-            usedQuantity: 0,
+            totalQuantity: totalQty,
+            usedQuantity: usedQty,
+            remainingQuantity: totalQty - usedQty, // Calculate remaining quantity
             expirationDate: new Date(expirationDate),
             createdAt: admin.firestore.FieldValue.serverTimestamp(),
             updatedAt: admin.firestore.FieldValue.serverTimestamp()
@@ -557,12 +560,14 @@ app.post('/method/coupon/:id', async (req, res) => {
         }
 
         // Prepare update data
+        const usedQty = existingCoupon.usedQuantity;
         const updateData = {
             title: title.trim(),
             couponCode: couponCode.trim().toUpperCase(),
             category,
             discount: parseFloat(discount),
             totalQuantity: newTotalQuantity,
+            remainingQuantity: newTotalQuantity - usedQty, // Recalculate remaining quantity
             expirationDate: new Date(expirationDate),
             updatedAt: admin.firestore.FieldValue.serverTimestamp()
         };
@@ -858,6 +863,7 @@ app.get('/api/coupon/list', async (req, res) => {
             discount: coupon.discount,
             totalQuantity: coupon.totalQuantity,
             usedQuantity: coupon.usedQuantity,
+            remainingQuantity: coupon.remainingQuantity !== undefined ? coupon.remainingQuantity : (coupon.totalQuantity - coupon.usedQuantity), // Calculate if not present
             expirationDate: coupon.expirationDate.toISOString(),
             daysUntilExpiry: coupon.daysUntilExpiry,
             type: coupon.type || null, // Type is optional, no default value
@@ -946,10 +952,12 @@ app.post('/api/coupon/use', async (req, res) => {
 
         // Increase used quantity by 1
         const newUsedQuantity = coupon.usedQuantity + 1;
+        const newRemainingQuantity = coupon.totalQuantity - newUsedQuantity;
 
         // Update the coupon in Firestore
         await firestore.collection('coupons').doc(couponId).update({
             usedQuantity: newUsedQuantity,
+            remainingQuantity: newRemainingQuantity, // Update remaining quantity
             updatedAt: admin.firestore.FieldValue.serverTimestamp()
         });
 
@@ -1009,7 +1017,7 @@ app.get('/api/category/list', async (req, res) => {
         const countPromises = allCategories.map(async (category) => {
             try {
                 // Use getCountFromServer for efficient counting (Firebase Admin SDK v11+)
-                const query = firestore.collection('coupons').where('category', '==', category);
+                const query = firestore.collection('coupons').where('category', '==', category).where('expirationDate', '>', new Date()).where('remainingQuantity', '>', 0);
 
                 // Try using count aggregation first
                 try {
@@ -1098,13 +1106,16 @@ async function importMockCoupons() {
                 }
 
                 // Prepare coupon data for database
+                const totalQty = mockCoupon.totalQuantity;
+                const usedQty = mockCoupon.usedQuantity || 0;
                 const couponData = {
                     title: mockCoupon.title,
                     couponCode: mockCoupon.couponCode,
                     category: mockCoupon.category,
                     discount: mockCoupon.discount,
-                    totalQuantity: mockCoupon.totalQuantity,
-                    usedQuantity: mockCoupon.usedQuantity || 0,
+                    totalQuantity: totalQty,
+                    usedQuantity: usedQty,
+                    remainingQuantity: totalQty - usedQty, // Calculate remaining quantity
                     expirationDate: new Date(mockCoupon.expirationDate),
                     createdAt: admin.firestore.FieldValue.serverTimestamp(),
                     updatedAt: admin.firestore.FieldValue.serverTimestamp()

@@ -118,7 +118,8 @@
                             <th class="px-6 py-4 text-sm font-semibold text-[#c9d1d9]">Category</th>
                             <th class="px-6 py-4 text-sm font-semibold text-[#c9d1d9]">Type</th>
                             <th class="px-6 py-4 text-sm font-semibold text-[#c9d1d9]">Discount</th>
-                            <th class="px-6 py-4 text-sm font-semibold text-[#c9d1d9]">Quantity</th>
+                            <th class="px-6 py-4 text-sm font-semibold text-[#c9d1d9]">Quantity (Used/Total/Remaining)
+                            </th>
                             <th class="px-6 py-4 text-sm font-semibold text-[#c9d1d9]">Expiration</th>
                             <th class="px-6 py-4 text-sm font-semibold text-[#c9d1d9]">Status</th>
                             <th class="px-6 py-4 text-sm font-semibold text-[#c9d1d9]">Actions</th>
@@ -162,9 +163,13 @@
                                         </span>
                                     </td>
                                     <td class="px-6 py-4">
-                                        <div class="flex items-center">
-                                            <span class="text-[#c9d1d9]">
+                                        <div class="flex flex-col items-center">
+                                            <span class="text-[#c9d1d9] text-sm">
                                                 <%= coupon.usedQuantity %> / <%= coupon.totalQuantity %>
+                                            </span>
+                                            <span class="text-[#58a6ff] text-xs font-semibold mt-1">
+                                                (<%= (coupon.remainingQuantity !==undefined ? coupon.remainingQuantity :
+                                                    (coupon.totalQuantity - coupon.usedQuantity)) %> remaining)
                                             </span>
                                         </div>
                                     </td>
